@@ -2,9 +2,8 @@
 {
     using Infrastructure;
     using InternalApiDB.Models;
-    using AutoMapper;
 
-    public class VehicleInterchangeablePartResponseModel : IMapFrom<VehicleGlassInterchangeablePart>, IHaveCustomMappings
+    public class VehicleInterchangeablePartResponseModel : IMapFrom<VehicleGlassInterchangeablePart>
     {
         public string Description { get; set; }
 
@@ -20,11 +19,21 @@
 
         public string NagsCode { get; set; }
 
-        public void CreateMappings(IConfiguration configuration)
+        public string CleanEurocode
         {
-            // todo constant for min eurocode length
-            configuration.CreateMap<VehicleGlassInterchangeablePart, VehicleInterchangeablePartResponseModel>("VehicleInterchangeablePartResponseModel")
-             .ForMember(x => x.EuroCode, opt => opt.MapFrom(x => x.EuroCode.Split(';')[0].Length > 5 ? x.EuroCode.Split(';')[0] : x.EuroCode));
+            get
+            {
+                // todo constant for min eurocode length also for ;
+                var eurocodeArray = this.EuroCode.Split(';');
+                string cleanEurocode = string.Empty;
+
+                if (eurocodeArray.Length > 0 && (eurocodeArray[0].Length >= 5 && eurocodeArray[0].Length <= 15))
+                {
+                    cleanEurocode = eurocodeArray[0];
+                }
+
+                return cleanEurocode;
+            }
         }
     }
 }

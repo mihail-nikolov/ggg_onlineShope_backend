@@ -128,24 +128,6 @@
         }
 
         [HttpGet]
-        [Route("api/Products/GetAccessoriesByGlassId/{glassId}")]
-        public IHttpActionResult GetAccessoryByGlassId(int glassId)
-        {
-            try
-            {
-                var accessories = this.glasses.GetAccessories(glassId).To<VehicleGlassAccessoryResponseModel>()
-                                                                         .ToList();
-
-                return this.Ok(accessories);
-            }
-            catch (Exception e)
-            {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
-                                                 e.Message));
-            }
-        }
-
-        [HttpGet]
         [Route("api/Products/GetById/{id}")]
         public IHttpActionResult GetById(int id)
         {
@@ -160,5 +142,23 @@
                                                  e.Message));
             }
         }
+
+        //[HttpGet]
+        //[Route("api/Products/GetAccessoriesByGlassId/{glassId}")]
+        //public IHttpActionResult GetAccessoryByGlassId(int glassId)
+        //{
+        //    try
+        //    {
+        //        var accessories = this.glasses.GetAccessories(glassId).To<VehicleGlassAccessoryResponseModel>()
+        //                                                                 .ToList();
+
+        //        return this.Ok(accessories);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
+        //                                         e.Message));
+        //    }
+        //}
     }
 }
