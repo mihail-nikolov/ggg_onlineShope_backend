@@ -9,13 +9,12 @@
 
     // TODO
     // - introduce constants
+    // - clear eurocodes from interchangeable parts!!!
 
-    public class InternalApiDbContext: IdentityDbContext<User>, IInternalApiDbContext
+    public class InternalApiDbContext : IdentityDbContext<User>, IInternalApiDbContext
     {
         public InternalApiDbContext()
-            : base("GGG_OnlineShopInternalDb"
-                  // TODO comment for apphrb
-                  ,  throwIfV1Schema: false)
+            : base("GGG_OnlineShopInternalDb", throwIfV1Schema: false)
         {
         }
 
@@ -48,7 +47,7 @@
 
         public override int SaveChanges()
         {
-            this.ApplyAuditInfoRules(); 
+            this.ApplyAuditInfoRules();
             return base.SaveChanges();
         }
 
@@ -56,7 +55,7 @@
         {
             modelBuilder.Entity<User>().ToTable("AspNetUsers");
             // TODO removing the user should not remove the orderedItem
-            // removing model/make/bodytype should not remove the vehicle
+            // removing model/make/bodytype should remove the vehicle
             // removing glass/characteristics/images/vehicle should not remove the mentioned
             // reset password functionality
             //modelBuilder.Entity<User>().HasOptional(u => u.OrderedItems).WithMany(i => i).WillCascadeOnDelete(false);

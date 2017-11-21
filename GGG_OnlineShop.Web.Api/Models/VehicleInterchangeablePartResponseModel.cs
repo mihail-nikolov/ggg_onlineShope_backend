@@ -2,32 +2,29 @@
 {
     using Infrastructure;
     using InternalApiDB.Models;
-    using System.ComponentModel.DataAnnotations;
+    using AutoMapper;
 
-    public class VehicleInterchangeablePartResponseModel : IMapFrom<VehicleGlassInterchangeablePart>
+    public class VehicleInterchangeablePartResponseModel : IMapFrom<VehicleGlassInterchangeablePart>, IHaveCustomMappings
     {
-        public int Id { get; set; }
-
-        [Required]
-        [StringLength(400, ErrorMessage = "max len:{1}")]
         public string Description { get; set; }
 
-        [StringLength(100, ErrorMessage = "max len:{1}")]
         public string EuroCode { get; set; }
 
-        [StringLength(100, ErrorMessage = "max len:{1}")]
         public string OesCode { get; set; }
 
-        [StringLength(100, ErrorMessage = "max len:{1}")]
         public string MaterialNumber { get; set; }
 
-        [StringLength(100, ErrorMessage = "max len:{1}")]
         public string LocalCode { get; set; }
 
-        [StringLength(100, ErrorMessage = "max len:{1}")]
         public string ScanCode { get; set; }
 
-        [StringLength(100, ErrorMessage = "max len:{1}")]
         public string NagsCode { get; set; }
+
+        public void CreateMappings(IConfiguration configuration)
+        {
+            // todo constant for min eurocode length
+            configuration.CreateMap<VehicleGlassInterchangeablePart, VehicleInterchangeablePartResponseModel>("VehicleInterchangeablePartResponseModel")
+             .ForMember(x => x.EuroCode, opt => opt.MapFrom(x => x.EuroCode.Split(';')[0].Length > 5 ? x.EuroCode.Split(';')[0] : x.EuroCode));
+        }
     }
 }

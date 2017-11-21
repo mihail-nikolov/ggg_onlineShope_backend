@@ -66,6 +66,8 @@
 
         public bool IsYesGlass { get; set; }
 
+        public virtual ICollection<VehicleGlassAccessoryResponseModel> Accessories { get; set; }
+
         public virtual ICollection<VehicleInterchangeablePartResponseModel> InterchangeableParts { get; set; }
 
         public void CreateMappings(IConfiguration configuration)
@@ -73,6 +75,7 @@
             configuration.CreateMap<VehicleGlass, VehicleGlassResponseModel>("VehicleGlassResponseModel")
                .ForMember(x => x.Images, opt => opt.MapFrom(x => x.VehicleGlassImages.Select(i => i.OriginalId).ToList()))
                .ForMember(x => x.InterchangeableParts, opt => opt.MapFrom(x => x.VehicleGlassInterchangeableParts))
+               .ForMember(x => x.Accessories, opt => opt.MapFrom(x => x.VehicleGlassAccessories))
                .ForMember(x => x.Characteristics, opt => opt.MapFrom(x => x.VehicleGlassCharacteristics.Select(i => i.Name).ToList()));
         }
     }
