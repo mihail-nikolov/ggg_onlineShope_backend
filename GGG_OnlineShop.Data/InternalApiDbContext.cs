@@ -13,7 +13,8 @@
     public class InternalApiDbContext: IdentityDbContext<User>, IInternalApiDbContext
     {
         public InternalApiDbContext()
-            : base("Name=GGG_OnlineShopInternalDb")
+            : base("GGG_OnlineShopInternalDb")
+                  // TODO restore ,  throwIfV1Schema: false)
         {
         }
 
