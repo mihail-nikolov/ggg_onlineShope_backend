@@ -21,7 +21,7 @@
         }
 
         [HttpPost]
-        [Route("api/Administration/dbInfoAdd")]
+        [Route("api/Administration/dbInfoAddFromFile")]
         public IHttpActionResult DbInfoAdd()
         {
             GlassJsonInfoModel[] glasses = null;
@@ -34,12 +34,28 @@
 
                 postedFilePath = HttpContext.Current.Server.MapPath("~/" + postedFile.FileName);
                 postedFile.SaveAs(postedFilePath);
-                // NOTE: To store in memory use postedFile.InputStream
             }
 
             try
             {
                 this.dbInfoFiller.FillInfo(glasses, postedFilePath);
+                return this.Ok("Db filled/updated finished. Check log files for info/errors.");
+            }
+            catch (Exception e)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
+                                                 e.Message));
+            }
+        }
+
+
+        [HttpPost]
+        [Route("api/Administration/dbInfoAdd")]
+        public IHttpActionResult DbInfoAdd(GlassJsonInfoModel[] glasses)
+        {
+            try
+            {
+                this.dbInfoFiller.FillInfo(glasses, "");
                 return this.Ok("Db filled/updated finished. Check log files for info/errors.");
             }
             catch (Exception e)

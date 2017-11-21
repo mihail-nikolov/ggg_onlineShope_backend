@@ -13,8 +13,9 @@
     public class InternalApiDbContext: IdentityDbContext<User>, IInternalApiDbContext
     {
         public InternalApiDbContext()
-            : base("GGG_OnlineShopInternalDb")
-                  // TODO restore ,  throwIfV1Schema: false)
+            : base("GGG_OnlineShopInternalDb"
+                  // TODO comment for apphrb
+                  ,  throwIfV1Schema: false)
         {
         }
 
