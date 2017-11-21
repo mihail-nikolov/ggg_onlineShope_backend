@@ -8,20 +8,12 @@
     using Models.Base;
 
     // TODO
-    //    - if no - implement the same IQueryable< VehicleGlass> GetByRandomCode(string code)
-    //    - discuss GetByRandomCode functionality
-    // - async post to database with glasses?
-    // hash pass when send from frontend
-    // think about indeces, when have the full info - probably not needed
-    // - think about key types
     // - introduce constants
-    // - think about when model and bodytype are "" -> directly get car ID by make only
-    //        same case when hanve only one model or bodytype
-    // check for repeatables in DB - OK(double check in the end)
+
     public class InternalApiDbContext: IdentityDbContext<User>, IInternalApiDbContext
     {
         public InternalApiDbContext()
-            : base("GGG_OnlineShopInternalDb", throwIfV1Schema: false)
+            : base("Name=GGG_OnlineShopInternalDb")
         {
         }
 
