@@ -9,6 +9,7 @@
     using System.Net.Http;
     using System.Web.Http;
 
+    [RoutePrefix("api/Products")]
     public class ProductsController : BaseController
     {
         private readonly IVehiclesService vehicles;
@@ -25,7 +26,7 @@
         // probably service returns it OK, but showing models etc is NOK in the fronted
         // how to pass code (some codes have non alphanumeric symbol
         [HttpPost]
-        [Route("api/Products/GetByVehicleInfoAndProductType")]
+        [Route("GetByVehicleInfoAndProductType")]
         public IHttpActionResult GetByMakeModelBodyTypeIdsAndProductType(VehicleGlassRequestModel requestModel)
         {
             if (!ModelState.IsValid)
@@ -50,7 +51,7 @@
         }
 
         [HttpPost]
-        [Route("api/Products/GetByVehicleInfo")]
+        [Route("GetByVehicleInfo")]
         public IHttpActionResult GetByMakeModelBodyTypeIds(VehicleGlassRequestModel requestModel)
         {
             if (!ModelState.IsValid)
@@ -74,7 +75,7 @@
         }
 
         [HttpGet]
-        [Route("api/Products/GetByEuroCode/{eurocode}")]
+        [Route("GetByEuroCode/{eurocode}")]
         public IHttpActionResult GetByEuroCode(string eurocode)
         {
             try
@@ -90,7 +91,7 @@
         }
 
         [HttpGet]
-        [Route("api/Products/GetByOesCode/{oescode}")]
+        [Route("GetByOesCode/{oescode}")]
         public IHttpActionResult GetByOesCode(string oescode)
         {
             try
@@ -106,7 +107,7 @@
         }
 
         [HttpGet]
-        [Route("api/Products/GetByCode/{code}")]
+        [Route("GetByCode/{code}")]
         public IHttpActionResult GetByCode(string code)
         {
             try
@@ -128,7 +129,7 @@
         }
 
         [HttpGet]
-        [Route("api/Products/GetById/{id}")]
+        [Route("GetById/{id}")]
         public IHttpActionResult GetById(int id)
         {
             try

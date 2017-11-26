@@ -8,7 +8,7 @@
 
         public override string ToString()
         {
-            return $@"From: {From}; To: {To}";
+            return $@"{From} - {To}";
         }
     }
 }

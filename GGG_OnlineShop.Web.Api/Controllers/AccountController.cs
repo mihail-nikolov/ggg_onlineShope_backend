@@ -8,7 +8,6 @@
     using System.Threading.Tasks;
     using System.Web;
     using System.Web.Http;
-    using System.Web.Http.ModelBinding;
     using Microsoft.AspNet.Identity;
     using Microsoft.AspNet.Identity.EntityFramework;
     using Microsoft.AspNet.Identity.Owin;
@@ -20,21 +19,31 @@
     using Results;
     using InternalApiDB.Models;
     using System.Net;
+    using Data.Services.Contracts;
+    using System.Linq;
+    using Infrastructure;
 
     [Authorize]
     [RoutePrefix("api/Account")]
-    public class AccountController : ApiController
+    public class AccountController : BaseController
     {
         private const string LocalLoginProvider = "Local";
         private ApplicationUserManager _userManager;
+        private readonly IUsersService users;
+        private readonly IOrderedItemsService orders;
 
-        public AccountController()
+        public AccountController(IUsersService users, IOrderedItemsService orders)
         {
+            this.users = users;
+            this.orders = orders;
         }
 
-        public AccountController(ApplicationUserManager userManager,
+        public AccountController(IUsersService users, IOrderedItemsService orders,
+            ApplicationUserManager userManager,
             ISecureDataFormat<AuthenticationTicket> accessTokenFormat)
         {
+            this.users = users;
+            this.orders = orders;
             UserManager = userManager;
             AccessTokenFormat = accessTokenFormat;
         }
@@ -56,7 +65,7 @@
         // POST api/Account/Register
         [AllowAnonymous]
         [Route("Register")]
-        public async Task<IHttpActionResult> Register(RegisterBindingModel model)
+        public async Task<IHttpActionResult> Register(AccountRegisterBindingModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -64,7 +73,8 @@
             }
             try
             {
-                var user = new User() { UserName = model.Email, Email = model.Email, Bulstat = model.Bulstat, CompanyName = model.CompanyName, DeliveryAddress = model.DeliveryAddress };
+                var user = this.Mapper.Map<User>(model);
+                user.UserName = user.Email;
 
                 IdentityResult result = await UserManager.CreateAsync(user, model.Password);
 
@@ -82,20 +92,109 @@
             }
         }
 
-        // TODO extend
-        // GET api/Account/UserInfo
-        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
-        [Route("UserInfo")]
-        public UserInfoViewModel GetUserInfo()
+        [HttpGet]
+        public IHttpActionResult Get()
         {
-            ExternalLoginData externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
-
-            return new UserInfoViewModel
+            try
             {
-                Email = User.Identity.GetUserName(),
-                HasRegistered = externalLogin == null,
-                LoginProvider = externalLogin != null ? externalLogin.LoginProvider : null
-            };
+                var userId = User.Identity.GetUserId();
+                var user = this.users.GetById(userId);
+                var userInfo = this.Mapper.Map<AccountInfoResponseModel>(user);
+
+                return this.Ok(userInfo);
+            }
+            catch (Exception e)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
+                                                 e.Message));
+            }
+        }
+
+        [HttpPost]
+        [Route("UpdateUserInfo")]
+        public IHttpActionResult UpdateUserInfo(AccountInfoUpdateModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var userId = User.Identity.GetUserId();
+                var user = this.Mapper.Map<User>(model);
+                user.Id = userId;
+
+                var updatedUser = this.users.UpdateContactInfo(user);
+                var resultUpdatedUser = this.Mapper.Map<AccountInfoResponseModel>(updatedUser);
+
+                return this.Ok(resultUpdatedUser);
+            }
+            catch (Exception e)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
+                                                 e.Message));
+            }
+        }
+
+        // POST api/Account/ChangePassword
+        [Route("ChangePassword")]
+        public async Task<IHttpActionResult> ChangePassword(ChangePasswordBindingModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            IdentityResult result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword,
+                model.NewPassword);
+
+            if (!result.Succeeded)
+            {
+                return GetErrorResult(result);
+            }
+
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("ShowMyOrders")]
+        public IHttpActionResult ShowMyOrders()
+        {
+            try
+            {
+                var orders = this.orders.GetAllByUser(User.Identity.GetUserId())
+                                        .OrderByDescending(x => x.Status)
+                                        .ThenBy(x => x.CreatedOn)
+                                        .ThenBy(x => x.Id)
+                                        .To<OrderedItemResponseModel>()
+                                        .ToList();
+                return this.Ok(orders);
+            }
+            catch (Exception e)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
+                                                 e.Message));
+            }
+        }
+
+        // POST api/Account/SetPassword
+        [Route("SetPassword")]
+        public async Task<IHttpActionResult> SetPassword(SetPasswordBindingModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            IdentityResult result = await UserManager.AddPasswordAsync(User.Identity.GetUserId(), model.NewPassword);
+
+            if (!result.Succeeded)
+            {
+                return GetErrorResult(result);
+            }
+
+            return Ok();
         }
 
         // POST api/Account/Logout
@@ -106,7 +205,6 @@
             return Ok();
         }
 
-        // TODO think about how to update address, bulstat etc
         // GET api/Account/ManageInfo?returnUrl=%2F&generateState=true
         [Route("ManageInfo")]
         public async Task<ManageInfoViewModel> GetManageInfo(string returnUrl, bool generateState = false)
@@ -147,43 +245,19 @@
             };
         }
 
-        // POST api/Account/ChangePassword
-        [Route("ChangePassword")]
-        public async Task<IHttpActionResult> ChangePassword(ChangePasswordBindingModel model)
+        // GET api/Account/UserInfo
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [Route("UserInfo")]
+        public UserInfoViewModel GetUserInfo()
         {
-            if (!ModelState.IsValid)
+            ExternalLoginData externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
+
+            return new UserInfoViewModel
             {
-                return BadRequest(ModelState);
-            }
-
-            IdentityResult result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword,
-                model.NewPassword);
-
-            if (!result.Succeeded)
-            {
-                return GetErrorResult(result);
-            }
-
-            return Ok();
-        }
-
-        // POST api/Account/SetPassword
-        [Route("SetPassword")]
-        public async Task<IHttpActionResult> SetPassword(SetPasswordBindingModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            IdentityResult result = await UserManager.AddPasswordAsync(User.Identity.GetUserId(), model.NewPassword);
-
-            if (!result.Succeeded)
-            {
-                return GetErrorResult(result);
-            }
-
-            return Ok();
+                Email = User.Identity.GetUserName(),
+                HasRegistered = externalLogin == null,
+                LoginProvider = externalLogin != null ? externalLogin.LoginProvider : null
+            };
         }
 
         // POST api/Account/RemoveLogin

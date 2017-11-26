@@ -1,60 +1,69 @@
 ﻿namespace GGG_OnlineShop.Web.Api.Controllers
 {
     using Data.Services.Contracts;
-    using Infrastructure;
     using InternalApiDB.Models;
     using Microsoft.AspNet.Identity;
     using Models;
     using System;
-    using System.Linq;
     using System.Net;
     using System.Net.Http;
     using System.Web.Http;
 
-    [Authorize]
+    [RoutePrefix("api/OrderedItems")]
     public class OrderedItemController : BaseController
     {
         private readonly IOrderedItemsService orders;
-        private readonly IVehicleGlassesService glasses;
+        private readonly IUsersService users;
 
-        public OrderedItemController(IOrderedItemsService orders,
-                                     IVehicleGlassesService glasses)
+        public OrderedItemController(IOrderedItemsService orders, IUsersService users)
         {
             this.orders = orders;
-            this.glasses = glasses;
-        }
-
-        [HttpGet]
-        [Route("api/OrderedItems/ShowMyOrders")]
-        public IHttpActionResult ShowMyOrders()
-        {
-            try
-            {
-                var orders = this.orders.GetAllByUser(User.Identity.GetUserId())
-                                        .OrderBy(x => x.Finished)
-                                        .ThenBy(x => x.CreatedOn)
-                                        .ThenBy(x => x.Id)
-                                        .To<OrderedItemResponseModel>()
-                                        .ToList();
-                return this.Ok(orders);
-            }
-            catch (Exception e)
-            {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
-                                                 e.Message));
-            }
+            this.users = users;
         }
 
         [HttpPost]
-        [Route("api/OrderedItems/order/{productId}")]
-        public IHttpActionResult OrderItem(int productId)
+        [Route("order")]
+        public IHttpActionResult Order(OrderedItemRequestModel model)
         {
             try
             {
-                var order = new OrderedItem() { VehicleGlassId = productId, UserId = User.Identity.GetUserId() };
-                this.orders.Add(order);
-                var product = this.Mapper.Map<OrderedItemResponseModel>(this.glasses.GetById(productId));
-                return this.Ok(product);
+                IHttpActionResult result;
+
+                var userId = User.Identity.GetUserId();
+
+                // info
+                // if registered user - default: user company deliveryAddress
+                // else if UseAlternativeAddress and registered -> use passed fullAddress
+                // if nonRegisteredUser -> fullAddres (required)
+                if (!string.IsNullOrEmpty(userId))
+                {
+                    model.UserId = userId;
+
+                    var user = this.users.GetById(userId);
+                    if (!model.UseAlternativeAddress)
+                    {
+                        model.FullAddress = $"{user.DeliveryCountry}; {user.DeliveryTown}; {user.DeliveryAddress}";
+                    }
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var order = this.Mapper.Map<OrderedItem>(model);
+
+                if (this.orders.ValidateOrder(order))
+                {
+                    this.orders.Add(order);
+                    result = this.Ok();
+                }
+                else
+                {
+                    result = this.BadRequest("Error while valditing userInfo and/or paid price");
+                }
+
+                return result;
             }
             catch (Exception e)
             {

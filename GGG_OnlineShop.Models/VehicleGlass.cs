@@ -1,6 +1,7 @@
 ﻿namespace GGG_OnlineShop.InternalApiDB.Models
 {
     using Base;
+    using Common;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
@@ -12,7 +13,6 @@
         private ICollection<VehicleGlassCharacteristic> vehicleGlassCharacteristics;
         private ICollection<VehicleGlassSuperceed> vehicleGlassSuperceed;
         private ICollection<VehicleGlassAccessory> vehicleGlassAccessories;
-        private ICollection<OrderedItem> orderedItems;
 
         public VehicleGlass()
         {
@@ -22,44 +22,45 @@
             this.vehicleGlassCharacteristics = new HashSet<VehicleGlassCharacteristic>();
             this.vehicleGlassSuperceed = new HashSet<VehicleGlassSuperceed>();
             this.vehicleGlassAccessories = new HashSet<VehicleGlassAccessory>();
-            this.orderedItems = new HashSet<OrderedItem>();
         }
 
-        [Required]
-        [StringLength(400, ErrorMessage = "max len:{1}")]
-        public string Description { get; set; }
-
-        [StringLength(100, ErrorMessage = "max len:{1}")]
+        [StringLength(GlobalConstants.EurocodeMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
         public string EuroCode { get; set; }
 
-        [StringLength(100, ErrorMessage = "max len:{1}")]
+        [StringLength(GlobalConstants.OesCodeMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
         public string OesCode { get; set; }
 
-        [StringLength(100, ErrorMessage = "max len:{1}")]
+        [StringLength(GlobalConstants.MaterialNumberMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
+        public string MaterialNumber { get; set; }
+
+        [Required]
+        [StringLength(GlobalConstants.DescriptionMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
+        public string Description { get; set; }
+
+        [StringLength(GlobalConstants.ModelDateMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
         public string ModelDate { get; set; }
 
-        [StringLength(100, ErrorMessage = "max len:{1}")]
+        [StringLength(GlobalConstants.PartDateMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
         public string PartDate { get; set; }
 
         public string ProductType { get; set; }
 
-        [StringLength(100, ErrorMessage = "max len:{1}")]
+        [StringLength(GlobalConstants.ModificationMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
         public string Modification { get; set; }
 
-        // TODO check again string lens
-        [StringLength(100, ErrorMessage = "max len:{1}")]
+        [StringLength(GlobalConstants.TintMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
         public string Tint { get; set; }
 
-        [Range(0, double.MaxValue)]
+        [Range(GlobalConstants.MinProductFittingTimeHours, GlobalConstants.MaxProductFittingTimeHours)]
         public double? FittingTimeHours { get; set; }
 
-        [StringLength(100, ErrorMessage = "max len:{1}")]
+        [StringLength(GlobalConstants.FittingTypeMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
         public string FittingType { get; set; }
 
-        [Range(0.1, double.MaxValue)]
+        [Range(GlobalConstants.MinProductHeight, GlobalConstants.MaxProductHeight)]
         public double? Height { get; set; }
 
-        [Range(0.1, double.MaxValue)]
+        [Range(GlobalConstants.MinProductWidth, GlobalConstants.MaxProductWidth)]
         public double? Width { get; set; }
 
         public virtual ICollection<VehicleGlassCharacteristic> VehicleGlassCharacteristics
@@ -122,13 +123,10 @@
 
         public bool IsAccessory { get; set; }
 
-        [StringLength(100, ErrorMessage = "max len:{1}")]
-        public string MaterialNumber { get; set; }
-
-        [StringLength(100, ErrorMessage = "max len:{1}")]
+        [StringLength(GlobalConstants.LocalCodeMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
         public string LocalCode { get; set; }
 
-        [StringLength(100, ErrorMessage = "max len:{1}")]
+        [StringLength(GlobalConstants.IndustryCodeMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
         public string IndustryCode { get; set; }
 
         public virtual ICollection<VehicleGlassInterchangeablePart> VehicleGlassInterchangeableParts
@@ -152,18 +150,6 @@
             set
             {
                 this.vehicles = value;
-            }
-        }
-
-        public virtual ICollection<OrderedItem> OrderedItems
-        {
-            get
-            {
-                return this.orderedItems;
-            }
-            set
-            {
-                this.orderedItems = value;
             }
         }
     }

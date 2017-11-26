@@ -5,9 +5,12 @@
 
     public interface IOrderedItemsService: IBaseDataWithCreatorService<OrderedItem>
     {
-        // TODO introduce enum for status
-        IQueryable<OrderedItem> GetAllPending();
+        IQueryable<OrderedItem> GetNewOrders();
 
-        IQueryable<OrderedItem> GetAllFinished();
+        IQueryable<OrderedItem> GetOrderedProducts();
+
+        IQueryable<OrderedItem> GetDoneOrders();
+
+        bool ValidateOrder(OrderedItem product);
     }
 }

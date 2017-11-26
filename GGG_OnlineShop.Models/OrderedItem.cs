@@ -1,34 +1,57 @@
 ﻿namespace GGG_OnlineShop.InternalApiDB.Models
 {
     using Base;
+    using Common;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
     public class OrderedItem: BaseModel<int>, IEntityWithCreator
     {
         [Required]
-        [StringLength(400, ErrorMessage = "max len:{1}")]
-        public string Address { get; set; }
+        [StringLength(GlobalConstants.ManufacturerMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
+        public string Manufacturer { get; set; }
+
+        [StringLength(GlobalConstants.EurocodeMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
+        public string EuroCode { get; set; }
+
+        [StringLength(GlobalConstants.OtherCodesMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
+        public string OtherCodes { get; set; }
 
         [Required]
-        [StringLength(600, ErrorMessage = "max len:{1}")]
-        public string DeliveryInfo { get; set; }
-
-        public VehicleGlass VehicleGlass { get; set; }
+        [StringLength(GlobalConstants.DescriptionMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
+        public string Description { get; set; }
 
         [Required]
-        [ForeignKey("VehicleGlass")]
-        public int VehicleGlassId { get; set; }
-
-        public VehicleGlassAccessory VehicleGlassAccessory { get; set; }
+        [StringLength(GlobalConstants.FullAddressMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
+        public string FullAddress { get; set; }
 
         [Required]
-        [ForeignKey("VehicleGlassAccessory")]
-        public int VehicleGlassAccessoryId { get; set; }
+        public DeliveryStatus Status { get; set; }
 
-        public bool Finished { get; set; }
+        [StringLength(GlobalConstants.DeliveryNotesMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
+        public string DeliveryNotes { get; set; }
 
         [Required]
+        public bool WithInstallation { get; set; }
+
+        [Required]
+        [Range(GlobalConstants.MinPrice, GlobalConstants.MaxPrice)]
+        public double PaidPrice { get; set; }
+
+        [Required]
+        public bool IsDepositNeeded { get; set; }
+
+        [Required]
+        [Range(GlobalConstants.MinPrice, GlobalConstants.MaxPrice)]
+        public double Price { get; set; }
+
+        // e.g. Name, Phone, email
+        [StringLength(GlobalConstants.AnonymousUserЕmailMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
+        public string AnonymousUserЕmail { get; set; }
+
+        [StringLength(GlobalConstants.AnonymousUserInfoMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
+        public string AnonymousUserInfo { get; set; }
+
         [ForeignKey("User")]
         public string UserId { get; set; }
 

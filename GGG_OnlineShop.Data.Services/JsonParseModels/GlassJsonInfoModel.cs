@@ -5,6 +5,7 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using AutoMapper;
+    using GGG_OnlineShop.Common;
 
     public class GlassJsonInfoModel : IMapTo<VehicleGlass>, IHaveCustomMappings
     {
@@ -19,45 +20,44 @@
         }
 
         [Required]
-        [StringLength(400, ErrorMessage = "max len:{1}")]
+        [StringLength(GlobalConstants.DescriptionMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
         public string Description { get; set; }
 
-        [StringLength(100, ErrorMessage = "max len:{1}")]
+        [StringLength(GlobalConstants.EurocodeMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
         public string EuroCode { get; set; }
 
-        [StringLength(100, ErrorMessage = "max len:{1}")]
+        [StringLength(GlobalConstants.OesCodeMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
         public string OesCode { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "max len:{1}")]
+        [StringLength(GlobalConstants.MakeNameMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
         public string Make { get; set; }
 
-        [StringLength(100, ErrorMessage = "max len:{1}")]
+        [StringLength(GlobalConstants.ModelNameMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
         public string Model { get; set; }
 
-        // TODO - think about ModelYearFrom and ModelYearTo - separated
         public ModelAndPartDatesJsonInfoModel ModelYear { get; set; }
 
         public ModelAndPartDatesJsonInfoModel PartYear { get; set; }
 
         public string ProductType { get; set; }
 
-        [StringLength(100, ErrorMessage = "max len:{1}")]
+        [StringLength(GlobalConstants.ModificationMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
         public string Modification { get; set; }
 
-        [StringLength(100, ErrorMessage = "max len:{1}")]
+        [StringLength(GlobalConstants.TintMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
         public string Tint { get; set; }
 
-        [Range(0.1, double.MaxValue)]
+        [Range(GlobalConstants.MinProductFittingTimeHours, GlobalConstants.MaxProductFittingTimeHours)]
         public double? FittingTimeHours { get; set; }
 
-        [StringLength(100, ErrorMessage = "max len:{1}")]
+        [StringLength(GlobalConstants.FittingTypeMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
         public string FittingType { get; set; } 
 
-        [Range(0.1, double.MaxValue)]
+        [Range(GlobalConstants.MinProductHeight, GlobalConstants.MaxProductHeight)]
         public double? Height { get; set; }
 
-        [Range(0.1, double.MaxValue)]
+        [Range(GlobalConstants.MinProductWidth, GlobalConstants.MaxProductWidth)]
         public double? Width { get; set; }
 
         public List<string> Characteristics { get; set; }
@@ -84,13 +84,13 @@
 
         public List<AccessoryJsonInfoModel> Accessories { get; set; }
 
-        [StringLength(100, ErrorMessage = "max len:{1}")]
+        [StringLength(GlobalConstants.MaterialNumberMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
         public string MaterialNumber { get; set; }
 
-        [StringLength(100, ErrorMessage = "max len:{1}")]
+        [StringLength(GlobalConstants.LocalCodeMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
         public string LocalCode { get; set; }
 
-        [StringLength(100, ErrorMessage = "max len:{1}")]
+        [StringLength(GlobalConstants.IndustryCodeMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
         public string IndustryCode { get; set; }
 
         public void CreateMappings(IConfiguration configuration)

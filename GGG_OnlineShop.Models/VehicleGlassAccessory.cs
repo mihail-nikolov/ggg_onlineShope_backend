@@ -1,35 +1,34 @@
 ﻿namespace GGG_OnlineShop.InternalApiDB.Models
 {
     using Base;
+    using Common;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
     public class VehicleGlassAccessory: BaseModel<int>
     {
         private ICollection<VehicleGlass> vehicleGlasses;
-        private ICollection<OrderedItem> orderedItems;
 
         public VehicleGlassAccessory()
         {
             this.vehicleGlasses = new HashSet<VehicleGlass>();
-            this.orderedItems = new HashSet<OrderedItem>();
         }
 
-        [StringLength(100, ErrorMessage = "max len:{1}")]
-        public string IndustryCode { get; set; }
-
-        [StringLength(100, ErrorMessage = "max len:{1}")]
+        [StringLength(GlobalConstants.MaterialNumberMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
         public string MaterialNumber { get; set; }
 
-        [StringLength(400, ErrorMessage = "max len:{1}")]
+        [StringLength(GlobalConstants.IndustryCodeMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
+        public string IndustryCode { get; set; }
+
+        [StringLength(GlobalConstants.DescriptionMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
         public string Description { get; set; }
 
-        [Range(0, double.MaxValue)]
+        [Range(GlobalConstants.MinAccessoryReplacementRate, GlobalConstants.MaxAccessoryReplacementRate)]
         public double ReplacementRate { get; set; }
 
         public bool Mandatory { get; set; }
 
-        [Range(0, int.MaxValue)]
+        [Range(GlobalConstants.MinAccessoryRecommendedQuantity, GlobalConstants.MaxAccessoryRecommendedQuantity)]
         public int RecommendedQuantity { get; set; }
 
         public bool HasImages { get; set; }
@@ -45,18 +44,6 @@
             set
             {
                 this.vehicleGlasses = value;
-            }
-        }
-
-        public virtual ICollection<OrderedItem> OrderedItems
-        {
-            get
-            {
-                return this.orderedItems;
-            }
-            set
-            {
-                this.orderedItems = value;
             }
         }
     }

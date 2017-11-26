@@ -29,7 +29,17 @@ namespace GGG_OnlineShop.InternalApiDB.Data.Migrations
 
                 var userStore = new UserStore<User>(context);
                 var userManager = new UserManager<User>(userStore);
-                var admin = new User { UserName = AdministratorUserName, Email = AdministratorUserName, Bulstat = "123456", CompanyName = "GGG", DeliveryAddress = "Sofia Liuln" };
+
+                var admin = new User
+                {
+                    UserName = AdministratorUserName,
+                    Email = AdministratorUserName,
+                    Bulstat = "123456",
+                    CompanyName = "GGG",
+                    DeliveryAddress = "Sofia Liuln",
+                    DeliveryCountry = "Bulgaria",
+                    DeliveryTown = "Sofia"
+                };
                 userManager.Create(admin, AdministratorPassword);
                 userManager.AddToRole(admin.Id, GlobalConstants.AdministratorRoleName);
             }

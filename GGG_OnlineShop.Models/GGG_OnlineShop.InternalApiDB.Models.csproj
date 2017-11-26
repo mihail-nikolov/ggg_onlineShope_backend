@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="Base\BaseModel{TKey}.cs" />
     <Compile Include="Base\IEntityWithCreator.cs" />
+    <Compile Include="DeliveryStatus.cs" />
     <Compile Include="VehicleBodyType.cs" />
     <Compile Include="VehicleGlass.cs" />
     <Compile Include="VehicleGlassAccessory.cs" />
@@ -78,6 +79,12 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GGG_OnlineShop.Common\GGG_OnlineShop.Common.csproj">
+      <Project>{37895E29-1472-4A8B-BF00-0297412AEB8F}</Project>
+      <Name>GGG_OnlineShop.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

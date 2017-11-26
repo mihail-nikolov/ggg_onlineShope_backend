@@ -1,6 +1,7 @@
 ﻿namespace GGG_OnlineShop.InternalApiDB.Models
 {
     using Base;
+    using Common;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
@@ -13,27 +14,26 @@
             this.vehicleGlasses = new HashSet<VehicleGlass>();
         }
 
-        [Required]
-        [StringLength(400, ErrorMessage = "max len:{1}")]
-        public string Description { get; set; }
-
-        [StringLength(100, ErrorMessage = "max len:{1}")]
+        [StringLength(GlobalConstants.InterchangeableEurocodeMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
         public string EuroCode { get; set; }
 
-        [StringLength(100, ErrorMessage = "max len:{1}")]
+        [StringLength(GlobalConstants.OesCodeMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
         public string OesCode { get; set; }
 
-        [StringLength(100, ErrorMessage = "max len:{1}")]
-        public string MaterialNumber { get; set; }
-
-        [StringLength(100, ErrorMessage = "max len:{1}")]
+        [StringLength(GlobalConstants.LocalCodeMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
         public string LocalCode { get; set; }
 
-        [StringLength(100, ErrorMessage = "max len:{1}")]
+        [StringLength(GlobalConstants.MaterialNumberMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
+        public string MaterialNumber { get; set; }
+
+        [StringLength(GlobalConstants.ScanCodeMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
         public string ScanCode { get; set; }
 
-        [StringLength(100, ErrorMessage = "max len:{1}")]
+        [StringLength(GlobalConstants.NagsCodeMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
         public string NagsCode { get; set; }
+
+        [StringLength(GlobalConstants.DescriptionMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
+        public string Description { get; set; }
 
         public virtual ICollection<VehicleGlass> VehicleGlasses
         {

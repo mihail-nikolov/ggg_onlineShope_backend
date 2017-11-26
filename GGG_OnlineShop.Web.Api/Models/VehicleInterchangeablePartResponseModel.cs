@@ -1,5 +1,6 @@
 ﻿namespace GGG_OnlineShop.Web.Api.Models
 {
+    using Common;
     using Infrastructure;
     using InternalApiDB.Models;
 
@@ -23,11 +24,11 @@
         {
             get
             {
-                // todo constant for min eurocode length also for ;
-                var eurocodeArray = this.EuroCode.Split(';');
+                var eurocodeArray = this.EuroCode.Split(GlobalConstants.InterchangeablePartStringSeparator);
                 string cleanEurocode = string.Empty;
 
-                if (eurocodeArray.Length > 0 && (eurocodeArray[0].Length >= 5 && eurocodeArray[0].Length <= 15))
+                if (eurocodeArray.Length > 0 &&
+                    (eurocodeArray[0].Length >= GlobalConstants.EurocodeMinLength && eurocodeArray[0].Length <= GlobalConstants.EurocodeMaxLength))
                 {
                     cleanEurocode = eurocodeArray[0];
                 }

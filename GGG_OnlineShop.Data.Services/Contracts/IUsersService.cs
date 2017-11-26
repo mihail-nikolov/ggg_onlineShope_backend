@@ -5,6 +5,10 @@
 
     public interface IUsersService : IBaseDataService<User>
     {
-        IQueryable<User> GetAllNotActivated(); 
+        IQueryable<User> GetAllNotActivated();
+
+        User Update(User user);
+
+        User UpdateContactInfo(User user);
     }
 }

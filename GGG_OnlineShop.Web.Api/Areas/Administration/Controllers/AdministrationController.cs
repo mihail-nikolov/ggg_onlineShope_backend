@@ -11,6 +11,7 @@
     using System.Web.Http;
 
     [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
+    [RoutePrefix("api/Administration")]
     public class AdministrationController : BaseController
     {
         private readonly IGlassesInfoDbFiller dbInfoFiller;
@@ -21,7 +22,7 @@
         }
 
         [HttpPost]
-        [Route("api/Administration/dbInfoAddFromFile")]
+        [Route("dbInfoAddFromFile")]
         public IHttpActionResult DbInfoAdd()
         {
             GlassJsonInfoModel[] glasses = null;
@@ -50,7 +51,7 @@
 
 
         [HttpPost]
-        [Route("api/Administration/dbInfoAdd")]
+        [Route("dbInfoAdd")]
         public IHttpActionResult DbInfoAdd(GlassJsonInfoModel[] glasses)
         {
             try

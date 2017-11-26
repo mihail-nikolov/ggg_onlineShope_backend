@@ -16,16 +16,6 @@
 
         public string OesCode { get; set; }
 
-        // TODO - probably not needed here
-        // ---------------------
-        //public string Make { get; set; }
-
-        //public string Model { get; set; }
-
-        //public string BodyType { get; set; }
-
-         //--------------------
-
         public string ModelDate { get; set; }
 
         public string PartDate { get; set; }

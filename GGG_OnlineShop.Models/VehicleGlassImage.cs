@@ -1,6 +1,7 @@
 ﻿namespace GGG_OnlineShop.InternalApiDB.Models
 {
     using Base;
+    using Common;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
@@ -14,9 +15,10 @@
         }
 
         [Required]
-        [StringLength(100, ErrorMessage = "max len:{1}, min len: {2}.", MinimumLength = 1)]
+        [StringLength(GlobalConstants.ProductImageCaptionMaxLength, ErrorMessage = GlobalConstants.MinAndMaxLengthErrorMessage, MinimumLength = GlobalConstants.ProductImageCaptionMinLength)]
         public string Caption { get; set; }
 
+        [Required]
         public int OriginalId { get; set; }
 
         public virtual ICollection<VehicleGlass> VehicleGlasses

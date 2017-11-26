@@ -9,6 +9,7 @@
     using System.Net.Http;
     using System.Web.Http;
 
+    [RoutePrefix("api/Models")]
     public class ModelsController : BaseController
     {
         private readonly IVehiclesService vehicles;
@@ -22,7 +23,7 @@
         }
 
         [HttpGet]
-        [Route("api/Models/GetByMakeId/{vehicleMakeId}")]
+        [Route("GetByMakeId/{vehicleMakeId}")]
         public IHttpActionResult GetVehicleModelByMake(int vehicleMakeId)
         {
             try

@@ -8,10 +8,12 @@
     using System;
     using System.Net.Http;
     using System.Net;
-    using ViewModels.Users;
+    using Models.Users;
     using Infrastructure;
+    using InternalApiDB.Models;
 
     [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
+    [RoutePrefix("api/Administration/ManageUsers")]
     public class ManageUsersController : BaseController
     {
         private readonly IUsersService users;
@@ -21,9 +23,9 @@
             this.users = users;
         }
 
-        // TODO should not be able to remove users
+        // TODO deactivate user
         //[HttpPost]
-        //[Route("api/ManageUsers/Delete/{userId}")]
+        //[Route("api/ManageUsers/deactivate/{userId}")]
         //public IHttpActionResult Delete(string userId)
         //{
         //    try
@@ -40,18 +42,40 @@
         //}
 
         [HttpGet]
-        [Route("api/Administration/ManageUsers")]
         public IHttpActionResult Get()
         {
             try
             {
-                var users = this.users.GetAll()
+                var allUsers = this.users.GetAll()
                                 .OrderBy(x => x.CreatedOn)
                                 .ThenBy(x => x.Id)
-                                .To<UserModel>()
+                                .To<UserResponseModel>()
                                 .ToList();
 
-                return this.Ok(users);
+                return this.Ok(allUsers);
+            }
+            catch (Exception e)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
+                                                 e.Message));
+            }
+        }
+
+        [HttpPost]
+        [Route("UpdateUserInfo")]
+        public IHttpActionResult UpdateUserInfo(UserUpdateModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var user = this.Mapper.Map<User>(model);
+                var updatedUser = this.Mapper.Map<UserResponseModel>(this.users.Update(user));
+
+                return this.Ok(updatedUser);
             }
             catch (Exception e)
             {

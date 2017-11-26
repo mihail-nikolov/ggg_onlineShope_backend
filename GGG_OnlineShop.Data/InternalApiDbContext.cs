@@ -7,10 +7,6 @@
     using Models;
     using Models.Base;
 
-    // TODO
-    // - introduce constants
-    // - clear eurocodes from interchangeable parts!!!
-
     public class InternalApiDbContext : IdentityDbContext<User>, IInternalApiDbContext
     {
         public InternalApiDbContext()
@@ -54,15 +50,16 @@
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().ToTable("AspNetUsers");
-            // TODO removing the user should not remove the orderedItem
-            // removing model/make/bodytype should remove the vehicle
-            // removing glass/characteristics/images/vehicle should not remove the mentioned
+            // info:
+            // removing glass -> removes the connection with characteristics for the glassId (applicable for many to many), but not the characteristic itself
+            //    - check what happens when this happens (glass should show [] characteristics)
+            // removing model/make/bodytype removes the vehicle
+
+            // TODO removing the user should not remove the orderedItem (one to many)
             // reset password functionality
-            //modelBuilder.Entity<User>().HasOptional(u => u.OrderedItems).WithMany(i => i).WillCascadeOnDelete(false);
-            //modelBuilder.Entity<OrderedItem>().HasOptional(v => v.UserId);
-            modelBuilder.Entity<Vehicle>().HasRequired(v => v.Make).WithMany(v => v.Vehicles).WillCascadeOnDelete(false);
-            modelBuilder.Entity<Vehicle>().HasOptional(v => v.BodyType).WithMany(v => v.Vehicles).WillCascadeOnDelete(false);
-            modelBuilder.Entity<Vehicle>().HasOptional(v => v.Model).WithMany(v => v.Vehicles).WillCascadeOnDelete(false);
+            //modelBuilder.Entity<User>().HasOptional(u => u.OrderedItems).WithOptionalDependent().WillCascadeOnDelete(false);
+            //modelBuilder.Entity<Vehicle>().HasOptional(v => v.BodyType).WithMany(v => v.Vehicles).WillCascadeOnDelete(true);
+            //modelBuilder.Entity<Vehicle>().HasOptional(v => v.Model).WithMany(v => v.Vehicles).WillCascadeOnDelete(true);
             base.OnModelCreating(modelBuilder);
         }
 

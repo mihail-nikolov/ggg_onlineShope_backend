@@ -1,6 +1,7 @@
 ﻿namespace GGG_OnlineShop.InternalApiDB.Models
 {
     using Base;
+    using Common;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
@@ -13,19 +14,19 @@
             this.vehicleGlasses = new HashSet<VehicleGlass>();
         }
 
-        [StringLength(100, ErrorMessage = "max len:{1}")]
+        [StringLength(GlobalConstants.MaterialNumberMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
         public string OldMaterialNumber { get; set; }
 
-        [StringLength(100, ErrorMessage = "max len:{1}")]
+        [StringLength(GlobalConstants.OesCodeMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
         public string OldOesCode { get; set; }
 
-        [StringLength(100, ErrorMessage = "max len:{1}")]
+        [StringLength(GlobalConstants.EurocodeMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
         public string OldEuroCode { get; set; }
 
-        [StringLength(100, ErrorMessage = "max len:{1}")]
+        [StringLength(GlobalConstants.LocalCodeMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
         public string OldLocalCode { get; set; }
 
-        [StringLength(150, ErrorMessage = "max len:{1}")]
+        [StringLength(GlobalConstants.SuperceedChangeDateMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
         public string ChangeDate { get; set; }
 
         public virtual ICollection<VehicleGlass> VehicleGlasses

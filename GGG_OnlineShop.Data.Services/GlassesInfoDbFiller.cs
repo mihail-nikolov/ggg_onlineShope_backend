@@ -16,7 +16,6 @@
 
     public class GlassesInfoDbFiller : IGlassesInfoDbFiller
     {
-        // TODO - check for not implemented
         private static string solutionDirectory = Path.GetDirectoryName(Path.GetDirectoryName(HttpRuntime.AppDomainAppPath));
 
         private string errorsfilePathToWrite = $@"{solutionDirectory}\DbFillInErorrs_{DateTime.Now.ToString("ddMMyy_HHmm")}.txt";

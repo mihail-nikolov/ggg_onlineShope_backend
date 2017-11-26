@@ -26,7 +26,6 @@
             return vehicles;
         }
 
-        // TODO think about using Iqueriably everywhere, because of mapping later
         public Vehicle GetVehicleByMakeModelAndBodyTypeIds(int makeId, int? modelId, int? bodyTypeId)
         {
             var vehicle = this.Data.All().Where(v =>

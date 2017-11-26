@@ -1,9 +1,9 @@
 ﻿namespace GGG_OnlineShop.InternalApiDB.Models
 {
     using Base;
+    using Common;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
 
     public class VehicleMake : BaseModel<int>
     {
@@ -15,6 +15,7 @@
         }
 
         [Required]
+        [StringLength(GlobalConstants.MakeNameMaxLength, ErrorMessage = GlobalConstants.MinAndMaxLengthErrorMessage, MinimumLength = GlobalConstants.MakeNameMinLength)]
         public string Name { get; set; }
 
         public virtual ICollection<Vehicle> Vehicles

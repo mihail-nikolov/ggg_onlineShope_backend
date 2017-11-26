@@ -9,6 +9,7 @@
     using System.Net.Http;
     using System.Web.Http;
 
+    [RoutePrefix("api/Makes")]
     public class MakesController : BaseController
     {
         private readonly IVehicleMakesService makes;
@@ -19,8 +20,7 @@
         }
 
         [HttpGet]
-        [Route("api/Makes")]
-        public IHttpActionResult GetVehicleMakes()
+        public IHttpActionResult Get()
         {
             try
             {

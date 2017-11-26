@@ -7,11 +7,12 @@
     using System;
     using System.Net.Http;
     using System.Linq;
-    using ViewModels.OrderedItems;
+    using Models.OrderedItems;
     using Infrastructure;
     using System.Net;
 
     [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
+    [RoutePrefix("api/Administration/ManageOrderedItems")]
     public class ManageOrderedItemsController : BaseController
     {
         private readonly IOrderedItemsService orders;
@@ -22,13 +23,14 @@
         }
 
         [HttpGet]
-        [Route("api/Administration/ManageOrderedItems/all")]
-        public IHttpActionResult GetAll()
+        [Route("all")]
+        public IHttpActionResult Get()
         {
             try
             {
                 var orders = this.orders.GetAll()
                                   .OrderBy(x => x.CreatedOn)
+                                  .ThenByDescending(x => x.Status)
                                   .ThenBy(x => x.UserId)
                                   .ThenBy(x => x.Id)
                                   .To<OrderedItemResponseModelWIthUserInfo>()
@@ -43,30 +45,30 @@
             }
         }
 
-        [HttpGet]
-        [Route("api/Administration/ManageOrderedItems/pending")]
-        public IHttpActionResult GetPending()
-        {
-            try
-            {
-                var orders = this.orders.GetAllPending()
-                                  .OrderBy(x => x.CreatedOn)
-                                  .ThenBy(x => x.UserId)
-                                  .ThenBy(x => x.Id)
-                                  .To<OrderedItemResponseModelWIthUserInfo>()
-                                  .ToList();
+        //[HttpGet]
+        //[Route("api/Administration/ManageOrderedItems/pending")]
+        //public IHttpActionResult GetPending()
+        //{
+        //    try
+        //    {
+        //        var orders = this.orders.GetAllPending()
+        //                          .OrderBy(x => x.CreatedOn)
+        //                          .ThenBy(x => x.UserId)
+        //                          .ThenBy(x => x.Id)
+        //                          .To<OrderedItemResponseModelWIthUserInfo>()
+        //                          .ToList();
 
-                return this.Ok(orders);
-            }
-            catch (Exception e)
-            {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
-                                                 e.Message));
-            }
-        }
+        //        return this.Ok(orders);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
+        //                                         e.Message));
+        //    }
+        //}
 
         [HttpPost]
-        [Route("api/Administration/ManageOrderedItems/update")]
+        [Route("update")]
         public IHttpActionResult Update(OrderedItemRequestUpdateStatusModel model)
         {
             if (!ModelState.IsValid)
@@ -77,12 +79,11 @@
             try
             {
                 var product = this.orders.GetById(model.Id);
-                product.Finished = model.Finished;
+                product.Status = model.Status;
                 this.orders.Save();
 
-                // TODO - check the nulls (closing the connection when getbyId => cannot read VehicleGlass property
-                var updatedOrder = this.Mapper.Map<OrderedItemResponseModelWIthUserInfo>(this.orders.GetById(model.Id)); // should return the whole model
-                return this.Ok($"{updatedOrder.Id} updated successfully");
+                var updatedOrder = this.Mapper.Map<OrderedItemResponseModelWIthUserInfo>(this.orders.GetById(model.Id));
+                return this.Ok($"{updatedOrder} updated successfully");
             }
             catch (Exception e)
             {

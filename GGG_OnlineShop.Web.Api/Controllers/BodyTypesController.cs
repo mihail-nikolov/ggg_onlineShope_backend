@@ -9,6 +9,7 @@
     using System.Net.Http;
     using System.Web.Http;
 
+    [RoutePrefix("api/BodyTypes")]
     public class BodyTypesController : BaseController
     {
         private readonly IVehiclesService vehicles;
@@ -23,7 +24,7 @@
         }
 
         [HttpPost]
-        [Route("api/BodyTypes/GetByMakeAndModelIds")]
+        [Route("GetByMakeAndModelIds")]
         public IHttpActionResult GetVehicleBodyTypeByMakeAndModelIds(VehicleBodyTypesRequestModel requestModel)
         {
             if (!ModelState.IsValid)

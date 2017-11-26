@@ -9,6 +9,7 @@
     using Base;
     using System;
     using System.ComponentModel.DataAnnotations.Schema;
+    using Common;
 
     public class User : IdentityUser, IAuditInfo, IDeletableEntity
     {
@@ -20,9 +21,44 @@
             this.CreatedOn = DateTime.Now;
         }
 
-        //[Range(RatingConstants.MinRating, RatingConstants.MaxRating)]
-        [Range(0, 100)]
-        public int? PercentageReduction { get; set; }
+        [Required]
+        [Range(GlobalConstants.MinPercentageReduction, GlobalConstants.MaxPercentageReduction)]
+        public double PercentageReduction { get; set; }
+
+        [Required]
+        [Index(IsUnique = true)]
+        [StringLength(GlobalConstants.BulstatMaxLength, ErrorMessage = GlobalConstants.MinAndMaxLengthErrorMessage, MinimumLength = GlobalConstants.BulstatMinLength)]
+        public string Bulstat { get; set; }
+
+        [Required]
+        [StringLength(GlobalConstants.CompanyNameMaxLength, ErrorMessage = GlobalConstants.MinAndMaxLengthErrorMessage, MinimumLength = GlobalConstants.CompanyNameMinLength)]
+        public string CompanyName { get; set; }
+
+        [Required]
+        [StringLength(GlobalConstants.DeliveryCountryMaxLength, ErrorMessage = GlobalConstants.MinAndMaxLengthErrorMessage, MinimumLength = GlobalConstants.DeliveryCountryMinLength)]
+        public string DeliveryCountry { get; set; }
+
+        [Required]
+        [StringLength(GlobalConstants.DeliveryTownMaxLength, ErrorMessage = GlobalConstants.MinAndMaxLengthErrorMessage, MinimumLength = GlobalConstants.DeliveryTownMinLength)]
+        public string DeliveryTown { get; set; }
+
+        [Required]
+        [StringLength(GlobalConstants.DeliveryAddressMaxLength, ErrorMessage = GlobalConstants.MinAndMaxLengthErrorMessage, MinimumLength = GlobalConstants.DeliveryAddressMinLength)]
+        public string DeliveryAddress{ get; set; }
+
+        [Required]
+        [StringLength(GlobalConstants.PhoneNumberMaxLength, ErrorMessage = GlobalConstants.MinAndMaxLengthErrorMessage, MinimumLength = GlobalConstants.PhoneNumberMinLength)]
+        public override string PhoneNumber { get; set; }
+
+        public bool IsAccountActive { get; set; }
+
+        public DateTime CreatedOn { get; set; }
+
+        public DateTime? ModifiedOn { get; set; }
+
+        public bool IsDeleted { get; set; }
+
+        public DateTime? DeletedOn { get; set; }
 
         public virtual ICollection<OrderedItem> OrderedItems
         {
@@ -35,29 +71,6 @@
                 this.orderedItems = value;
             }
         }
-
-        [Required]
-        [Index(IsUnique = true)]
-        [StringLength(50, ErrorMessage = "max len:{1}, min len: {2}.", MinimumLength = 2)]
-        public string Bulstat { get; set; }
-
-        [Required]
-        [StringLength(30, ErrorMessage = "max len:{1}, min len: {2}.", MinimumLength = 3)]
-        public string CompanyName { get; set; }
-
-        [Required]
-        [StringLength(300, ErrorMessage = "max len:{1}, min len: {2}.", MinimumLength = 2)]
-        public string DeliveryAddress { get; set; }
-
-        public bool IsAccountActive { get; set; }
-
-        public DateTime CreatedOn { get; set; }
-
-        public DateTime? ModifiedOn { get; set; }
-
-        public bool IsDeleted { get; set; }
-
-        public DateTime? DeletedOn { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<User> manager, string authenticationType)
         {

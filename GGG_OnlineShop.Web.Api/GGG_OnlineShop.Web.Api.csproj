@@ -265,9 +265,10 @@
     <Compile Include="Areas\Administration\Controllers\AdministrationController.cs" />
     <Compile Include="Areas\Administration\Controllers\ManageOrderedItemsController.cs" />
     <Compile Include="Areas\Administration\Controllers\ManageUsersController.cs" />
-    <Compile Include="Areas\Administration\ViewModels\OrderedItems\OrderedItemRequestUpdateStatusModel.cs" />
-    <Compile Include="Areas\Administration\ViewModels\OrderedItems\OrderedItemResponseModelWIthUserInfo.cs" />
-    <Compile Include="Areas\Administration\ViewModels\Users\UserModel.cs" />
+    <Compile Include="Areas\Administration\Models\OrderedItems\OrderedItemRequestUpdateStatusModel.cs" />
+    <Compile Include="Areas\Administration\Models\OrderedItems\OrderedItemResponseModelWIthUserInfo.cs" />
+    <Compile Include="Areas\Administration\Models\Users\UserResponseModel.cs" />
+    <Compile Include="Areas\Administration\Models\Users\UserUpdateModel.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\BodyTypesController.cs" />
@@ -279,7 +280,11 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountBindingModels.cs" />
+    <Compile Include="Models\AccountInfoResponseModel.cs" />
+    <Compile Include="Models\AccountInfoUpdateModel.cs" />
+    <Compile Include="Models\AccountRegisterBindingModel.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\OrderedItemRequestModel.cs" />
     <Compile Include="Models\OrderedItemResponseModel.cs" />
     <Compile Include="Models\VehicleBodyTypesRequestModel.cs" />
     <Compile Include="Models\VehicleBodyTypeResponseModel.cs" />
