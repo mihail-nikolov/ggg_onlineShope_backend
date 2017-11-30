@@ -7,7 +7,7 @@
 
     public class VehicleGlassesService : BaseDataService<VehicleGlass>, IVehicleGlassesService
     {
-        public VehicleGlassesService(IDbRepository<VehicleGlass> dataSet) : base(dataSet)
+        public VehicleGlassesService(IInternalDbRepository<VehicleGlass> dataSet) : base(dataSet)
         {
         }
 

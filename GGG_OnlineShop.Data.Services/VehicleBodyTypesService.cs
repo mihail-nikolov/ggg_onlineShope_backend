@@ -7,7 +7,7 @@
 
     public class VehicleBodyTypesService : BaseDataService<VehicleBodyType>, IVehicleBodyTypesService
     {
-        public VehicleBodyTypesService(IDbRepository<VehicleBodyType> dataSet) : base(dataSet)
+        public VehicleBodyTypesService(IInternalDbRepository<VehicleBodyType> dataSet) : base(dataSet)
         {
         }
 

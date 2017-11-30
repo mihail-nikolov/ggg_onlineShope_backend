@@ -7,7 +7,7 @@
 
     public class VehicleSuperceedsService : BaseDataService<VehicleGlassSuperceed>, IVehicleSuperceedsService
     {
-        public VehicleSuperceedsService(IDbRepository<VehicleGlassSuperceed> dataSet) : base(dataSet)
+        public VehicleSuperceedsService(IInternalDbRepository<VehicleGlassSuperceed> dataSet) : base(dataSet)
         {
         }
 

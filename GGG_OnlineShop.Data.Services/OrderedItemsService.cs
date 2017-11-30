@@ -8,7 +8,7 @@
 
     public class OrderedItemsService : BaseDataWithCreatorService<OrderedItem>, IOrderedItemsService
     {
-        public OrderedItemsService(IDbRepository<OrderedItem> dataSet, IDbRepository<User> users)
+        public OrderedItemsService(IInternalDbRepository<OrderedItem> dataSet, IInternalDbRepository<User> users)
             : base(dataSet, users)
         {
         }

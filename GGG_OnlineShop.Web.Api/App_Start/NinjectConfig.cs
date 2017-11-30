@@ -36,7 +36,7 @@
         private static void RegisterServices(IKernel kernel)
         {
             kernel.Bind<IInternalApiDbContext>().To<InternalApiDbContext>().InRequestScope();
-            kernel.Bind(typeof(IDbRepository<>)).To(typeof(DbRepository<>)).InRequestScope();
+            kernel.Bind(typeof(IInternalDbRepository<>)).To(typeof(InternalDbRepository<>)).InRequestScope();
             kernel.Bind<ILogger>().To<FileLogger>();
             kernel.Bind<IReader>().To<FileReader>();
             //kernel.Bind(typeof(IUserStore<User>)).To(typeof(UserStore<User>)); TODO remove if not needed

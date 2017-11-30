@@ -14,11 +14,14 @@
     {
         private readonly IVehiclesService vehicles;
         private readonly IVehicleGlassesService glasses;
+        private readonly IProductQuantitiesService productQuantities;
 
-        public ProductsController(IVehiclesService vehicles, IVehicleGlassesService glasses)
+        public ProductsController(IVehiclesService vehicles, IVehicleGlassesService glasses,
+                                    IProductQuantitiesService productQuantities)
         {
             this.vehicles = vehicles;
             this.glasses = glasses;
+            this.productQuantities = productQuantities;
         }
 
         // TODO crossing elements between DBs via GetGlass nad GetInterchangeableParts
@@ -136,6 +139,23 @@
             {
                 var glass = this.Mapper.Map<VehicleGlassResponseModel>(this.glasses.GetById(id));
                 return this.Ok(glass);
+            }
+            catch (Exception e)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
+                                                 e.Message));
+            }
+        }
+
+        [HttpGet]
+        [Route("GetQuantities/{code}")]
+        public IHttpActionResult GetQuantities(string code)
+        {
+            try
+            {
+
+                var quantities = this.productQuantities.GetQuantitiesByCode(code);
+                return this.Ok(quantities);
             }
             catch (Exception e)
             {

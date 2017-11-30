@@ -7,7 +7,7 @@
 
     public class VehicleInterchangeablePartsService : BaseDataService<VehicleGlassInterchangeablePart>, IVehicleInterchangeablePartsService
     {
-        public VehicleInterchangeablePartsService(IDbRepository<VehicleGlassInterchangeablePart> dataSet) : base(dataSet)
+        public VehicleInterchangeablePartsService(IInternalDbRepository<VehicleGlassInterchangeablePart> dataSet) : base(dataSet)
         {
         }
 

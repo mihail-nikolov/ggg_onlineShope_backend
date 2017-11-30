@@ -8,7 +8,7 @@
 
     public class VehiclesService : BaseDataService<Vehicle>, IVehiclesService
     {
-        public VehiclesService(IDbRepository<Vehicle> dataSet) : base(dataSet)
+        public VehiclesService(IInternalDbRepository<Vehicle> dataSet) : base(dataSet)
         {
         }
 

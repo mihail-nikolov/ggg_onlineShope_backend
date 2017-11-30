@@ -3,6 +3,8 @@
     public class GlobalConstants
     {
         public const string AdministratorRoleName = "admin";
+        public const string ExternalDBRestrictionMessage = "do not have rights on external DB";
+        public const string DBContextRequiredErrorMessage = "An instance of DbContext is required to use this repository.";
 
         public const char InterchangeablePartStringSeparator = ';';
         public const int InterchangeableEurocodeMaxLength = 400;

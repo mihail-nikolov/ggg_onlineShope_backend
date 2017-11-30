@@ -7,7 +7,7 @@
 
     public class UsersService : BaseDataService<User>, IUsersService 
     {
-        public UsersService(IDbRepository<User> dataSet) : base(dataSet)
+        public UsersService(IInternalDbRepository<User> dataSet) : base(dataSet)
         {
         }
 

@@ -53,11 +53,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DbRepository{T}.cs" />
-    <Compile Include="IDbRepository{T}.cs" />
+    <Compile Include="ExternalDbRepository.cs" />
+    <Compile Include="IExternalDbRepository{T}.cs" />
+    <Compile Include="InternalDbRepository{T}.cs" />
+    <Compile Include="IInternalDbRepository{T}.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GGG_OnlineShop.Common\GGG_OnlineShop.Common.csproj">
+      <Project>{37895E29-1472-4A8B-BF00-0297412AEB8F}</Project>
+      <Name>GGG_OnlineShop.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GGG_onlineShop.Data\GGG_OnlineShop.InternalApiDB.Data.csproj">
       <Project>{602C2947-92C6-4119-B519-3A2AA26B55AA}</Project>
       <Name>GGG_OnlineShop.InternalApiDB.Data</Name>
@@ -65,6 +71,10 @@
     <ProjectReference Include="..\GGG_onlineShop.Models\GGG_OnlineShop.InternalApiDB.Models.csproj">
       <Project>{B8D0E014-1843-4AC3-A5C4-5E64875B2CBE}</Project>
       <Name>GGG_OnlineShop.InternalApiDB.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SkladProDB.Data\SkladProDB.Data.csproj">
+      <Project>{6F949385-1832-4CAC-B653-8F428E28380E}</Project>
+      <Name>SkladProDB.Data</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

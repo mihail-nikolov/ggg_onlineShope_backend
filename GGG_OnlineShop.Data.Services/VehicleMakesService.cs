@@ -7,7 +7,7 @@
 
     public class VehicleMakesService : BaseDataService<VehicleMake>, IVehicleMakesService
     {
-        public VehicleMakesService(IDbRepository<VehicleMake> dataSet) : base(dataSet)
+        public VehicleMakesService(IInternalDbRepository<VehicleMake> dataSet) : base(dataSet)
         {
         }
 
