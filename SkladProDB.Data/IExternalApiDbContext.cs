@@ -1,4 +1,4 @@
-﻿namespace SkladProDB.Data
+﻿namespace GGG_OnlineShop_SkladProDB.Data
 {
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;

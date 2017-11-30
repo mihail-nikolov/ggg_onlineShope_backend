@@ -153,7 +153,6 @@
         {
             try
             {
-
                 var quantities = this.productQuantities.GetQuantitiesByCode(code);
                 return this.Ok(quantities);
             }

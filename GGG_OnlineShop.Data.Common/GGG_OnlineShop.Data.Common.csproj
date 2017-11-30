@@ -53,7 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExternalDbRepository.cs" />
+    <Compile Include="ExternalDbRepository{T}.cs" />
     <Compile Include="IExternalDbRepository{T}.cs" />
     <Compile Include="InternalDbRepository{T}.cs" />
     <Compile Include="IInternalDbRepository{T}.cs" />
@@ -72,9 +72,9 @@
       <Project>{B8D0E014-1843-4AC3-A5C4-5E64875B2CBE}</Project>
       <Name>GGG_OnlineShop.InternalApiDB.Models</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SkladProDB.Data\SkladProDB.Data.csproj">
+    <ProjectReference Include="..\SkladProDB.Data\GGG_OnlineShop_SkladProDB.Data.csproj">
       <Project>{6F949385-1832-4CAC-B653-8F428E28380E}</Project>
-      <Name>SkladProDB.Data</Name>
+      <Name>GGG_OnlineShop_SkladProDB.Data</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -43,7 +43,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductExcelSheets.app.test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkladProDB.Models", "SkladProDB.Models\SkladProDB.Models.csproj", "{23D4A163-B78F-4CF1-9F6C-9F62FBB0F491}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkladProDB.Data", "SkladProDB.Data\SkladProDB.Data.csproj", "{6F949385-1832-4CAC-B653-8F428E28380E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GGG_OnlineShop_SkladProDB.Data", "SkladProDB.Data\GGG_OnlineShop_SkladProDB.Data.csproj", "{6F949385-1832-4CAC-B653-8F428E28380E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

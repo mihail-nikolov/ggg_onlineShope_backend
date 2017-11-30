@@ -1,6 +1,6 @@
 ﻿namespace GGG_OnlineShop.Web.Api.App_Start
 {
-    using GGG_OnlineShop.InternalApiDB.Data;
+    using InternalApiDB.Data;
     using Data.Common;
     using Common;
     using Ninject;
@@ -8,8 +8,9 @@
     using System;
     using System.Web;
     using Ninject.Extensions.Conventions;
-    using GGG_OnlineShop.Common.Services.Contracts;
-    using GGG_OnlineShop.Common.Services;
+    using Common.Services.Contracts;
+    using Common.Services;
+    using GGG_OnlineShop_SkladProDB.Data;
 
     public class NinjectConfig
     {
@@ -37,6 +38,10 @@
         {
             kernel.Bind<IInternalApiDbContext>().To<InternalApiDbContext>().InRequestScope();
             kernel.Bind(typeof(IInternalDbRepository<>)).To(typeof(InternalDbRepository<>)).InRequestScope();
+
+            kernel.Bind<IExternalApiDbContext>().To<ExternalApiDbContext>().InRequestScope();
+            kernel.Bind(typeof(IExternalDbRepository<>)).To(typeof(ExternalDbRepository<>)).InRequestScope();
+
             kernel.Bind<ILogger>().To<FileLogger>();
             kernel.Bind<IReader>().To<FileReader>();
             //kernel.Bind(typeof(IUserStore<User>)).To(typeof(UserStore<User>)); TODO remove if not needed
