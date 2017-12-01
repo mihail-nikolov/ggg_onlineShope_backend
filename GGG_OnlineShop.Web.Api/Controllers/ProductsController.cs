@@ -24,10 +24,6 @@
             this.productQuantities = productQuantities;
         }
 
-        // TODO crossing elements between DBs via GetGlass nad GetInterchangeableParts
-        // be really careful with nulls! model and bodyType could be nulls => the Ids will be nulls.. (double check!!!)
-        // probably service returns it OK, but showing models etc is NOK in the fronted
-        // how to pass code (some codes have non alphanumeric symbol
         [HttpPost]
         [Route("GetByVehicleInfoAndProductType")]
         public IHttpActionResult GetByMakeModelBodyTypeIdsAndProductType(VehicleGlassRequestModel requestModel)

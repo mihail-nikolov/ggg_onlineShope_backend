@@ -77,13 +77,23 @@
                 user.UserName = user.Email;
 
                 IdentityResult result = await UserManager.CreateAsync(user, model.Password);
-
-                if (!result.Succeeded)
+                if (result.Succeeded)
                 {
-                    return GetErrorResult(result);
-                }
+                    var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                    var callbackUrl = this.Url.Route("GGG_OnlineShop_WithAction", new { Controller = "Account", Action = "ConfirmEmail", userId = user.Id, code = code });
 
-                return Ok();
+                    //await UserManager.SendEmailAsync(user.Id,
+                    //   "Confirm your account",
+                    //   "Please confirm your account by clicking this link: <a href=\""
+                    //                                   + callbackUrl + "\">link</a>");
+                    return Ok(callbackUrl);
+                }
+                //    if (!result.Succeeded)
+                //{
+                //    return GetErrorResult(result);
+                //}
+
+                return GetErrorResult(result);
             }
             catch (Exception e)
             {
@@ -92,6 +102,7 @@
             }
         }
 
+        // GET user info
         [HttpGet]
         public IHttpActionResult Get()
         {
@@ -178,6 +189,73 @@
             }
         }
 
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("ForgotPassword")]
+        // TODO - constants and email send service implement
+        public async Task<IHttpActionResult> ForgotPassword(AccountRequestForgottenPasswordCodeModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await UserManager.FindByNameAsync(model.Email);
+                if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
+                {
+                    // Don't reveal that the user does not exist or is not confirmed
+                    return BadRequest(ModelState);
+                }
+
+                string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+                //await UserManager.SendEmailAsync(user.Id, "Reset Password", $"Please reset your password by using this {code}");
+                return Ok(code);
+            }
+
+            return BadRequest(ModelState);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("ResetPassword")]
+        public async Task<IHttpActionResult> ResetPassword(AccountResetPasswordRequestModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var user = await UserManager.FindByNameAsync(model.Email);
+            if (user == null)
+            {
+                // Don't reveal that the user does not exist
+                return Ok();
+            }
+            var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
+            if (result.Succeeded)
+            {
+                return Ok();
+            }
+
+            // Don't reveal that the user does not exist
+            return Ok();
+        }
+
+        [HttpPost]
+        [AllowAnonymous] // TODO  constants
+        [Route("ConfirmEmail")]
+        public async Task<IHttpActionResult> ConfirmEmail(string userId, string code)
+        {
+            if (userId == null || code == null)
+            {
+                return this.BadRequest($"wrong code for {userId}");
+            }
+
+            var result = await UserManager.ConfirmEmailAsync(userId, code);
+            if (!result.Succeeded)
+            {
+                return this.BadRequest("email confirmation failed");
+            }
+
+            return this.Ok();
+        }
+
         // POST api/Account/SetPassword
         [Route("SetPassword")]
         public async Task<IHttpActionResult> SetPassword(SetPasswordBindingModel model)
@@ -196,7 +274,7 @@
 
             return Ok();
         }
-
+        
         // POST api/Account/Logout
         [Route("Logout")]
         public IHttpActionResult Logout()
@@ -205,6 +283,7 @@
             return Ok();
         }
 
+        // ==============================================================================================================================
         // GET api/Account/ManageInfo?returnUrl=%2F&generateState=true
         [Route("ManageInfo")]
         public async Task<ManageInfoViewModel> GetManageInfo(string returnUrl, bool generateState = false)

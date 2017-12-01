@@ -283,6 +283,8 @@
     <Compile Include="Models\AccountInfoResponseModel.cs" />
     <Compile Include="Models\AccountInfoUpdateModel.cs" />
     <Compile Include="Models\AccountRegisterBindingModel.cs" />
+    <Compile Include="Models\AccountRequestForgottenPasswordCodeModel.cs" />
+    <Compile Include="Models\AccountResetPasswordRequestModel.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\OrderedItemRequestModel.cs" />
     <Compile Include="Models\OrderedItemResponseModel.cs" />

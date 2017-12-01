@@ -34,6 +34,7 @@ namespace GGG_OnlineShop.InternalApiDB.Data.Migrations
                 {
                     UserName = AdministratorUserName,
                     Email = AdministratorUserName,
+                    EmailConfirmed = true,
                     Bulstat = "123456",
                     CompanyName = "GGG",
                     DeliveryAddress = "Sofia Liuln",

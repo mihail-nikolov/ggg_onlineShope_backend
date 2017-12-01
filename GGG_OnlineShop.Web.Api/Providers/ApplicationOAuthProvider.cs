@@ -36,6 +36,13 @@
                 return;
             }
 
+            // set emailConfirmed required
+            if (!user.EmailConfirmed)
+            {
+                context.SetError("invalid_grant", "Account pending approval.");
+                return;
+            }
+
             ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(userManager,
                OAuthDefaults.AuthenticationType);
             ClaimsIdentity cookiesIdentity = await user.GenerateUserIdentityAsync(userManager,
