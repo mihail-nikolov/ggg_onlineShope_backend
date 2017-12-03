@@ -40,7 +40,8 @@ namespace GGG_OnlineShop.InternalApiDB.Data.Migrations
                     CompanyName = "GGG",
                     DeliveryAddress = "Sofia Liuln",
                     DeliveryCountry = "Bulgaria",
-                    DeliveryTown = "Sofia"
+                    DeliveryTown = "Sofia",
+                    PhoneNumber = "1312312312"
                 };
                 userManager.Create(admin, AdministratorPassword);
                 userManager.AddToRole(admin.Id, GlobalConstants.AdministratorRoleName);
