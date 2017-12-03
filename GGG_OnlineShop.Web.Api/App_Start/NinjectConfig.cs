@@ -44,7 +44,6 @@
 
             kernel.Bind<ILogger>().To<FileLogger>();
             kernel.Bind<IReader>().To<FileReader>();
-            //kernel.Bind(typeof(IUserStore<User>)).To(typeof(UserStore<User>)); TODO remove if not needed
 
             kernel.Bind(b => b
                 .From(Assemblies.DataServices)

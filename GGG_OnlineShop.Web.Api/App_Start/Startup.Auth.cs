@@ -7,7 +7,7 @@
     using Microsoft.Owin.Security.OAuth;
     using Owin;
     using Providers;
-    using GGG_OnlineShop.InternalApiDB.Data;
+    using InternalApiDB.Data;
 
     public partial class Startup
     {

@@ -17,6 +17,7 @@ namespace GGG_OnlineShop.InternalApiDB.Data.Migrations
 
         private void SeedUsersAndAdmin(InternalApiDbContext context)
         {
+            // TODO  - remove when deploy
             const string AdministratorUserName = "admin@admin.com";
             const string AdministratorPassword = "admin123";
 
@@ -49,27 +50,6 @@ namespace GGG_OnlineShop.InternalApiDB.Data.Migrations
         protected override void Seed(InternalApiDbContext context)
         {
             this.SeedUsersAndAdmin(context);
-            //context.OrderedItems.AddOrUpdate(new OrderedItem() { EuroCode = "2345A", Description = "Ford Fiesta 2004 3 Doors", CreatedOn = DateTime.Now });
-            //context.VehicleBodyTypes.AddOrUpdate(new VehicleBodyType() { Name = "3 HBK" });
-            //context.VehicleBodyTypes.AddOrUpdate(new VehicleBodyType() { Name = "3 HBK" });
-            //context.VehicleMakes.AddOrUpdate(new VehicleMake() { Name = "Ford" });
-            //context.VehicleModelEurocodes.AddOrUpdate(new VehicleGlass() { Name = "2030"});
-            //context.VehicleModels.AddOrUpdate(new VehicleModel() { Name = "Fiesta"});
-            //context.VehicleYears.AddOrUpdate(new VehicleYear() { Year = "02-05" });
-            //context.Vehicles.AddOrUpdate(new Vehicle() { Type = VehicleType.Car, BrandId = 1, ModelId = 1, BodyTypeId = 1, YearId = 1, EurocodeId = 1 });
-
-            //  This method will be called after migrating to the latest version.
-
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
-            //  to avoid creating duplicate seed data. E.g.
-            //
-            //    context.People.AddOrUpdate(
-            //      p => p.FullName,
-            //      new Person { FullName = "Andrew Peters" },
-            //      new Person { FullName = "Brice Lambson" },
-            //      new Person { FullName = "Rowan Miller" }
-            //    );
-            //
         }
     }
 }

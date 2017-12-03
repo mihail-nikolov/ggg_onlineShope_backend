@@ -13,13 +13,13 @@
 
         public VehicleGlassImage GetByCaption(string caption)
         {
-            var image = this.Data.All().Where(i => i.Caption.ToLower() == caption.ToLower()).FirstOrDefault();
+            var image = this.Data.All().Where(i => i.Caption.ToLower() == caption.ToLower()).First();
             return image;
         }
 
         public VehicleGlassImage GetByOriginalId(int originalId)
         {
-            var image = this.Data.All().Where(i => i.OriginalId == originalId).FirstOrDefault();
+            var image = this.Data.All().Where(i => i.OriginalId == originalId).First();
             return image;
         }
     }

@@ -1,12 +1,14 @@
 ﻿namespace GGG_OnlineShop.Data.Services.Contracts
 {
     using InternalApiDB.Models;
+    using System.Linq;
 
     public interface IVehicleSuperceedsService : IBaseDataService<VehicleGlassSuperceed>
     {
         VehicleGlassSuperceed GetByOldEuroCode(string oldEuroCode);
 
-        VehicleGlassSuperceed GetByOldOesCode(string oldOesCode);
+        // oes is not unique - several glasses could have 1 oes
+        IQueryable<VehicleGlassSuperceed> GetByOldOesCode(string oldOesCode);
 
         VehicleGlassSuperceed GetByOldLocalCode(string oldLocalCode);
 

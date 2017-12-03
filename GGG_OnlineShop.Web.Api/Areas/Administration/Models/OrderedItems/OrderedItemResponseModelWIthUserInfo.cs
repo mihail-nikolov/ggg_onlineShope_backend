@@ -9,6 +9,8 @@
     {
         public string AnonymousUserInfo { get; set; }
 
+        public string AnonymousUserЕmail { get; set; }
+
         public string UserInfo { get; set; }
 
         public void CreateMappings(IConfiguration configuration)

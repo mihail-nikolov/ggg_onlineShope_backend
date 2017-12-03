@@ -4,6 +4,7 @@
     using InternalApiDB.Models;
     using System.Linq;
     using Common;
+    using GGG_OnlineShop.Common;
 
     public class UsersService : BaseDataService<User>, IUsersService 
     {
@@ -11,15 +12,33 @@
         {
         }
 
+        public void CleanUserInfoFromOrders(User user)
+        {
+            var orders = user.OrderedItems;
+
+            foreach (var order in orders)
+            {
+                order.AnonymousUserInfo = string.Format(GlobalConstants.DeletedUserInfo, user.PhoneNumber);
+                order.AnonymousUserЕmail = user.Email;
+                order.UserId = null;
+            }
+
+            this.Data.Save();
+        }
+
         public IQueryable<User> GetAllNotActivated()
         {
-            return this.GetAll().Where(u => !u.IsAccountActive);
+            return this.GetAll().Where(u => !u.EmailConfirmed);
+        }
+
+        public User GetByEmail(string email)
+        {
+            return this.GetAll().Where(u => u.Email == email).First();
         }
 
         public User Update(User user)
         {
             var userFromDb = this.GetById(user.Id);
-            userFromDb.IsAccountActive = user.IsAccountActive;
             userFromDb.PercentageReduction = user.PercentageReduction;
             userFromDb.Bulstat = user.Bulstat;
             userFromDb.CompanyName = user.CompanyName;

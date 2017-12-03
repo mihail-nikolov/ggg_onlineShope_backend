@@ -24,12 +24,12 @@
 
         public VehicleGlassAccessory GetAccessoryByMaterialNumber(string materialNumber)
         {
-            return this.Data.All().Where(a => a.MaterialNumber.ToLower() == materialNumber.ToLower()).FirstOrDefault();
+            return this.Data.All().Where(a => a.MaterialNumber.ToLower() == materialNumber.ToLower()).First();
         }
 
         public VehicleGlassAccessory GetAccessoryByIndustryCode(string industryCode)
         {
-            return this.Data.All().Where(a => a.IndustryCode.ToLower() == industryCode.ToLower()).FirstOrDefault();
+            return this.Data.All().Where(a => a.IndustryCode.ToLower() == industryCode.ToLower()).First();
         }
     }
 }

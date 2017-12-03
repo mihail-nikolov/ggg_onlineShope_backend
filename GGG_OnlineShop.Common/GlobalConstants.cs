@@ -3,8 +3,9 @@
     public class GlobalConstants
     {
         public const string AdministratorRoleName = "admin";
-        public const string ExternalDBRestrictionMessage = "do not have rights on external DB";
+        public const string ExternalDBRestrictionMessage = "Do not have rights on external DB";
         public const string DBContextRequiredErrorMessage = "An instance of DbContext is required to use this repository.";
+        public const string AppDomainPath = "http://localhost:60918"; // TODO will change
 
         public const char InterchangeablePartStringSeparator = ';';
         public const int InterchangeableEurocodeMaxLength = 400;
@@ -19,13 +20,14 @@
         public const int FullAddressMaxLength = 400;
         public const int ManufacturerMaxLength = 30;
         public const int OtherCodesMaxLength = 200;
-       
+
         public const int AnonymousUserЕmailMaxLength = 40;
         public const int AnonymousUserInfoMaxLength = 200;
         public const int BulstatMaxLength = 50;
         public const int BulstatMinLength = 2;
         public const int CompanyNameMaxLength = 50;
         public const int CompanyNameMinLength = 2;
+        public const string DeletedUserInfo = "Deleted user; {0}";
         public const int DeliveryNotesMaxLength = 600;
         public const int DeliveryCountryMaxLength = 50;
         public const int DeliveryCountryMinLength = 2;
@@ -40,6 +42,17 @@
         public const int PhoneNumberMaxLength = 30;
         public const int PhoneNumberMinLength = 3;
 
+        public const string SMTPServer = "smtp.gmail.com";
+        public const string EmalToSendFrom = "testggg9@gmail.com"; // TODO change to original email
+        public const string EmalToSendFromPassword = "ggg12345";
+        public const string ResetPasswordSubject = "Reset Password";
+        public const string ResetPasswordBody = "Please reset your password by using this code: {0}";
+        public const string ConfirmEmailSubject = "Confirm your account";
+        public const string ConfirmEmailBody = "Please confirm your account by clicking this link: {0}";
+        public const string WrongCodeErrorMessage = "wrong code for {0}";
+        public const string EmailConfirmationFailedErrorMessage = "email confirmation failed";
+        public const string CannotRemoveAdminErrorMessage = "Cannot remove Admin";
+
         public const int BodyTypeCodeMinLength = 1;
         public const int BodyTypeCodeMaxLength = 10;
         public const int BodyTypeDescriptionMaxLength = 100;
@@ -47,7 +60,10 @@
         public const int MakeNameMinLength = 1;
         public const int ModelNameMaxLength = 100;
         public const int ModelNameMinLength = 1;
+        public const string NeededCodesErrorMessage = "At least one of (glassId, eurocode, oescode, code) should be passed";
 
+        public const string CodeMinLengthErrorMessage = "Enter at least 4 symbols";
+        public const int CodeMinLength = 4;
         public const int EurocodeMinLength = 5;
         public const int EurocodeMaxLength = 30;
         public const int DescriptionMaxLength = 400;
@@ -82,5 +98,14 @@
         public const int SuperceedChangeDateMaxLength = 30;
         public const int NagsCodeMaxLength = 30;
         public const int ScanCodeMaxLength = 30;
+
+        public const string AGCGroup = "AGC";
+        public const string FuyaoGroup = "Fuyao";
+        public const string LamexGroup = "Lamex";
+        public const string NordglassGroup = "Nordglass";
+        public const string PilkingtonGroup = "Pilkington";
+        public const string SaintGobainGroup = "Saint-Gobain";
+        public const string SharedGroup = "Общи";
+        public const string YesglassGroup = "Yesglass";
     }
 }

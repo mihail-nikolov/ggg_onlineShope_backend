@@ -50,8 +50,6 @@
         [StringLength(GlobalConstants.PhoneNumberMaxLength, ErrorMessage = GlobalConstants.MinAndMaxLengthErrorMessage, MinimumLength = GlobalConstants.PhoneNumberMinLength)]
         public override string PhoneNumber { get; set; }
 
-        public bool IsAccountActive { get; set; }
-
         public DateTime CreatedOn { get; set; }
 
         public DateTime? ModifiedOn { get; set; }
@@ -59,6 +57,22 @@
         public bool IsDeleted { get; set; }
 
         public DateTime? DeletedOn { get; set; }
+
+        public bool IsSaintGobainVisible { get; set; }
+
+        public bool IsPilkingtonVisible { get; set; }
+
+        public bool IsYesglassVisible { get; set; }
+
+        public bool IsNordglassVisible { get; set; }
+
+        public bool IsLamexVisible { get; set; }
+
+        public bool IsAGCVisible { get; set; }
+
+        public bool IsFuyaoVisible { get; set; }
+
+        public bool IsSharedVisible { get; set; }
 
         public virtual ICollection<OrderedItem> OrderedItems
         {

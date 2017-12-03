@@ -7,8 +7,12 @@
     {
         IQueryable<User> GetAllNotActivated();
 
+        User GetByEmail(string email);
+
         User Update(User user);
 
         User UpdateContactInfo(User user);
+
+        void CleanUserInfoFromOrders(User user);
     }
 }

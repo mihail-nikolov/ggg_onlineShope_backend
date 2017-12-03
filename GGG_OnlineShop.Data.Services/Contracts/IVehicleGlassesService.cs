@@ -7,7 +7,8 @@
     {
         VehicleGlass GetByEuroCode(string euroCode);
 
-        VehicleGlass GetByOesCode(string oesCode);
+        // oes is not unique - several glasses could have 1 oes
+        IQueryable<VehicleGlass> GetByOesCode(string oesCode);
 
         VehicleGlass GetByMaterialNumber(string materialNumber);
 
@@ -20,5 +21,7 @@
         IQueryable<VehicleGlassAccessory> GetAccessories(int glassId);
 
         IQueryable<VehicleGlass> GetByRandomCode(string code);
+
+        string GetCode(VehicleGlass product);
     }
 }

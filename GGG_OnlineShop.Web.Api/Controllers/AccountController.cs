@@ -22,6 +22,7 @@
     using Data.Services.Contracts;
     using System.Linq;
     using Infrastructure;
+    using Common;
 
     [Authorize]
     [RoutePrefix("api/Account")]
@@ -31,19 +32,23 @@
         private ApplicationUserManager _userManager;
         private readonly IUsersService users;
         private readonly IOrderedItemsService orders;
+        private readonly IEmailsService emails;
 
-        public AccountController(IUsersService users, IOrderedItemsService orders)
+        public AccountController(IUsersService users, IOrderedItemsService orders, IEmailsService emails)
         {
             this.users = users;
             this.orders = orders;
+            this.emails = emails;
         }
 
-        public AccountController(IUsersService users, IOrderedItemsService orders,
+        public AccountController(IUsersService users, IOrderedItemsService orders, IEmailsService emails,
             ApplicationUserManager userManager,
             ISecureDataFormat<AuthenticationTicket> accessTokenFormat)
         {
             this.users = users;
             this.orders = orders;
+            this.emails = emails;
+
             UserManager = userManager;
             AccessTokenFormat = accessTokenFormat;
         }
@@ -77,23 +82,12 @@
                 user.UserName = user.Email;
 
                 IdentityResult result = await UserManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
+                if (!result.Succeeded)
                 {
-                    var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    var callbackUrl = this.Url.Route("GGG_OnlineShop_WithAction", new { Controller = "Account", Action = "ConfirmEmail", userId = user.Id, code = code });
-
-                    //await UserManager.SendEmailAsync(user.Id,
-                    //   "Confirm your account",
-                    //   "Please confirm your account by clicking this link: <a href=\""
-                    //                                   + callbackUrl + "\">link</a>");
-                    return Ok(callbackUrl);
+                    return GetErrorResult(result);
                 }
-                //    if (!result.Succeeded)
-                //{
-                //    return GetErrorResult(result);
-                //}
 
-                return GetErrorResult(result);
+                return this.Ok();
             }
             catch (Exception e)
             {
@@ -148,7 +142,7 @@
             }
         }
 
-        // POST api/Account/ChangePassword
+        [HttpPost]
         [Route("ChangePassword")]
         public async Task<IHttpActionResult> ChangePassword(ChangePasswordBindingModel model)
         {
@@ -169,8 +163,8 @@
         }
 
         [HttpGet]
-        [Route("ShowMyOrders")]
-        public IHttpActionResult ShowMyOrders()
+        [Route("GetMyOrders")]
+        public IHttpActionResult GetMyOrders()
         {
             try
             {
@@ -192,24 +186,35 @@
         [HttpPost]
         [AllowAnonymous]
         [Route("ForgotPassword")]
-        // TODO - constants and email send service implement
-        public async Task<IHttpActionResult> ForgotPassword(AccountRequestForgottenPasswordCodeModel model)
+        public async Task<IHttpActionResult> ForgotPassword(AccountEmailRequestModel model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var user = await UserManager.FindByNameAsync(model.Email);
-                if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
+                if (ModelState.IsValid)
                 {
-                    // Don't reveal that the user does not exist or is not confirmed
-                    return BadRequest(ModelState);
+                    var user = await UserManager.FindByNameAsync(model.Email);
+                    if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
+                    {
+                        // Don't reveal that the user does not exist or is not confirmed
+                        return BadRequest(ModelState);
+                    }
+
+                    string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+                    // TODO - will be the user email
+                    this.emails.SendEmail(GlobalConstants.EmalToSendFrom, GlobalConstants.ResetPasswordSubject,
+                                            string.Format(GlobalConstants.ResetPasswordBody, code), GlobalConstants.SMTPServer,
+                                            GlobalConstants.EmalToSendFrom, GlobalConstants.EmalToSendFromPassword);
+
+                    return Ok(code);
                 }
 
-                string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                //await UserManager.SendEmailAsync(user.Id, "Reset Password", $"Please reset your password by using this {code}");
-                return Ok(code);
+                return BadRequest(ModelState);
             }
-
-            return BadRequest(ModelState);
+            catch (Exception e)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
+                                                 e.Message));
+            }
         }
 
         [HttpPost]
@@ -238,24 +243,64 @@
         }
 
         [HttpPost]
-        [AllowAnonymous] // TODO  constants
+        [AllowAnonymous]
         [Route("ConfirmEmail")]
         public async Task<IHttpActionResult> ConfirmEmail(string userId, string code)
         {
             if (userId == null || code == null)
             {
-                return this.BadRequest($"wrong code for {userId}");
+                return this.BadRequest(string.Format(GlobalConstants.WrongCodeErrorMessage, userId));
             }
 
             var result = await UserManager.ConfirmEmailAsync(userId, code);
             if (!result.Succeeded)
             {
-                return this.BadRequest("email confirmation failed");
+                return this.BadRequest(GlobalConstants.EmailConfirmationFailedErrorMessage);
             }
 
             return this.Ok();
         }
 
+        [HttpPost]
+        [Route("RemoveUser")]
+        public IHttpActionResult RemoveUser()
+        {
+            if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                return this.BadRequest(GlobalConstants.CannotRemoveAdminErrorMessage);
+            }
+
+            try
+            {
+                var user = UserManager.FindByName(this.User.Identity.Name);
+
+                if (user.OrderedItems.Any())
+                {
+                    this.users.CleanUserInfoFromOrders(user);
+                }
+
+                IHttpActionResult result;
+                IdentityResult userRemove = UserManager.Delete(user);
+                if (userRemove.Succeeded)
+                {
+                    result = this.Ok();
+                }
+                else
+                {
+                    result = this.BadRequest(string.Join(", ", userRemove.Errors));
+                }
+
+                return result;
+            }
+
+            catch (Exception e)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
+                                                 e.Message));
+            }
+        }
+
+        // -----------------------------------------------------------------------------------------------------------------------------
         // POST api/Account/SetPassword
         [Route("SetPassword")]
         public async Task<IHttpActionResult> SetPassword(SetPasswordBindingModel model)
@@ -274,7 +319,7 @@
 
             return Ok();
         }
-        
+
         // POST api/Account/Logout
         [Route("Logout")]
         public IHttpActionResult Logout()

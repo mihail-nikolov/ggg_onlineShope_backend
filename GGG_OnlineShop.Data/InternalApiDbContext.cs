@@ -55,11 +55,6 @@
             //    - check what happens when this happens (glass should show [] characteristics)
             // removing model/make/bodytype removes the vehicle
 
-            // TODO removing the user should not remove the orderedItem (one to many)
-            // reset password functionality
-            //modelBuilder.Entity<User>().HasOptional(u => u.OrderedItems).WithOptionalDependent().WillCascadeOnDelete(false);
-            //modelBuilder.Entity<Vehicle>().HasOptional(v => v.BodyType).WithMany(v => v.Vehicles).WillCascadeOnDelete(true);
-            //modelBuilder.Entity<Vehicle>().HasOptional(v => v.Model).WithMany(v => v.Vehicles).WillCascadeOnDelete(true);
             base.OnModelCreating(modelBuilder);
         }
 

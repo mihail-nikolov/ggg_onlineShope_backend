@@ -10,6 +10,7 @@
     using Models.OrderedItems;
     using Infrastructure;
     using System.Net;
+    using System.Collections.Generic;
 
     [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
     [RoutePrefix("api/Administration/ManageOrderedItems")]
@@ -23,18 +24,43 @@
         }
 
         [HttpGet]
-        [Route("all")]
-        public IHttpActionResult Get()
+        [Route("")]
+        public IHttpActionResult Get(bool pending = false, bool ordered = false, bool done = false)
         {
             try
             {
-                var orders = this.orders.GetAll()
-                                  .OrderBy(x => x.CreatedOn)
-                                  .ThenByDescending(x => x.Status)
-                                  .ThenBy(x => x.UserId)
-                                  .ThenBy(x => x.Id)
-                                  .To<OrderedItemResponseModelWIthUserInfo>()
-                                  .ToList();
+                List<OrderedItemResponseModelWIthUserInfo> orders;
+
+                if (pending)
+                {
+                    orders = this.orders.GetNewOrders()
+                                        .To<OrderedItemResponseModelWIthUserInfo>()
+                                        .ToList();
+                }
+                else if (ordered)
+                {
+                    orders = this.orders.GetOrderedProducts()
+                                        .To<OrderedItemResponseModelWIthUserInfo>()
+                                        .ToList();
+                }
+                else if (done)
+                {
+                    orders = this.orders.GetDoneOrders()
+                                        .To<OrderedItemResponseModelWIthUserInfo>()
+                                        .ToList();
+                }
+                else
+                {
+                    orders = this.orders.GetAll()
+                                        .To<OrderedItemResponseModelWIthUserInfo>()
+                                        .ToList();
+                }
+
+                orders = orders.OrderBy(x => x.CreatedOn)
+                                      .ThenByDescending(x => x.Status)
+                                      .ThenBy(x => x.UserInfo)
+                                      .ThenBy(x => x.Id)
+                                      .ToList();
 
                 return this.Ok(orders);
             }
@@ -44,28 +70,6 @@
                                                  e.Message));
             }
         }
-
-        //[HttpGet]
-        //[Route("api/Administration/ManageOrderedItems/pending")]
-        //public IHttpActionResult GetPending()
-        //{
-        //    try
-        //    {
-        //        var orders = this.orders.GetAllPending()
-        //                          .OrderBy(x => x.CreatedOn)
-        //                          .ThenBy(x => x.UserId)
-        //                          .ThenBy(x => x.Id)
-        //                          .To<OrderedItemResponseModelWIthUserInfo>()
-        //                          .ToList();
-
-        //        return this.Ok(orders);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
-        //                                         e.Message));
-        //    }
-        //}
 
         [HttpPost]
         [Route("update")]

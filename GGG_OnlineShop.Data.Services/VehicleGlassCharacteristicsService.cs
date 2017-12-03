@@ -13,7 +13,7 @@
 
         public VehicleGlassCharacteristic GetByName(string name)
         {
-            var glassCharacteristic = this.Data.All().Where(c => c.Name.ToLower() == name.ToLower()).FirstOrDefault();
+            var glassCharacteristic = this.Data.All().Where(c => c.Name.ToLower() == name.ToLower()).First();
             return glassCharacteristic;
         }
     }

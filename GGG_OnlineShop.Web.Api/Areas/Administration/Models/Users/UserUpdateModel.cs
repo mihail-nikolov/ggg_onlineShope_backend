@@ -22,7 +22,20 @@
         [StringLength(GlobalConstants.CompanyNameMaxLength, ErrorMessage = GlobalConstants.MinAndMaxLengthErrorMessage, MinimumLength = GlobalConstants.CompanyNameMinLength)]
         public string CompanyName { get; set; }
 
-        [Required]
-        public bool IsAccountActive { get; set; }
+        public bool IsSaintGobainVisible { get; set; }
+
+        public bool IsPilkingtonVisible { get; set; }
+
+        public bool IsYesglassVisible { get; set; }
+
+        public bool IsNordglassVisible { get; set; }
+
+        public bool IsLamexVisible { get; set; }
+
+        public bool IsAGCVisible { get; set; }
+
+        public bool IsFuyaoVisible { get; set; }
+
+        public bool IsSharedVisible { get; set; }
     }
 }

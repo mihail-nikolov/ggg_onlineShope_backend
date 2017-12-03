@@ -13,39 +13,38 @@
 
         public VehicleGlassSuperceed GetByOldEuroCode(string oldEuroCode)
         {
-            var superceed = this.Data.All().Where(s => s.OldEuroCode.ToLower() == oldEuroCode.ToLower()).FirstOrDefault();
+            var superceed = this.Data.All().Where(s => s.OldEuroCode.ToLower() == oldEuroCode.ToLower()).First();
             return superceed;
         }
 
         public VehicleGlassSuperceed GetByOldLocalCode(string oldLocalCode)
         {
-            var superceed = this.Data.All().Where(s => s.OldLocalCode.ToLower() == oldLocalCode.ToLower()).FirstOrDefault();
+            var superceed = this.Data.All().Where(s => s.OldLocalCode.ToLower() == oldLocalCode.ToLower()).First();
             return superceed;
         }
 
         public VehicleGlassSuperceed GetByOldMaterialNumber(string oldMaterialNumber)
         {
-            var superceed = this.Data.All().Where(s => s.OldMaterialNumber.ToLower() == oldMaterialNumber.ToLower()).FirstOrDefault();
+            var superceed = this.Data.All().Where(s => s.OldMaterialNumber.ToLower() == oldMaterialNumber.ToLower()).First();
             return superceed;
         }
 
-        public VehicleGlassSuperceed GetByOldOesCode(string oldOesCode)
+        // oes is not unique - several glasses could have 1 oes
+        public IQueryable<VehicleGlassSuperceed> GetByOldOesCode(string oldOesCode)
         {
-            var superceed = this.Data.All().Where(s => s.OldOesCode.ToLower() == oldOesCode.ToLower()).FirstOrDefault();
+            var superceed = this.Data.All().Where(s => s.OldOesCode.ToLower() == oldOesCode.ToLower());
             return superceed;
         }
 
         public VehicleGlassSuperceed GetSuperceed(string oldEuroCode, string oldOesCode, string oldLocalCode, string oldMaterialNumber)
         {
+            // oes is not unique - several glasses could have 1 oes
+            // => will not search by oes
             VehicleGlassSuperceed superceed;
 
             if (!string.IsNullOrEmpty(oldEuroCode))
             {
                 superceed = this.GetByOldEuroCode(oldEuroCode);
-            }
-            else if (!string.IsNullOrEmpty(oldOesCode))
-            {
-                superceed = this.GetByOldOesCode(oldOesCode);
             }
             else if (!string.IsNullOrEmpty(oldMaterialNumber))
             {

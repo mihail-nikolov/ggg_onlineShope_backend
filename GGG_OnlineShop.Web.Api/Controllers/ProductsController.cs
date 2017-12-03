@@ -1,9 +1,12 @@
 ﻿namespace GGG_OnlineShop.Web.Api.Controllers
 {
+    using Common;
     using Data.Services.Contracts;
     using Infrastructure;
+    using InternalApiDB.Models;
     using Models;
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
@@ -15,17 +18,19 @@
         private readonly IVehiclesService vehicles;
         private readonly IVehicleGlassesService glasses;
         private readonly IProductQuantitiesService productQuantities;
+        private readonly IUsersService users;
 
         public ProductsController(IVehiclesService vehicles, IVehicleGlassesService glasses,
-                                    IProductQuantitiesService productQuantities)
+                                  IProductQuantitiesService productQuantities, IUsersService users)
         {
             this.vehicles = vehicles;
             this.glasses = glasses;
             this.productQuantities = productQuantities;
+            this.users = users;
         }
 
         [HttpPost]
-        [Route("GetByVehicleInfoAndProductType")]
+        [Route("FindByVehicleInfo")]
         public IHttpActionResult GetByMakeModelBodyTypeIdsAndProductType(VehicleGlassRequestModel requestModel)
         {
             if (!ModelState.IsValid)
@@ -36,88 +41,23 @@
             try
             {
                 var vehicle = this.vehicles.GetVehicleByMakeModelAndBodyTypeIds(requestModel.MakeId, requestModel.ModelId, requestModel.BodyTypeId);
-                var glasses = this.vehicles.GetApplicableGLassesByProductType(vehicle, requestModel.ProductType)
+                List<VehicleGlassShortResponseModel> glasses;
+
+                if (!string.IsNullOrEmpty(requestModel.ProductType))
+                {
+                    glasses = this.vehicles.GetApplicableGLassesByProductType(vehicle, requestModel.ProductType)
                                                                              .To<VehicleGlassShortResponseModel>()
                                                                              .OrderBy(x => x.Description)
                                                                              .ToList();
-                return this.Ok(glasses);
-            }
-            catch (Exception e)
-            {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
-                                                 e.Message));
-            }
-        }
-
-        [HttpPost]
-        [Route("GetByVehicleInfo")]
-        public IHttpActionResult GetByMakeModelBodyTypeIds(VehicleGlassRequestModel requestModel)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            try
-            {
-                var vehicle = this.vehicles.GetVehicleByMakeModelAndBodyTypeIds(requestModel.MakeId, requestModel.ModelId, requestModel.BodyTypeId);
-                var glasses = this.vehicles.GetApplicableGLasses(vehicle).To<VehicleGlassShortResponseModel>()
+                }
+                else
+                {
+                    glasses = this.vehicles.GetApplicableGLasses(vehicle).To<VehicleGlassShortResponseModel>()
                                                                          .OrderBy(x => x.Description)
                                                                          .ToList();
-                return this.Ok(glasses);
-            }
-            catch (Exception e)
-            {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
-                                                 e.Message));
-            }
-        }
-
-        [HttpGet]
-        [Route("GetByEuroCode/{eurocode}")]
-        public IHttpActionResult GetByEuroCode(string eurocode)
-        {
-            try
-            {
-                var glass = this.Mapper.Map<VehicleGlassResponseModel>(this.glasses.GetByEuroCode(eurocode));
-                return this.Ok(glass);
-            }
-            catch (Exception e)
-            {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
-                                                 e.Message));
-            }
-        }
-
-        [HttpGet]
-        [Route("GetByOesCode/{oescode}")]
-        public IHttpActionResult GetByOesCode(string oescode)
-        {
-            try
-            {
-                var glass = this.Mapper.Map<VehicleGlassResponseModel>(this.glasses.GetByOesCode(oescode));
-                return this.Ok(glass);
-            }
-            catch (Exception e)
-            {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
-                                                 e.Message));
-            }
-        }
-
-        [HttpGet]
-        [Route("GetByCode/{code}")]
-        public IHttpActionResult GetByCode(string code)
-        {
-            try
-            {
-                if (code.Length < 4)
-                {
-                    return this.BadRequest("enter at least 4 symbols");
                 }
 
-                var glasses = this.glasses.GetByRandomCode(code).To<VehicleGlassResponseModel>()
-                                                                         .ToList();
+
                 return this.Ok(glasses);
             }
             catch (Exception e)
@@ -128,13 +68,50 @@
         }
 
         [HttpGet]
-        [Route("GetById/{id}")]
-        public IHttpActionResult GetById(int id)
+        public IHttpActionResult Get(int? id, string eurocode = "", string oescode = "", string code = "")
         {
             try
             {
-                var glass = this.Mapper.Map<VehicleGlassResponseModel>(this.glasses.GetById(id));
-                return this.Ok(glass);
+                IHttpActionResult result;
+                if (id == null && string.IsNullOrEmpty(eurocode) && string.IsNullOrEmpty(oescode) && string.IsNullOrEmpty(code))
+                {
+                    result = this.BadRequest(GlobalConstants.NeededCodesErrorMessage);
+                }
+                else
+                {
+                    VehicleGlassResponseModel glass;
+                    if (id != null)
+                    {
+                        glass = this.Mapper.Map<VehicleGlassResponseModel>(this.glasses.GetById(id));
+                        result = this.Ok(glass);
+                    }
+                    else if (!string.IsNullOrEmpty(eurocode))
+                    {
+                        glass = this.Mapper.Map<VehicleGlassResponseModel>(this.glasses.GetByEuroCode(eurocode));
+                        result = this.Ok(glass);
+                    }
+                    else if (!string.IsNullOrEmpty(oescode))
+                    {
+                        var glasses = this.glasses.GetByOesCode(oescode).To<VehicleGlassResponseModel>()
+                                                                                  .ToList();
+                        result = this.Ok(glasses);
+                    }
+                    else
+                    {
+                        if (code.Length < GlobalConstants.CodeMinLength)
+                        {
+                            result = this.BadRequest(GlobalConstants.CodeMinLengthErrorMessage);
+                        }
+                        else
+                        {
+                            var glasses = this.glasses.GetByRandomCode(code).To<VehicleGlassResponseModel>()
+                                                                                    .ToList();
+                            result = this.Ok(glasses);
+                        }
+                    }
+                }
+
+                return result;
             }
             catch (Exception e)
             {
@@ -144,12 +121,22 @@
         }
 
         [HttpGet]
-        [Route("GetQuantities/{code}")]
-        public IHttpActionResult GetQuantities(string code)
+        [Route("GetQuantities/{productId}")]
+        public IHttpActionResult GetQuantities(int productId)
         {
             try
             {
-                var quantities = this.productQuantities.GetQuantitiesByCode(code);
+                var product = this.glasses.GetById(productId);
+                var code = this.glasses.GetCode(product);
+
+                var isUserLogged = this.User.Identity.IsAuthenticated;
+                User user = null;
+                if (isUserLogged)
+                {
+                    user = this.users.GetByEmail(this.User.Identity.Name);
+                }
+
+                var quantities = this.productQuantities.GetQuantitiesByCode(code, user);
                 return this.Ok(quantities);
             }
             catch (Exception e)
