@@ -13,7 +13,7 @@
 
         public VehicleGlass GetByEuroCode(string euroCode)
         {
-            var glass = this.Data.All().Where(g => g.EuroCode.ToLower() == euroCode.ToLower()).First();
+            var glass = this.Data.All().Where(g => g.EuroCode.ToLower() == euroCode.ToLower()).FirstOrDefault();
             return glass;
         }
 
@@ -26,23 +26,23 @@
 
         public VehicleGlass GetByMaterialNumber(string materialNumber)
         {
-            var glass = this.Data.All().Where(g => g.MaterialNumber.ToLower() == materialNumber.ToLower()).First();
+            var glass = this.Data.All().Where(g => g.MaterialNumber.ToLower() == materialNumber.ToLower()).FirstOrDefault();
             return glass;
         }
 
         public VehicleGlass GetByLocalCode(string localCode)
         {
-            var glass = this.Data.All().Where(g => g.LocalCode.ToLower() == localCode.ToLower()).First();
+            var glass = this.Data.All().Where(g => g.LocalCode.ToLower() == localCode.ToLower()).FirstOrDefault();
             return glass;
         }
 
         public VehicleGlass GetByIndustryCode(string industryCode)
         {
-            var glass = this.Data.All().Where(g => g.IndustryCode.ToLower() == industryCode.ToLower()).First();
+            var glass = this.Data.All().Where(g => g.IndustryCode.ToLower() == industryCode.ToLower()).FirstOrDefault();
             return glass;
         }
 
-        public VehicleGlass GetGlass(string euroCode, string oesCode, string materialNumber, string localCode, string industryCode)
+        public VehicleGlass GetGlass(string euroCode, string materialNumber, string localCode, string industryCode)
         {
             VehicleGlass glass;
             // oes is not unique - several glasses could have 1 oes

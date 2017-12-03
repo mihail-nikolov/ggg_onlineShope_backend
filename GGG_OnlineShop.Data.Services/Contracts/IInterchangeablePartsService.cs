@@ -18,8 +18,7 @@
 
         VehicleGlassInterchangeablePart GetByNagsCode(string nagsCode);
 
-        VehicleGlassInterchangeablePart GetInterchangeablePart(string euroCode, string oesCode,
-                                                               string materialNumber, string localCode,
+        VehicleGlassInterchangeablePart GetInterchangeablePart(string euroCode, string materialNumber, string localCode,
                                                                string scanCode, string nagsCode);
     }
 }

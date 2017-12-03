@@ -23,7 +23,7 @@
 
         [HttpPost]
         [Route("dbInfoAddFromFile")]
-        public IHttpActionResult DbInfoAdd()
+        public IHttpActionResult DbInfoAddFromFile()
         {
             GlassJsonInfoModel[] glasses = null;
             var httpRequest = HttpContext.Current.Request;

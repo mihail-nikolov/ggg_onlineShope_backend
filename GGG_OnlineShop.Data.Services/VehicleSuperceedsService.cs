@@ -13,19 +13,19 @@
 
         public VehicleGlassSuperceed GetByOldEuroCode(string oldEuroCode)
         {
-            var superceed = this.Data.All().Where(s => s.OldEuroCode.ToLower() == oldEuroCode.ToLower()).First();
+            var superceed = this.Data.All().Where(s => s.OldEuroCode.ToLower() == oldEuroCode.ToLower()).FirstOrDefault();
             return superceed;
         }
 
         public VehicleGlassSuperceed GetByOldLocalCode(string oldLocalCode)
         {
-            var superceed = this.Data.All().Where(s => s.OldLocalCode.ToLower() == oldLocalCode.ToLower()).First();
+            var superceed = this.Data.All().Where(s => s.OldLocalCode.ToLower() == oldLocalCode.ToLower()).FirstOrDefault();
             return superceed;
         }
 
         public VehicleGlassSuperceed GetByOldMaterialNumber(string oldMaterialNumber)
         {
-            var superceed = this.Data.All().Where(s => s.OldMaterialNumber.ToLower() == oldMaterialNumber.ToLower()).First();
+            var superceed = this.Data.All().Where(s => s.OldMaterialNumber.ToLower() == oldMaterialNumber.ToLower()).FirstOrDefault();
             return superceed;
         }
 
@@ -36,7 +36,7 @@
             return superceed;
         }
 
-        public VehicleGlassSuperceed GetSuperceed(string oldEuroCode, string oldOesCode, string oldLocalCode, string oldMaterialNumber)
+        public VehicleGlassSuperceed GetSuperceed(string oldEuroCode, string oldLocalCode, string oldMaterialNumber)
         {
             // oes is not unique - several glasses could have 1 oes
             // => will not search by oes

@@ -16,7 +16,7 @@
 
         VehicleGlass GetByIndustryCode(string industryCode);
 
-        VehicleGlass GetGlass(string euroCode, string oesCode, string materialNumber, string localCode, string industryCode);
+        VehicleGlass GetGlass(string euroCode, string materialNumber, string localCode, string industryCode);
 
         IQueryable<VehicleGlassAccessory> GetAccessories(int glassId);
 

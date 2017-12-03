@@ -13,7 +13,7 @@
 
         public VehicleMake GetByName(string vehicleMake)
         {
-            var make = this.Data.All().Where(m => m.Name.ToLower() == vehicleMake.ToLower()).First();
+            var make = this.Data.All().Where(m => m.Name.ToLower() == vehicleMake.ToLower()).FirstOrDefault();
             return make;
         }
     }

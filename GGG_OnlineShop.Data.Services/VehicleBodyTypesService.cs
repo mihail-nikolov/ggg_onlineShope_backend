@@ -13,7 +13,7 @@
 
         public VehicleBodyType GetByCode(string code)
         {
-            var bodyType = this.Data.All().Where(b => b.Code.ToLower() == code.ToLower()).First();
+            var bodyType = this.Data.All().Where(b => b.Code.ToLower() == code.ToLower()).FirstOrDefault();
             return bodyType;
         }
     }

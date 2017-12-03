@@ -14,7 +14,6 @@
 
         VehicleGlassSuperceed GetByOldMaterialNumber(string oldMaterialNumber);
 
-        VehicleGlassSuperceed GetSuperceed(string oldEuroCode, string oldOesCode,
-                                           string oldLocalCode, string oldMaterialNumber);
+        VehicleGlassSuperceed GetSuperceed(string oldEuroCode, string oldLocalCode, string oldMaterialNumber);
     }
 }

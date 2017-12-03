@@ -13,7 +13,7 @@
 
         public VehicleModel GetByName(string modelName)
         {
-            var vehicleModel = this.Data.All().Where(m =>m.Name.ToLower() == modelName.ToLower()).First();
+            var vehicleModel = this.Data.All().Where(m =>m.Name.ToLower() == modelName.ToLower()).FirstOrDefault();
             return vehicleModel;
         }
     }

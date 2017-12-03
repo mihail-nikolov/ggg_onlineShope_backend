@@ -30,7 +30,7 @@
                 using (ExcelPackage excelPackage = new ExcelPackage(fileinfo))
                 {
                     ExcelWorkbook excelWorkBook = excelPackage.Workbook;
-                    ExcelWorksheet excelWorksheet = excelWorkBook.Worksheets.Where(s => s.Name == sheetName).First();
+                    ExcelWorksheet excelWorksheet = excelWorkBook.Worksheets.Where(s => s.Name == sheetName).FirstOrDefault();
 
                     var column = excelWorksheet.Cells["1:1"].First(c => c.Value.ToString() == "Description").Start.Column;
 
@@ -71,15 +71,15 @@
                 {
                     ExcelWorkbook excelWorkBook = excelPackage.Workbook;
 
-                    ExcelWorksheet excelSourceSheet = excelWorkBook.Worksheets.Where(s => s.Name == sourceSheet).First();
+                    ExcelWorksheet excelSourceSheet = excelWorkBook.Worksheets.Where(s => s.Name == sourceSheet).FirstOrDefault();
                     var codeSourceColumn = excelSourceSheet.Cells["1:1"].First(c => c.Value.ToString() == "Code").Start.Column;
                     var liulinSourceColumn = excelSourceSheet.Cells["1:1"].First(c => c.Value.ToString() == "Liulin").Start.Column;
                     var slatinaSourceColumn = excelSourceSheet.Cells["1:1"].First(c => c.Value.ToString() == "Slatina").Start.Column;
                     var rouseSourceColumn = excelSourceSheet.Cells["1:1"].First(c => c.Value.ToString() == "Rouse").Start.Column;
 
-                    ExcelWorksheet interchangeablesSheet = excelWorkBook.Worksheets.Where(s => s.Name == interchangeablesSheetName).First();
+                    ExcelWorksheet interchangeablesSheet = excelWorkBook.Worksheets.Where(s => s.Name == interchangeablesSheetName).FirstOrDefault();
 
-                    ExcelWorksheet excelTargetSheet = excelWorkBook.Worksheets.Where(s => s.Name == targetSheet).First();
+                    ExcelWorksheet excelTargetSheet = excelWorkBook.Worksheets.Where(s => s.Name == targetSheet).FirstOrDefault();
                     var euroCodeTargetColumn = excelTargetSheet.Cells["1:1"].First(c => c.Value.ToString() == "Eurocode").Start.Column;
                     var liulinTargetColumn = excelTargetSheet.Cells["1:1"].First(c => c.Value.ToString() == "Liulin").Start.Column;
                     var slatinaTargetColumn = excelTargetSheet.Cells["1:1"].First(c => c.Value.ToString() == "Slatina").Start.Column;
@@ -156,11 +156,11 @@
                 {
                     ExcelWorkbook excelWorkBook = excelPackage.Workbook;
 
-                    ExcelWorksheet excelSourceSheet = excelWorkBook.Worksheets.Where(s => s.Name == sourceSheet).First();
+                    ExcelWorksheet excelSourceSheet = excelWorkBook.Worksheets.Where(s => s.Name == sourceSheet).FirstOrDefault();
                     var eurocodeSourceColumn = excelSourceSheet.Cells["1:1"].First(c => c.Value.ToString() == "Eurocode").Start.Column;
                     var sourceColumn = excelSourceSheet.Cells["1:1"].First(c => c.Value.ToString() == columnToReplace).Start.Column;
 
-                    ExcelWorksheet excelTargetSheet = excelWorkBook.Worksheets.Where(s => s.Name == targetSheet).First();
+                    ExcelWorksheet excelTargetSheet = excelWorkBook.Worksheets.Where(s => s.Name == targetSheet).FirstOrDefault();
                     var eurocodeTargetColumn = excelTargetSheet.Cells["1:1"].First(c => c.Value.ToString() == "Eurocode").Start.Column;
                     var targetColumn = excelTargetSheet.Cells["1:1"].First(c => c.Value.ToString() == columnToReplace).Start.Column;
 
@@ -218,7 +218,7 @@
                 {
                     ExcelWorkbook excelWorkBook = excelPackage.Workbook;
 
-                    ExcelWorksheet excelSourceSheet = excelWorkBook.Worksheets.Where(s => s.Name == sourceSheet).First();
+                    ExcelWorksheet excelSourceSheet = excelWorkBook.Worksheets.Where(s => s.Name == sourceSheet).FirstOrDefault();
                     var groupSourceColumn = excelSourceSheet.Cells["1:1"].First(c => c.Value.ToString() == "Group").Start.Column;
                     var codeSourceColumn = excelSourceSheet.Cells["1:1"].First(c => c.Value.ToString() == "Code").Start.Column;
                     var liulinSourceColumn = excelSourceSheet.Cells["1:1"].First(c => c.Value.ToString() == "Liulin").Start.Column;
@@ -228,7 +228,7 @@
                     var quantitySlatinaSourceColumn = excelSourceSheet.Cells["1:1"].First(c => c.Value.ToString() == "Q_Slatina").Start.Column;
                     var quantityRouseSourceColumn = excelSourceSheet.Cells["1:1"].First(c => c.Value.ToString() == "Q_Rouse").Start.Column;
 
-                    ExcelWorksheet excelTargetSheet = excelWorkBook.Worksheets.Where(s => s.Name == targetSheet).First();
+                    ExcelWorksheet excelTargetSheet = excelWorkBook.Worksheets.Where(s => s.Name == targetSheet).FirstOrDefault();
                     var euroCodeTargetColumn = excelTargetSheet.Cells["1:1"].First(c => c.Value.ToString() == "Eurocode").Start.Column;
                     var liulinTargetColumn = excelTargetSheet.Cells["1:1"].First(c => c.Value.ToString() == "Liulin").Start.Column;
                     var slatinaTargetColumn = excelTargetSheet.Cells["1:1"].First(c => c.Value.ToString() == "Slatina").Start.Column;
@@ -296,13 +296,13 @@
                 {
                     ExcelWorkbook excelWorkBook = excelPackage.Workbook;
 
-                    ExcelWorksheet excelSourceSheet = excelWorkBook.Worksheets.Where(s => s.Name == sourceSheet).First();
+                    ExcelWorksheet excelSourceSheet = excelWorkBook.Worksheets.Where(s => s.Name == sourceSheet).FirstOrDefault();
                     var eurocodeSourceColumn = excelSourceSheet.Cells["1:1"].First(c => c.Value.ToString() == "Eurocode").Start.Column;
                     var sameAs1SourceColumn = excelSourceSheet.Cells["1:1"].First(c => c.Value.ToString() == "SameAs1").Start.Column;
                     var sameAs2SourceColumn = excelSourceSheet.Cells["1:1"].First(c => c.Value.ToString() == "SameAs2").Start.Column;
                     var sameAs3SourceColumn = excelSourceSheet.Cells["1:1"].First(c => c.Value.ToString() == "SameAs3").Start.Column;
 
-                    ExcelWorksheet excelTargetSheet = excelWorkBook.Worksheets.Where(s => s.Name == targetSheet).First();
+                    ExcelWorksheet excelTargetSheet = excelWorkBook.Worksheets.Where(s => s.Name == targetSheet).FirstOrDefault();
                     var euroCodeTargetColumn = excelTargetSheet.Cells["1:1"].First(c => c.Value.ToString() == "Eurocode").Start.Column;
                     var sameAs1TargetColumn = excelTargetSheet.Cells["1:1"].First(c => c.Value.ToString() == "SameAs1").Start.Column;
                     var sameAs2TargetColumn = excelTargetSheet.Cells["1:1"].First(c => c.Value.ToString() == "SameAs2").Start.Column;

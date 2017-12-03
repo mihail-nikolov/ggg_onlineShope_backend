@@ -33,7 +33,7 @@
 
         public User GetByEmail(string email)
         {
-            return this.GetAll().Where(u => u.Email == email).First();
+            return this.GetAll().Where(u => u.Email == email).FirstOrDefault();
         }
 
         public User Update(User user)

@@ -13,7 +13,7 @@
 
         public VehicleGlassInterchangeablePart GetByEuroCode(string euroCode)
         {
-            var glass = this.Data.All().Where(g => g.EuroCode.ToLower() == euroCode.ToLower()).First();
+            var glass = this.Data.All().Where(g => g.EuroCode.ToLower() == euroCode.ToLower()).FirstOrDefault();
             return glass;
         }
 
@@ -26,30 +26,29 @@
 
         public VehicleGlassInterchangeablePart GetByMaterialNumber(string materialNumber)
         {
-            var glass = this.Data.All().Where(g => g.MaterialNumber.ToLower() == materialNumber.ToLower()).First();
+            var glass = this.Data.All().Where(g => g.MaterialNumber.ToLower() == materialNumber.ToLower()).FirstOrDefault();
             return glass;
         }
 
         public VehicleGlassInterchangeablePart GetByLocalCode(string localCode)
         {
-            var glass = this.Data.All().Where(g => g.LocalCode.ToLower() == localCode.ToLower()).First();
+            var glass = this.Data.All().Where(g => g.LocalCode.ToLower() == localCode.ToLower()).FirstOrDefault();
             return glass;
         }
 
         public VehicleGlassInterchangeablePart GetByScanCode(string scanCode)
         {
-            var glass = this.Data.All().Where(g => g.ScanCode.ToLower() == scanCode.ToLower()).First();
+            var glass = this.Data.All().Where(g => g.ScanCode.ToLower() == scanCode.ToLower()).FirstOrDefault();
             return glass;
         }
 
         public VehicleGlassInterchangeablePart GetByNagsCode(string nagsCode)
         {
-            var glass = this.Data.All().Where(g => g.NagsCode.ToLower() == nagsCode.ToLower()).First();
+            var glass = this.Data.All().Where(g => g.NagsCode.ToLower() == nagsCode.ToLower()).FirstOrDefault();
             return glass;
         }
 
-        public VehicleGlassInterchangeablePart GetInterchangeablePart(string euroCode, string oesCode,
-                                                                      string materialNumber, string localCode,
+        public VehicleGlassInterchangeablePart GetInterchangeablePart(string euroCode, string materialNumber, string localCode,
                                                                       string scanCode, string nagsCode)
         {
             // oes is not unique - several glasses could have 1 oes

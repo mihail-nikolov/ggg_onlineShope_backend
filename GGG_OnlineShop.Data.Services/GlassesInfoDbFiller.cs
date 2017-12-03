@@ -86,7 +86,7 @@
 
         //------------------------------ Public FillInfo ----------------------------------------------
 
-        public void FillInfo(IList<GlassJsonInfoModel> glasses, string passedFile="")
+        public void FillInfo(IList<GlassJsonInfoModel> glasses, string passedFile = "")
         {
             try
             {
@@ -216,7 +216,6 @@
         {
             bool added = false;
             VehicleGlass glassFromDb = this.Glasses.GetGlass(glassInfoModel.EuroCode,
-                                                             glassInfoModel.OesCode,
                                                              glassInfoModel.MaterialNumber,
                                                              glassInfoModel.LocalCode,
                                                              glassInfoModel.IndustryCode);
@@ -231,7 +230,6 @@
                 var characteristics = this.CheckAndGetCharacteristics(glassInfoModel.Characteristics);
                 var images = this.CheckAndGetImages(glassInfoModel.Images);
                 var interchaneableParts = this.CheckAndGetInterchaneableParts(glassInfoModel.InterchangeableParts);
-                // -------------------
                 var superceeds = this.CheckAndGetAccessories(glassInfoModel.Accessories);
                 var accessories = this.CheckAndGetSuperceeds(glassInfoModel.Superceeds);
 
@@ -249,7 +247,6 @@
             foreach (var superceed in superceeds)
             {
                 var superceedFromDb = this.Superceeds.GetSuperceed(superceed.OldEuroCode,
-                                                                   superceed.OldOesCode,
                                                                    superceed.OldLocalCode,
                                                                    superceed.OldMaterialNumber);
                 if (superceedFromDb == null)
@@ -258,7 +255,6 @@
 
                     this.Superceeds.Add(newSuperceed);
                     var superceedToAdd = this.Superceeds.GetSuperceed(superceed.OldEuroCode,
-                                                                      superceed.OldOesCode,
                                                                       superceed.OldLocalCode,
                                                                       superceed.OldMaterialNumber);
                     vehicleSupeceeds.Add(superceedToAdd);
@@ -304,10 +300,8 @@
             VehicleGlass newGlass = this.Mapper.Map<VehicleGlass>(glassInfoModel);
             this.Glasses.Add(newGlass);
 
-            var glass = this.Glasses.GetGlass(newGlass.EuroCode, newGlass.OesCode,
-                                              newGlass.MaterialNumber, newGlass.LocalCode,
-                                              newGlass.IndustryCode
-                                              );
+            var glass = this.Glasses.GetGlass(newGlass.EuroCode, newGlass.MaterialNumber,
+                                              newGlass.LocalCode, newGlass.IndustryCode);
 
             foreach (var vehicle in vehicles)
             {
@@ -343,7 +337,6 @@
             foreach (var interchangeablePart in interchangeableParts)
             {
                 var interchangeablePartFromDb = this.InterchangeableParts.GetInterchangeablePart(interchangeablePart.EuroCode,
-                                                                                                 interchangeablePart.OesCode,
                                                                                                  interchangeablePart.MaterialNumber,
                                                                                                  interchangeablePart.LocalCode,
                                                                                                  interchangeablePart.ScanCode,
@@ -354,7 +347,6 @@
 
                     this.InterchangeableParts.Add(newInterchangeablePart);
                     var interchangeableGlassToAdd = this.InterchangeableParts.GetInterchangeablePart(interchangeablePart.EuroCode,
-                                                                                                     interchangeablePart.OesCode,
                                                                                                      interchangeablePart.MaterialNumber,
                                                                                                      interchangeablePart.LocalCode,
                                                                                                      interchangeablePart.ScanCode,

@@ -31,7 +31,7 @@
             var vehicle = this.Data.All().Where(v =>
                                               ((v.MakeId == makeId) &&
                                                (v.ModelId == modelId) &&
-                                               (v.BodyTypeId == bodyTypeId))).First();
+                                               (v.BodyTypeId == bodyTypeId))).FirstOrDefault();
             return vehicle;
         }
 

@@ -63,7 +63,7 @@
                 using (ExcelPackage excelPackage = new ExcelPackage(fileinfo))
                 {
                     ExcelWorkbook excelWorkBook = excelPackage.Workbook;
-                    ExcelWorksheet excelWorksheet = excelWorkBook.Worksheets.Where(s => s.Name == sheetName).First();
+                    ExcelWorksheet excelWorksheet = excelWorkBook.Worksheets.Where(s => s.Name == sheetName).FirstOrDefault();
 
                     var columnDescription = excelWorksheet.Cells["1:1"].First(c => c.Value.ToString() == "Description").Start.Column;
 
@@ -107,7 +107,7 @@
                 using (ExcelPackage excelPackage = new ExcelPackage(fileinfo))
                 {
                     ExcelWorkbook excelWorkBook = excelPackage.Workbook;
-                    ExcelWorksheet excelWorksheet = excelWorkBook.Worksheets.Where(s => s.Name == targetSheet).First();
+                    ExcelWorksheet excelWorksheet = excelWorkBook.Worksheets.Where(s => s.Name == targetSheet).FirstOrDefault();
 
                     var columnDescription = excelWorksheet.Cells["1:1"].First(c => c.Value.ToString() == "Description").Start.Column;
                     var columnEurocode = excelWorksheet.Cells["1:1"].First(c => c.Value.ToString() == "Eurocode").Start.Column;
@@ -169,7 +169,7 @@
                 using (ExcelPackage excelPackage = new ExcelPackage(fileinfo))
                 {
                     ExcelWorkbook excelWorkBook = excelPackage.Workbook;
-                    ExcelWorksheet excelWorksheet = excelWorkBook.Worksheets.Where(s => s.Name == targetSheet).First();
+                    ExcelWorksheet excelWorksheet = excelWorkBook.Worksheets.Where(s => s.Name == targetSheet).FirstOrDefault();
 
                     var columnOES = excelWorksheet.Cells["1:1"].First(c => c.Value.ToString() == "OESCode").Start.Column;
                     var columnEurocode = excelWorksheet.Cells["1:1"].First(c => c.Value.ToString() == "Eurocode").Start.Column;
@@ -230,7 +230,7 @@
                 using (ExcelPackage excelPackage = new ExcelPackage(fileinfo))
                 {
                     ExcelWorkbook excelWorkBook = excelPackage.Workbook;
-                    ExcelWorksheet excelWorksheet = excelWorkBook.Worksheets.Where(s => s.Name == targetSheet).First();
+                    ExcelWorksheet excelWorksheet = excelWorkBook.Worksheets.Where(s => s.Name == targetSheet).FirstOrDefault();
 
                     var euroCodeTargetColumn = excelWorksheet.Cells["1:1"].First(c => c.Value.ToString() == "Eurocode").Start.Column;
                     var liulinTargetColumn = excelWorksheet.Cells["1:1"].First(c => c.Value.ToString() == "Liulin").Start.Column;
@@ -314,7 +314,7 @@
                 using (ExcelPackage excelPackage = new ExcelPackage(fileinfo))
                 {
                     ExcelWorkbook excelWorkBook = excelPackage.Workbook;
-                    ExcelWorksheet excelWorksheet = excelWorkBook.Worksheets.Where(s => s.Name == targetSheet).First();
+                    ExcelWorksheet excelWorksheet = excelWorkBook.Worksheets.Where(s => s.Name == targetSheet).FirstOrDefault();
 
                     var euroCodeTargetColumn = excelWorksheet.Cells["1:1"].First(c => c.Value.ToString() == "Eurocode").Start.Column;
                     var sameAs1TargetColumn = excelWorksheet.Cells["1:1"].First(c => c.Value.ToString() == "SameAs1").Start.Column;
@@ -379,7 +379,7 @@
                 using (ExcelPackage excelPackage = new ExcelPackage(fileinfo))
                 {
                     ExcelWorkbook excelWorkBook = excelPackage.Workbook;
-                    ExcelWorksheet excelWorksheet = excelWorkBook.Worksheets.Where(s => s.Name == targetSheet).First();
+                    ExcelWorksheet excelWorksheet = excelWorkBook.Worksheets.Where(s => s.Name == targetSheet).FirstOrDefault();
 
                     var euroCodeTargetColumn = excelWorksheet.Cells["1:1"].First(c => c.Value.ToString() == "Eurocode").Start.Column;
                     var liulinTargetColumn = excelWorksheet.Cells["1:1"].First(c => c.Value.ToString() == "Liulin").Start.Column;
