@@ -42,6 +42,51 @@
             }
         }
 
+        [HttpGet]
+        public IHttpActionResult Get()
+        {
+            try
+            {
+                var allUsers = this.users.GetAll()
+                                .OrderBy(x => x.CreatedOn)
+                                .ThenBy(x => x.Id)
+                                .To<UserResponseModel>()
+                                .ToList();
+
+                return this.Ok(allUsers);
+            }
+            catch (Exception e)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
+                                                 e.Message));
+            }
+        }
+
+        [HttpPost]
+        [Route("UpdateUserInfo")]
+        public IHttpActionResult UpdateUserInfo(UserUpdateModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var user = this.Mapper.Map<User>(model);
+                var updatedUser = this.Mapper.Map<UserResponseModel>(this.users.Update(user));
+
+                // TODO - doube check
+                return this.Ok(updatedUser);
+            }
+            catch (Exception e)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
+                                                 e.Message));
+            }
+        }
+
+        // TODO - token - max 4 days
         [HttpPost]
         [Route("SendEmailConfirmation")]
         public async Task<IHttpActionResult> SendEmailConfirmation(AccountEmailRequestModel model)
@@ -107,48 +152,5 @@
         //                                         e.Message));
         //    }
         //}
-
-        [HttpGet]
-        public IHttpActionResult Get()
-        {
-            try
-            {
-                var allUsers = this.users.GetAll()
-                                .OrderBy(x => x.CreatedOn)
-                                .ThenBy(x => x.Id)
-                                .To<UserResponseModel>()
-                                .ToList();
-
-                return this.Ok(allUsers);
-            }
-            catch (Exception e)
-            {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
-                                                 e.Message));
-            }
-        }
-
-        [HttpPost]
-        [Route("UpdateUserInfo")]
-        public IHttpActionResult UpdateUserInfo(UserUpdateModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            try
-            {
-                var user = this.Mapper.Map<User>(model);
-                var updatedUser = this.Mapper.Map<UserResponseModel>(this.users.Update(user));
-
-                return this.Ok(updatedUser);
-            }
-            catch (Exception e)
-            {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
-                                                 e.Message));
-            }
-        }
     }
 }

@@ -230,7 +230,8 @@
             if (user == null)
             {
                 // Don't reveal that the user does not exist
-                return Ok();
+                // TODO const
+                return BadRequest("No such a user");
             }
             var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
             if (result.Succeeded)

@@ -85,9 +85,10 @@
                 var product = this.orders.GetById(model.Id);
                 product.Status = model.Status;
                 this.orders.Save();
-
+                
                 var updatedOrder = this.Mapper.Map<OrderedItemResponseModelWIthUserInfo>(this.orders.GetById(model.Id));
-                return this.Ok($"{updatedOrder} updated successfully");
+                // TODO - double check
+                return this.Ok(updatedOrder);
             }
             catch (Exception e)
             {
