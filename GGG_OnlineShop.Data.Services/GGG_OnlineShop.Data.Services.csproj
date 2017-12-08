@@ -66,12 +66,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseDataExternalService{T}.cs" />
-    <Compile Include="BaseDataWithCreatorService{T}.cs" />
+    <Compile Include="Base\BaseDataExternalService{T}.cs" />
+    <Compile Include="Base\BaseDataWithCreatorService{T}.cs" />
     <Compile Include="Contracts\IBaseDataExternalService{T}.cs" />
     <Compile Include="Contracts\IBaseDataService{T}.cs" />
     <Compile Include="Contracts\IBaseDataWithCreatorService{T}.cs" />
-    <Compile Include="BaseDataService{T}.cs" />
+    <Compile Include="Base\BaseDataService{T}.cs" />
     <Compile Include="Contracts\IEmailsService.cs" />
     <Compile Include="Contracts\IGlassesInfoDbFiller.cs" />
     <Compile Include="Contracts\IGoodGroupsService.cs" />
@@ -91,12 +91,13 @@
     <Compile Include="Contracts\IVehiclesService.cs" />
     <Compile Include="Contracts\IVehicleSuperceedsService.cs" />
     <Compile Include="EmailsService.cs" />
+    <Compile Include="ExternalDb.Models\GlassInfoResponseModel.cs" />
     <Compile Include="GlassesInfoDbFiller.cs" />
-    <Compile Include="GoodGroupsService.cs" />
-    <Compile Include="GoodsService.cs" />
+    <Compile Include="ExternalDb\GoodGroupsService.cs" />
+    <Compile Include="ExternalDb\GoodsService.cs" />
     <Compile Include="JsonParseModels\InterchangeableParJsonInfoModel.cs" />
-    <Compile Include="ProductQuantitiesService.cs" />
-    <Compile Include="StoreService.cs" />
+    <Compile Include="ExternalDb\ProductQuantitiesService.cs" />
+    <Compile Include="ExternalDb\StoreService.cs" />
     <Compile Include="VehicleAccessoriesService.cs" />
     <Compile Include="VehicleInterchangeablePartsService.cs" />
     <Compile Include="JsonParseModels\AccessoryJsonInfoModel.cs" />

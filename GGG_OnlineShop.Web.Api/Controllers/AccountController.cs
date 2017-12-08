@@ -229,9 +229,7 @@
             var user = await UserManager.FindByNameAsync(model.Email);
             if (user == null)
             {
-                // Don't reveal that the user does not exist
-                // TODO const
-                return BadRequest("No such a user");
+                return BadRequest(GlobalConstants.NoSuchAUserErroMessage);
             }
             var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
             if (result.Succeeded)

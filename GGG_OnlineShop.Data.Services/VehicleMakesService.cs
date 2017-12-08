@@ -4,6 +4,7 @@
     using InternalApiDB.Models;
     using Common;
     using System.Linq;
+    using Base;
 
     public class VehicleMakesService : BaseDataService<VehicleMake>, IVehicleMakesService
     {

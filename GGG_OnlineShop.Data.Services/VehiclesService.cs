@@ -5,6 +5,7 @@
     using System.Linq;
     using Common;
     using System.Collections.Generic;
+    using Base;
 
     public class VehiclesService : BaseDataService<Vehicle>, IVehiclesService
     {

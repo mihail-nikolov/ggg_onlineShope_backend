@@ -87,7 +87,7 @@
                 this.orders.Save();
                 
                 var updatedOrder = this.Mapper.Map<OrderedItemResponseModelWIthUserInfo>(this.orders.GetById(model.Id));
-                // TODO - double check
+
                 return this.Ok(updatedOrder);
             }
             catch (Exception e)

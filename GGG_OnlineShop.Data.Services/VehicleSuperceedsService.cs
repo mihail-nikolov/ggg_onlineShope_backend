@@ -4,6 +4,7 @@
     using Contracts;
     using Common;
     using InternalApiDB.Models;
+    using Base;
 
     public class VehicleSuperceedsService : BaseDataService<VehicleGlassSuperceed>, IVehicleSuperceedsService
     {

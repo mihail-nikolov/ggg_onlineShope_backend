@@ -4,6 +4,7 @@
     using Common;
     using InternalApiDB.Models;
     using System.Linq;
+    using Base;
 
     public class VehicleGlassCharacteristicsService : BaseDataService<VehicleGlassCharacteristic>, IVehicleGlassCharacteristicsService
     {

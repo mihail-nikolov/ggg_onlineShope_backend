@@ -92,7 +92,7 @@
                     }
                     else if (!string.IsNullOrEmpty(oescode))
                     {
-                        var glasses = this.glasses.GetByOesCode(oescode).To<VehicleGlassResponseModel>()
+                        var glasses = this.glasses.GetByOesCode(oescode).To<VehicleGlassShortResponseModel>()
                                                                                   .ToList();
                         result = this.Ok(glasses);
                     }
@@ -104,7 +104,7 @@
                         }
                         else
                         {
-                            var glasses = this.glasses.GetByRandomCode(code).To<VehicleGlassResponseModel>()
+                            var glasses = this.glasses.GetByRandomCode(code).To<VehicleGlassShortResponseModel>()
                                                                                     .ToList();
                             result = this.Ok(glasses);
                         }
@@ -121,11 +121,11 @@
         }
 
         [HttpGet]
-        [Route("GetQuantities/{productId}")]
-        public IHttpActionResult GetQuantities(int productId)
+        [Route("GetPriceAndQUantities/{productId}")]
+        public IHttpActionResult GetPriceAndQUantities(int productId)
         {
             try
-            {
+           { 
                 var product = this.glasses.GetById(productId);
                 var code = this.glasses.GetCode(product);
 
@@ -136,7 +136,7 @@
                     user = this.users.GetByEmail(this.User.Identity.Name);
                 }
 
-                var quantities = this.productQuantities.GetQuantitiesByCode(code, user);
+                var quantities = this.productQuantities.GetPriceAndQuantitiesByCode(code, user);
                 return this.Ok(quantities);
             }
             catch (Exception e)

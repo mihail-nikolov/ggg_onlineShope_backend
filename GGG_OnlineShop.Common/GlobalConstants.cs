@@ -42,6 +42,7 @@
         public const int PhoneNumberMaxLength = 30;
         public const int PhoneNumberMinLength = 3;
 
+        public const string NoSuchAUserErroMessage = "No such a user";
         public const string SMTPServer = "smtp.gmail.com";
         public const string EmalToSendFrom = "testggg9@gmail.com"; // TODO change to original email
         public const string EmalToSendFromPassword = "ggg12345";

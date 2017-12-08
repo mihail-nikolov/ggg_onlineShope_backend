@@ -43,6 +43,7 @@
         }
 
         [HttpGet]
+        [Route("")]
         public IHttpActionResult Get()
         {
             try
@@ -76,7 +77,6 @@
                 var user = this.Mapper.Map<User>(model);
                 var updatedUser = this.Mapper.Map<UserResponseModel>(this.users.Update(user));
 
-                // TODO - doube check
                 return this.Ok(updatedUser);
             }
             catch (Exception e)
@@ -86,7 +86,6 @@
             }
         }
 
-        // TODO - token - max 4 days
         [HttpPost]
         [Route("SendEmailConfirmation")]
         public async Task<IHttpActionResult> SendEmailConfirmation(AccountEmailRequestModel model)

@@ -5,6 +5,7 @@
     using System.Linq;
     using Common;
     using GGG_OnlineShop.Common;
+    using Base;
 
     public class UsersService : BaseDataService<User>, IUsersService 
     {

@@ -11,12 +11,12 @@
             context.MapRoute(
                 "Administration_default",
                 "Administration/{controller}/{action}/{id}",
-                new { action = "Index", id = UrlParameter.Optional });
+                new { id = UrlParameter.Optional });
 
             context.MapRoute(
                "Administration_noAction",
                "Administration/{controller}/{id}",
-               new { action = "Index", id = UrlParameter.Optional });
+               new { id = UrlParameter.Optional });
         }
     }
 }
