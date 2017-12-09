@@ -43,7 +43,7 @@
             return glass;
         }
 
-        public VehicleGlass GetGlass(string euroCode, string materialNumber, string localCode, string industryCode)
+        public VehicleGlass GetGlass(string euroCode, string materialNumber, string industryCode, string localCode)
         {
             VehicleGlass glass;
             // oes is not unique - several glasses could have 1 oes
@@ -87,16 +87,13 @@
             return accessories;
         }
 
+        // method is used to get the product code by which we will search in SkladProDb
         public string GetCode(VehicleGlass product)
         {
             string code = string.Empty;
             if (!string.IsNullOrEmpty(product.EuroCode))
             {
                 code = product.EuroCode;
-            }
-            else if (!string.IsNullOrEmpty(product.OesCode))
-            {
-                code = product.OesCode;
             }
             else if (!string.IsNullOrEmpty(product.MaterialNumber))
             {
@@ -106,13 +103,29 @@
             {
                 code = product.IndustryCode;
             }
+            else if (!string.IsNullOrEmpty(product.LocalCode))
+            {
+                code = product.LocalCode;
+            }
             else
             {
-                // localcode
-                code = product.LocalCode;
+                // OesCode
+                code = product.OesCode;
             }
 
             return code;
+        }
+
+        // this method will be used to get optimize filling in the DB
+        // will have all unique codes from Db and when a new glass is passed the code will be checked in this codes collection
+        public IQueryable<string> GetAllUniqueCodesFromDb()
+        {
+            var codes = this.Data.All().Select(
+                            x =>
+                                (!string.IsNullOrEmpty(x.EuroCode) ? x.EuroCode :
+                                    (!string.IsNullOrEmpty(x.MaterialNumber) ? x.MaterialNumber :
+                                        (!string.IsNullOrEmpty(x.IndustryCode) ? x.IndustryCode : x.LocalCode))));
+            return codes;
         }
     }
 }

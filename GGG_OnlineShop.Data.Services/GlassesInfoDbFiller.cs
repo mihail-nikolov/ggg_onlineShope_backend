@@ -13,6 +13,7 @@
     using Infrastructure;
     using System.IO;
     using System.Web;
+    using System.Linq;
 
     public class GlassesInfoDbFiller : IGlassesInfoDbFiller
     {
@@ -21,6 +22,8 @@
         private string errorsfilePathToWrite = $@"{solutionDirectory}\DbFillInErorrs_{DateTime.Now.ToString("ddMMyy_HHmm")}.txt";
         private string parsedGlassesInfofilePath = $@"{solutionDirectory}\DbFillInInfo_{DateTime.Now.ToString("ddMMyy_HHmm")}.txt";
         private string jsonFilePathToRead = $@"{solutionDirectory}\ggg\products_test.json";
+
+        private ISet<string> GlassesCodesProjectionFromDb;
 
         public GlassesInfoDbFiller(IVehicleGlassesService glasses,
                                    IVehiclesService vehicles,
@@ -90,6 +93,8 @@
         {
             try
             {
+                CreateGlassesDictionary();
+
                 if (glasses != null)
                 {
                     this.AddArrayOfGlassJsonInfoModels(glasses);
@@ -167,6 +172,41 @@
 
         //------------------------------ Helper Methods ----------------------------------------------
 
+        private bool IsGlassAlreadyAdded(string eurocode, string materialnumber, string industrycode, string localcode)
+        {
+            bool answer = false;
+
+            if (!string.IsNullOrEmpty(eurocode))
+            {
+                if (this.GlassesCodesProjectionFromDb.Contains(eurocode)) answer = true;
+            }
+            else if (!string.IsNullOrEmpty(materialnumber))
+            {
+                if (this.GlassesCodesProjectionFromDb.Contains(materialnumber)) answer = true;
+            }
+            else if (!string.IsNullOrEmpty(industrycode))
+            {
+                if (this.GlassesCodesProjectionFromDb.Contains(industrycode)) answer = true;
+            }
+            else
+            {
+                if (this.GlassesCodesProjectionFromDb.Contains(localcode)) answer = true;
+            }
+
+            return answer;
+        }
+
+        private void CreateGlassesDictionary()
+        {
+            GlassesCodesProjectionFromDb = new HashSet<string>();
+            var codes = this.Glasses.GetAllUniqueCodesFromDb();
+
+            foreach (var code in codes)
+            {
+                GlassesCodesProjectionFromDb.Add(code);
+            }
+        }
+
         private void ValidationExceptionCatcher(DbEntityValidationException dbEx, GlassJsonInfoModel glass, int index)
         {
             foreach (var validationErrors in dbEx.EntityValidationErrors)
@@ -215,11 +255,11 @@
         private bool CheckGlassJsonInfoModelAndAddToDb(GlassJsonInfoModel glassInfoModel)
         {
             bool added = false;
-            VehicleGlass glassFromDb = this.Glasses.GetGlass(glassInfoModel.EuroCode,
-                                                             glassInfoModel.MaterialNumber,
-                                                             glassInfoModel.LocalCode,
-                                                             glassInfoModel.IndustryCode);
-            if (glassFromDb == null)
+
+            if (!IsGlassAlreadyAdded(glassInfoModel.EuroCode,
+                                     glassInfoModel.MaterialNumber,
+                                     glassInfoModel.LocalCode,
+                                     glassInfoModel.IndustryCode))
             {
                 // Get car IDs or create ones and all related entities
                 int makeId = this.CheckAndGetMakeId(glassInfoModel.Make);
@@ -300,8 +340,14 @@
             VehicleGlass newGlass = this.Mapper.Map<VehicleGlass>(glassInfoModel);
             this.Glasses.Add(newGlass);
 
+
             var glass = this.Glasses.GetGlass(newGlass.EuroCode, newGlass.MaterialNumber,
-                                              newGlass.LocalCode, newGlass.IndustryCode);
+                                              newGlass.IndustryCode, newGlass.LocalCode);
+
+            // -------------- for optimization
+            var uniqueCode = this.Glasses.GetCode(glass);
+            this.GlassesCodesProjectionFromDb.Add(uniqueCode);
+            // -------------- for optimization
 
             foreach (var vehicle in vehicles)
             {
