@@ -10,7 +10,7 @@
     public class InternalApiDbContext : IdentityDbContext<User>, IInternalApiDbContext
     {
         public InternalApiDbContext()
-            : base("GGG_OnlineShopInternalDb_new", throwIfV1Schema: false)
+            : base("GGG_OnlineShopInternalDb", throwIfV1Schema: false)
         {
         }
 

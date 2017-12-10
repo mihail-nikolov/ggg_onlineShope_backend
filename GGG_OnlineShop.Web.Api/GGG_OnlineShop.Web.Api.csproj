@@ -321,6 +321,7 @@
   <ItemGroup>
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
+    <None Include="Properties\PublishProfiles\gggStore.pubxml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GGG_onlineShop.Common.Services\GGG_OnlineShop.Common.Services.csproj">
