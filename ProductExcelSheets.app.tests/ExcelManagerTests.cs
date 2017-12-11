@@ -274,6 +274,18 @@
                             string cellQRuse = excelWorksheet.Cells[i, quantityRouseTargetColumn].Value.ToString();
                             Assert.AreEqual(cellQRuse, "2");
                         }
+                        else if (cellStrEurocode == "4633AGN")
+                        {
+                            string cellLiulin = excelWorksheet.Cells[i, liulinTargetColumn].Value.ToString();
+                            Assert.AreEqual(cellLiulin, "55");
+                            string cellSlatina = excelWorksheet.Cells[i, slatinaTargetColumn].Value.ToString();
+                            Assert.AreEqual(cellSlatina, "55");
+                            string cellRuse = excelWorksheet.Cells[i, rouseTargetColumn].Value.ToString();
+                            Assert.AreEqual(cellRuse, "55");
+                            Assert.IsTrue(excelManager.IsCellEmpty(excelWorksheet.Cells[i, quantityLiulinTargetColumn].Value));
+                            Assert.IsTrue(excelManager.IsCellEmpty(excelWorksheet.Cells[i, quantitySlatinaTargetColumn].Value));
+                            Assert.IsTrue(excelManager.IsCellEmpty(excelWorksheet.Cells[i, quantityRouseTargetColumn].Value));
+                        }
                         else
                         {
                             Assert.IsTrue(excelManager.IsCellEmpty(excelWorksheet.Cells[i, liulinTargetColumn].Value));
@@ -339,6 +351,14 @@
                             Assert.AreEqual(cellSameAs1, "4633AGN");
                             string cellSameAs2 = excelWorksheet.Cells[i, sameAs2TargetColumn].Value.ToString();
                             Assert.AreEqual(cellSameAs2, "7253AGN");
+                            Assert.IsTrue(excelManager.IsCellEmpty(excelWorksheet.Cells[i, sameAs3TargetColumn].Value));
+                        }
+                        else if (cellStrEurocode == "4633AGN")
+                        {
+                            string cellSameAs1 = excelWorksheet.Cells[i, sameAs1TargetColumn].Value.ToString();
+                            Assert.AreEqual(cellSameAs1, "7253AGN");
+                            string cellSameAs2 = excelWorksheet.Cells[i, sameAs2TargetColumn].Value.ToString();
+                            Assert.AreEqual(cellSameAs2, "8834AGN");
                             Assert.IsTrue(excelManager.IsCellEmpty(excelWorksheet.Cells[i, sameAs3TargetColumn].Value));
                         }
                         else
