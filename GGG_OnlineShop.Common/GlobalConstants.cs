@@ -14,7 +14,7 @@
         public const string MinAndMaxLengthErrorMessage = "{0}: min length:{2}, max length: {1}";
 
         public const double MinPercentPaidPrice = 0.45;
-        public const double MinPrice = 0;
+        public const double MinPrice = 0.1;
         public const double MaxPrice = double.MaxValue;
 
         public const int FullAddressMaxLength = 400;

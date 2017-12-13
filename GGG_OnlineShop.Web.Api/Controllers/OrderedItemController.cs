@@ -30,7 +30,7 @@
                 IHttpActionResult result;
 
                 var userId = User.Identity.GetUserId();
-
+                // TODO think about introducing min length for strings -> because when passed they are always null!
                 // info
                 // if registered user - default: user company deliveryAddress
                 // else if UseAlternativeAddress and registered -> use passed fullAddress

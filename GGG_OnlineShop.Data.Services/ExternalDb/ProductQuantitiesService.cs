@@ -100,7 +100,14 @@
                     }
                     else
                     {
-                        productQuantities[groupName] = new GlassInfoResponseModel() { Manufacturer = groupName, Quantity = (int)item.Qtty, Price = item.Price };
+                        productQuantities[groupName] = new GlassInfoResponseModel()
+                        {
+                            Manufacturer = groupName,
+                            Quantity = (int)item.Qtty,
+                            Price = item.Price,
+                            DescriptionWithName = good.Name,
+                            DescriptionWithoutName = good.Name2
+                        };
                     }
                 }
             }
