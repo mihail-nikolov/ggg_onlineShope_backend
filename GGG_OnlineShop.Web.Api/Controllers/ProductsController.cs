@@ -67,6 +67,8 @@
             }
         }
 
+        // TODO get productTypes
+
         [HttpGet]
         public IHttpActionResult Get(int? id, string eurocode = "", string oescode = "", string code = "")
         {
@@ -79,34 +81,50 @@
                 }
                 else
                 {
-                    VehicleGlassResponseModel glass;
+                    List<VehicleGlassShortResponseModel> glasses;
                     if (id != null)
                     {
-                        glass = this.Mapper.Map<VehicleGlassResponseModel>(this.glasses.GetById(id));
-                        result = this.Ok(glass);
-                    }
-                    else if (!string.IsNullOrEmpty(eurocode))
-                    {
-                        glass = this.Mapper.Map<VehicleGlassResponseModel>(this.glasses.GetByEuroCode(eurocode));
-                        result = this.Ok(glass);
-                    }
-                    else if (!string.IsNullOrEmpty(oescode))
-                    {
-                        var glasses = this.glasses.GetByOesCode(oescode).To<VehicleGlassShortResponseModel>()
-                                                                                  .ToList();
-                        result = this.Ok(glasses);
+                        var glass = this.Mapper.Map<VehicleGlassResponseModel>(this.glasses.GetById(id));
+                        return this.Ok(glass);
                     }
                     else
                     {
-                        if (code.Length < GlobalConstants.CodeMinLength)
+                        if (!string.IsNullOrEmpty(eurocode))
                         {
-                            result = this.BadRequest(GlobalConstants.CodeMinLengthErrorMessage);
+                            if (eurocode.Length < GlobalConstants.CodeMinLength)
+                            {
+                                result = this.BadRequest(GlobalConstants.CodeMinLengthErrorMessage);
+                            }
+                            else
+                            {
+                                glasses = this.glasses.GetGlassesByEuroCode(eurocode).To<VehicleGlassShortResponseModel>().ToList();
+                                result = this.Ok(glasses);
+                            }
+                        }
+                        else if (!string.IsNullOrEmpty(oescode))
+                        {
+                            if (oescode.Length < GlobalConstants.CodeMinLength)
+                            {
+                                result = this.BadRequest(GlobalConstants.CodeMinLengthErrorMessage);
+                            }
+                            else
+                            {
+                                glasses = this.glasses.GetByOesCode(oescode).To<VehicleGlassShortResponseModel>().ToList();
+                                result = this.Ok(glasses);
+                            }
                         }
                         else
                         {
-                            var glasses = this.glasses.GetByRandomCode(code).To<VehicleGlassShortResponseModel>()
-                                                                                    .ToList();
-                            result = this.Ok(glasses);
+                            if (code.Length < GlobalConstants.CodeMinLength)
+                            {
+                                result = this.BadRequest(GlobalConstants.CodeMinLengthErrorMessage);
+                            }
+                            else
+                            {
+                                glasses = this.glasses.GetByRandomCode(code).To<VehicleGlassShortResponseModel>()
+                                                                                       .ToList();
+                                result = this.Ok(glasses);
+                            }
                         }
                     }
                 }
@@ -125,7 +143,7 @@
         public IHttpActionResult GetPriceAndQUantities(int productId)
         {
             try
-           { 
+            {
                 var product = this.glasses.GetById(productId);
                 var code = this.glasses.GetCode(product);
 

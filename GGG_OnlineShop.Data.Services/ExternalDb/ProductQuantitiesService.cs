@@ -102,7 +102,7 @@
                     {
                         productQuantities[groupName] = new GlassInfoResponseModel()
                         {
-                            Manufacturer = groupName,
+                            Group = groupName,
                             Quantity = (int)item.Qtty,
                             Price = item.Price,
                             DescriptionWithName = good.Name,

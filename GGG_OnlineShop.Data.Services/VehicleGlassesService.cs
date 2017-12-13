@@ -18,11 +18,17 @@
             return glass;
         }
 
+        public IQueryable<VehicleGlass> GetGlassesByEuroCode(string euroCode)
+        {
+            var glasses = this.Data.All().Where(g => g.EuroCode.ToLower().StartsWith(euroCode.ToLower()));
+            return glasses;
+        }
+
         // oes is not unique - several glasses could have 1 oes
         public IQueryable<VehicleGlass> GetByOesCode(string oesCode)
         {
-            var glass = this.Data.All().Where(g => g.OesCode.ToLower() == oesCode.ToLower());
-            return glass;
+            var glasses = this.Data.All().Where(g => g.OesCode.ToLower() == oesCode.ToLower());
+            return glasses;
         }
 
         public VehicleGlass GetByMaterialNumber(string materialNumber)

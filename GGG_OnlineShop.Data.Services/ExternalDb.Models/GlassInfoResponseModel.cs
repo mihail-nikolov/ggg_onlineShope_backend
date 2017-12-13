@@ -4,7 +4,7 @@
     {
         public int Quantity { get; set; }
 
-        public string Manufacturer { get; set; }
+        public string Group { get; set; }
 
         public string DescriptionWithName { get; set; }
 

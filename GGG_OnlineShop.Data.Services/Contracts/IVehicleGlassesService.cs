@@ -7,6 +7,8 @@
     {
         VehicleGlass GetByEuroCode(string euroCode);
 
+        IQueryable<VehicleGlass> GetGlassesByEuroCode(string euroCode);
+
         // oes is not unique - several glasses could have 1 oes
         IQueryable<VehicleGlass> GetByOesCode(string oesCode);
 
