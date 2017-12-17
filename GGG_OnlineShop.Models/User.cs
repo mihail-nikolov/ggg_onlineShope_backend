@@ -25,14 +25,14 @@
         [Range(GlobalConstants.MinPercentageReduction, GlobalConstants.MaxPercentageReduction)]
         public double PercentageReduction { get; set; }
 
-        [Required]
+        // TODO is required needed?
         [Index(IsUnique = true)]
         [StringLength(GlobalConstants.BulstatMaxLength, ErrorMessage = GlobalConstants.MinAndMaxLengthErrorMessage, MinimumLength = GlobalConstants.BulstatMinLength)]
         public string Bulstat { get; set; }
 
         [Required]
-        [StringLength(GlobalConstants.CompanyNameMaxLength, ErrorMessage = GlobalConstants.MinAndMaxLengthErrorMessage, MinimumLength = GlobalConstants.CompanyNameMinLength)]
-        public string CompanyName { get; set; }
+        [StringLength(GlobalConstants.NameMaxLength, ErrorMessage = GlobalConstants.MinAndMaxLengthErrorMessage, MinimumLength = GlobalConstants.NameMinLength)]
+        public string Name { get; set; }
 
         [Required]
         [StringLength(GlobalConstants.DeliveryCountryMaxLength, ErrorMessage = GlobalConstants.MinAndMaxLengthErrorMessage, MinimumLength = GlobalConstants.DeliveryCountryMinLength)]
@@ -44,19 +44,15 @@
 
         [Required]
         [StringLength(GlobalConstants.DeliveryAddressMaxLength, ErrorMessage = GlobalConstants.MinAndMaxLengthErrorMessage, MinimumLength = GlobalConstants.DeliveryAddressMinLength)]
-        public string DeliveryAddress{ get; set; }
+        public string DeliveryAddress { get; set; }
 
         [Required]
         [StringLength(GlobalConstants.PhoneNumberMaxLength, ErrorMessage = GlobalConstants.MinAndMaxLengthErrorMessage, MinimumLength = GlobalConstants.PhoneNumberMinLength)]
         public override string PhoneNumber { get; set; }
 
-        public DateTime CreatedOn { get; set; }
+        public bool IsCompany { get; set; }
 
-        public DateTime? ModifiedOn { get; set; }
-
-        public bool IsDeleted { get; set; }
-
-        public DateTime? DeletedOn { get; set; }
+        public bool IsDeferredPaymentAllowed { get; set; }
 
         public bool IsSaintGobainVisible { get; set; }
 
@@ -73,6 +69,14 @@
         public bool IsFuyaoVisible { get; set; }
 
         public bool IsSharedVisible { get; set; }
+
+        public DateTime CreatedOn { get; set; }
+
+        public DateTime? ModifiedOn { get; set; }
+
+        public bool IsDeleted { get; set; }
+
+        public DateTime? DeletedOn { get; set; }
 
         public virtual ICollection<OrderedItem> OrderedItems
         {

@@ -14,13 +14,16 @@
         [Range(GlobalConstants.MinPercentageReduction, GlobalConstants.MaxPercentageReduction)]
         public double PercentageReduction { get; set; }
 
-        [Required]
         [StringLength(GlobalConstants.BulstatMaxLength, ErrorMessage = GlobalConstants.MinAndMaxLengthErrorMessage, MinimumLength = GlobalConstants.BulstatMinLength)]
         public string Bulstat { get; set; }
 
         [Required]
-        [StringLength(GlobalConstants.CompanyNameMaxLength, ErrorMessage = GlobalConstants.MinAndMaxLengthErrorMessage, MinimumLength = GlobalConstants.CompanyNameMinLength)]
-        public string CompanyName { get; set; }
+        [StringLength(GlobalConstants.NameMaxLength, ErrorMessage = GlobalConstants.MinAndMaxLengthErrorMessage, MinimumLength = GlobalConstants.NameMinLength)]
+        public string Name { get; set; }
+
+        public bool IsCompany { get; set; }
+
+        public bool IsDeferredPaymentAllowed { get; set; }
 
         public bool IsSaintGobainVisible { get; set; }
 

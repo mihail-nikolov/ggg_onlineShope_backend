@@ -13,16 +13,19 @@
         public string Email { get; set; }
 
         [Required]
+        public bool IsCompany { get; set; }
+
+        [Required]
         [Range(GlobalConstants.MinPercentageReduction, GlobalConstants.MaxPercentageReduction)]
         public double PercentageReduction { get; set; }
 
-        [Required]
         [StringLength(GlobalConstants.BulstatMaxLength, ErrorMessage = GlobalConstants.MinAndMaxLengthErrorMessage, MinimumLength = GlobalConstants.BulstatMinLength)]
         public string Bulstat { get; set; }
 
+        // will be used for company names and first + last names for normal users
         [Required]
-        [StringLength(GlobalConstants.CompanyNameMaxLength, ErrorMessage = GlobalConstants.MinAndMaxLengthErrorMessage, MinimumLength = GlobalConstants.CompanyNameMinLength)]
-        public string CompanyName { get; set; }
+        [StringLength(GlobalConstants.NameMaxLength, ErrorMessage = GlobalConstants.MinAndMaxLengthErrorMessage, MinimumLength = GlobalConstants.NameMinLength)]
+        public string Name { get; set; }
 
         [Required]
         [StringLength(GlobalConstants.DeliveryCountryMaxLength, ErrorMessage = GlobalConstants.MinAndMaxLengthErrorMessage, MinimumLength = GlobalConstants.DeliveryCountryMinLength)]

@@ -11,7 +11,9 @@
 
         public string Bulstat { get; set; }
 
-        public string CompanyName { get; set; }
+        public bool IsDeferredPaymentAllowed { get; set; }
+
+        public string Name { get; set; }
 
         public string PhoneNumber { get; set; }
 

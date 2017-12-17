@@ -37,7 +37,7 @@ namespace GGG_OnlineShop.InternalApiDB.Data.Migrations
                     Email = AdministratorUserName,
                     EmailConfirmed = true,
                     Bulstat = "123456",
-                    CompanyName = "GGG",
+                    Name = "GGG",
                     DeliveryAddress = "Sofia Liuln",
                     DeliveryCountry = "Bulgaria",
                     DeliveryTown = "Sofia",

@@ -42,7 +42,7 @@
             var userFromDb = this.GetById(user.Id);
             userFromDb.PercentageReduction = user.PercentageReduction;
             userFromDb.Bulstat = user.Bulstat;
-            userFromDb.CompanyName = user.CompanyName;
+            userFromDb.Name = user.Name;
             this.Save();
 
             return this.GetById(userFromDb.Id);

@@ -31,7 +31,7 @@
 
         [HttpPost]
         [Route("FindByVehicleInfo")]
-        public IHttpActionResult GetByMakeModelBodyTypeIdsAndProductType(VehicleGlassRequestModel requestModel)
+        public IHttpActionResult FindByVehicleInfo(VehicleGlassRequestModel requestModel)
         {
             if (!ModelState.IsValid)
             {
@@ -40,23 +40,7 @@
 
             try
             {
-                var vehicle = this.vehicles.GetVehicleByMakeModelAndBodyTypeIds(requestModel.MakeId, requestModel.ModelId, requestModel.BodyTypeId);
-                List<VehicleGlassShortResponseModel> glasses;
-
-                if (!string.IsNullOrEmpty(requestModel.ProductType))
-                {
-                    glasses = this.vehicles.GetApplicableGLassesByProductType(vehicle, requestModel.ProductType)
-                                                                             .To<VehicleGlassShortResponseModel>()
-                                                                             .OrderBy(x => x.Description)
-                                                                             .ToList();
-                }
-                else
-                {
-                    glasses = this.vehicles.GetApplicableGLasses(vehicle).To<VehicleGlassShortResponseModel>()
-                                                                         .OrderBy(x => x.Description)
-                                                                         .ToList();
-                }
-
+                var glasses = this.FindGlassesByVehicleInfo(requestModel);
 
                 return this.Ok(glasses);
             }
@@ -67,7 +51,26 @@
             }
         }
 
-        // TODO get productTypes
+        [HttpPost]
+        [Route("GetProductTypes")]
+        public IHttpActionResult GetProductTypes(VehicleGlassRequestModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var productTypes = this.FindGlassesByVehicleInfo(model).Select(x => x.ProductType).Distinct().ToList();
+                return this.Ok(productTypes);
+            }
+            catch (Exception e)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
+                                                 e.Message));
+            }
+        }
 
         [HttpGet]
         public IHttpActionResult Get(int? id, string eurocode = "", string oescode = "", string code = "")
@@ -81,7 +84,6 @@
                 }
                 else
                 {
-                    List<VehicleGlassShortResponseModel> glasses;
                     if (id != null)
                     {
                         var glass = this.Mapper.Map<VehicleGlassResponseModel>(this.glasses.GetById(id));
@@ -89,6 +91,8 @@
                     }
                     else
                     {
+                        List<VehicleGlassShortResponseModel> glasses;
+
                         if (!string.IsNullOrEmpty(eurocode))
                         {
                             if (eurocode.Length < GlobalConstants.CodeMinLength)
@@ -163,6 +167,27 @@
                                                  e.Message));
             }
         }
+
+        private IQueryable<VehicleGlassShortResponseModel> FindGlassesByVehicleInfo(VehicleGlassRequestModel requestModel)
+        {
+            var vehicle = this.vehicles.GetVehicleByMakeModelAndBodyTypeIds(requestModel.MakeId, requestModel.ModelId, requestModel.BodyTypeId);
+            IQueryable<VehicleGlassShortResponseModel> glasses;
+
+            if (!string.IsNullOrEmpty(requestModel.ProductType))
+            {
+                glasses = this.vehicles.GetApplicableGLassesByProductType(vehicle, requestModel.ProductType)
+                                                                         .To<VehicleGlassShortResponseModel>()
+                                                                         .OrderBy(x => x.Description);
+            }
+            else
+            {
+                glasses = this.vehicles.GetApplicableGLasses(vehicle).To<VehicleGlassShortResponseModel>()
+                                                                     .OrderBy(x => x.Description);
+            }
+
+            return glasses;
+        }
+
 
         //[HttpGet]
         //[Route("api/Products/GetAccessoriesByGlassId/{glassId}")]

@@ -1,8 +1,10 @@
 ﻿namespace GGG_OnlineShop.Data.Services.ExternalDb.Models
 {
-    public class GlassInfoResponseModel
+    using System.Collections.Generic;
+
+    public class ProductInfoResponseModel
     {
-        public int Quantity { get; set; }
+        public Dictionary<string, int> StoreQUantities { get; set; }
 
         public string Group { get; set; }
 

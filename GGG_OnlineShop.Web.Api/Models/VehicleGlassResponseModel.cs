@@ -6,21 +6,11 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    public class VehicleGlassResponseModel : IMapFrom<VehicleGlass>, IHaveCustomMappings
+    public class VehicleGlassResponseModel : VehicleGlassShortResponseModel, IMapFrom<VehicleGlass>, IHaveCustomMappings
     {
-        public int Id { get; set; }
-
-        public string Description { get; set; }
-
-        public string EuroCode { get; set; }
-
-        public string OesCode { get; set; }
-
         public string ModelDate { get; set; }
 
         public string PartDate { get; set; }
-
-        public string ProductType { get; set; }
 
         public string Modification { get; set; }
 
@@ -40,14 +30,6 @@
 
         public bool IsAccessory { get; set; }
 
-        public string MaterialNumber { get; set; }
-
-        public string LocalCode { get; set; }
-
-        public string IndustryCode { get; set; }
-
-        public List<int> Images { get; set; }
-
         public List<string> Characteristics { get; set; }
 
         public bool HasFittingMethod { get; set; }
@@ -60,7 +42,7 @@
 
         public virtual ICollection<VehicleInterchangeablePartResponseModel> InterchangeableParts { get; set; }
 
-        public void CreateMappings(IConfiguration configuration)
+        public override void CreateMappings(IConfiguration configuration)
         {
             configuration.CreateMap<VehicleGlass, VehicleGlassResponseModel>("VehicleGlassResponseModel")
                .ForMember(x => x.Images, opt => opt.MapFrom(x => x.VehicleGlassImages.Select(i => i.OriginalId).ToList()))

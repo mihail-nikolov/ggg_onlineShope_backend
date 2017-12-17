@@ -13,6 +13,8 @@
 
         public DateTime? DeletedOn { get; set; }
 
+        public bool IsCompany { get; set; }
+
         public bool IsSaintGobainVisible { get; set; }
 
         public bool IsPilkingtonVisible { get; set; }

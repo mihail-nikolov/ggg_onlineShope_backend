@@ -25,8 +25,8 @@
         public const int AnonymousUserInfoMaxLength = 200;
         public const int BulstatMaxLength = 50;
         public const int BulstatMinLength = 2;
-        public const int CompanyNameMaxLength = 50;
-        public const int CompanyNameMinLength = 2;
+        public const int NameMaxLength = 60;
+        public const int NameMinLength = 2;
         public const string DeletedUserInfo = "Deleted user; {0}";
         public const int DeliveryNotesMaxLength = 600;
         public const int DeliveryCountryMaxLength = 50;
@@ -42,6 +42,7 @@
         public const int PhoneNumberMaxLength = 30;
         public const int PhoneNumberMinLength = 3;
 
+        public const string BulstatEmptyErrorMessage = "When company is registed Bulstat is mandatory";
         public const string NoSuchAUserErroMessage = "No such a user";
         public const string SMTPServer = "smtp.gmail.com";
         public const string EmalToSendFrom = "testggg9@gmail.com"; // TODO change to original email

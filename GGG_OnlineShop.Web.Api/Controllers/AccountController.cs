@@ -67,6 +67,8 @@
 
         public ISecureDataFormat<AuthenticationTicket> AccessTokenFormat { get; private set; }
 
+        // TODO - double check bulstat required; isCompany, isDefferedPaymentAllowed checks; companyName usage; IsInvoiceNeeded checks for orderedItems
+
         // POST api/Account/Register
         [AllowAnonymous]
         [Route("Register")]
@@ -78,16 +80,25 @@
             }
             try
             {
+                IHttpActionResult result;
                 var user = this.Mapper.Map<User>(model);
-                user.UserName = user.Email;
-
-                IdentityResult result = await UserManager.CreateAsync(user, model.Password);
-                if (!result.Succeeded)
+                if (user.IsCompany && string.IsNullOrEmpty(user.Bulstat))
                 {
-                    return GetErrorResult(result);
+                    result = BadRequest(GlobalConstants.BulstatEmptyErrorMessage);
+                }
+                else
+                {
+                    user.UserName = user.Email;
+
+                    IdentityResult resultCreation = await UserManager.CreateAsync(user, model.Password);
+                    if (!resultCreation.Succeeded)
+                    {
+                        result = GetErrorResult(resultCreation);
+                    }
+                    result = this.Ok();
                 }
 
-                return this.Ok();
+                return result;
             }
             catch (Exception e)
             {
@@ -195,7 +206,6 @@
                     var user = await UserManager.FindByNameAsync(model.Email);
                     if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
                     {
-                        // Don't reveal that the user does not exist or is not confirmed
                         return BadRequest(ModelState);
                     }
 

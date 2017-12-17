@@ -72,6 +72,11 @@
                 return BadRequest(ModelState);
             }
 
+            if (model.IsCompany && string.IsNullOrEmpty(model.Bulstat))
+            {
+                return BadRequest(GlobalConstants.BulstatEmptyErrorMessage);
+            }
+
             try
             {
                 var user = this.Mapper.Map<User>(model);

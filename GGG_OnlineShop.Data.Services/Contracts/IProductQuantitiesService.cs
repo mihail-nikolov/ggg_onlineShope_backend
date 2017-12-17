@@ -6,6 +6,6 @@
 
     public interface IProductQuantitiesService
     {
-        IEnumerable<GlassInfoResponseModel> GetPriceAndQuantitiesByCode(string code, User user);
+        IEnumerable<ProductInfoResponseModel> GetPriceAndQuantitiesByCode(string code, User user);
     }
 }

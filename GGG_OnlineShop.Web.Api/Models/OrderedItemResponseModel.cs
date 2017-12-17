@@ -32,6 +32,8 @@
 
         public string FullAddress { get; set; }
 
+        public bool IsInvoiceNeeded { get; set; }
+
         public bool WithInstallation { get; set; }
 
         public string DeliveryNotes { get; set; }

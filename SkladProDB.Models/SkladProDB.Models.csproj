@@ -64,7 +64,7 @@
     <Compile Include="Lot.cs" />
     <Compile Include="Network.cs" />
     <Compile Include="NextAcct.cs" />
-    <Compile Include="Object.cs" />
+    <Compile Include="ObjectSkladPro.cs" />
     <Compile Include="ObjectsGroup.cs" />
     <Compile Include="Operation.cs" />
     <Compile Include="OperationType.cs" />

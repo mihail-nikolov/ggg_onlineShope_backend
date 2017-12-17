@@ -77,6 +77,7 @@
     <Compile Include="Contracts\IGoodGroupsService.cs" />
     <Compile Include="Contracts\IGoodsService.cs" />
     <Compile Include="Contracts\IInterchangeablePartsService.cs" />
+    <Compile Include="Contracts\IObjectsService.cs" />
     <Compile Include="Contracts\IOrderedItemsService.cs" />
     <Compile Include="Contracts\IProductQuantitiesService.cs" />
     <Compile Include="Contracts\IStoreService.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="Contracts\IVehicleSuperceedsService.cs" />
     <Compile Include="EmailsService.cs" />
     <Compile Include="ExternalDb.Models\GlassInfoResponseModel.cs" />
+    <Compile Include="ExternalDb\ObjectsService.cs" />
     <Compile Include="GlassesInfoDbFiller.cs" />
     <Compile Include="ExternalDb\GoodGroupsService.cs" />
     <Compile Include="ExternalDb\GoodsService.cs" />

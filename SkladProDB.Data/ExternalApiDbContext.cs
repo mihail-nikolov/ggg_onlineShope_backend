@@ -29,6 +29,7 @@
         //public virtual DbSet<Network> Networks { get; set; }
         //public virtual DbSet<NextAcct> NextAccts { get; set; }
         //public virtual DbSet<SkladProDB.Models.Object> Objects { get; set; }
+        public virtual DbSet<SkladProDB.Models.ObjectSkladPro> Objects { get; set; }
         //public virtual DbSet<ObjectsGroup> ObjectsGroups { get; set; }
         //public virtual DbSet<Operation> Operations { get; set; }
         //public virtual DbSet<OperationType> OperationTypes { get; set; }
