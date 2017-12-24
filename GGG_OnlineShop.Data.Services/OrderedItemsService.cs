@@ -29,17 +29,39 @@
             return this.Data.All().Where(x => x.Status == DeliveryStatus.Ordered);
         }
 
-        public bool ValidateOrder(OrderedItem product)
+        public bool IsValidOrder(OrderedItem order)
         {
             bool result = true;
-            var neededPrice = product.Price * GlobalConstants.MinPercentPaidPrice;
-            if (product.IsDepositNeeded && product.PaidPrice < neededPrice)
+            var neededPrice = order.Price * GlobalConstants.MinPercentPaidPrice;
+
+            // should have some codes passed
+            if (result && (string.IsNullOrEmpty(order.OtherCodes) && string.IsNullOrEmpty(order.EuroCode)))
             {
                 result = false;
             }
 
-            if ((string.IsNullOrEmpty(product.AnonymousUserInfo) || string.IsNullOrEmpty(product.AnonymousUserЕmail))
-                                                                 && string.IsNullOrEmpty(product.UserId))
+            // if not enough money paid
+            if (result && (order.IsDepositNeeded && order.PaidPrice < neededPrice))
+            {
+                var user = Users.GetById(order.UserId);
+                // and registered user
+                if (user != null)
+                {
+                    // deffered payment not allowed -> invalid
+                    if (!user.IsDeferredPaymentAllowed)
+                    {
+                        result = false;
+                    }
+                }
+                // not registered user => no way to have deffered payment -> invalid
+                else
+                {
+                    result = false;
+                }
+            }
+
+            if (result && ((string.IsNullOrEmpty(order.AnonymousUserInfo) || string.IsNullOrEmpty(order.AnonymousUserЕmail))
+                                                                 && string.IsNullOrEmpty(order.UserId)))
             {
                 result = false;
             }

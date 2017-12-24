@@ -48,10 +48,10 @@
         [Range(GlobalConstants.MinPrice, GlobalConstants.MaxPrice)]
         public double Price { get; set; }
 
-        // e.g. Name, Phone, email
         [StringLength(GlobalConstants.AnonymousUserЕmailMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
         public string AnonymousUserЕmail { get; set; }
 
+        // e.g. Name, Phone, address
         [StringLength(GlobalConstants.AnonymousUserInfoMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
         public string AnonymousUserInfo { get; set; }
 

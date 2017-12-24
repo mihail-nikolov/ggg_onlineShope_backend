@@ -5,7 +5,8 @@
         public const string AdministratorRoleName = "admin";
         public const string ExternalDBRestrictionMessage = "Do not have rights on external DB";
         public const string DBContextRequiredErrorMessage = "An instance of DbContext is required to use this repository.";
-        public const string AppDomainPath = "http://localhost:60918"; // TODO will change
+        public const string AppDomainPath = "http://localhost:60918"; // TODO will change and also build on release!!!
+
 
         public const char InterchangeablePartStringSeparator = ';';
         public const int InterchangeableEurocodeMaxLength = 400;
@@ -42,7 +43,7 @@
         public const int PhoneNumberMaxLength = 30;
         public const int PhoneNumberMinLength = 3;
 
-        public const string BulstatEmptyErrorMessage = "When company is registed Bulstat is mandatory";
+        public const string BulstatEmptyErrorMessage = "valid compinations: company + bulstat; not company without bulstat";
         public const string NoSuchAUserErroMessage = "No such a user";
         public const string SMTPServer = "smtp.gmail.com";
         public const string EmalToSendFrom = "testggg9@gmail.com"; // TODO change to original email

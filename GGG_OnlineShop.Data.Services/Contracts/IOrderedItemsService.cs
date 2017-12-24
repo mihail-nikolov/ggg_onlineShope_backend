@@ -11,6 +11,6 @@
 
         IQueryable<OrderedItem> GetDoneOrders();
 
-        bool ValidateOrder(OrderedItem product);
+        bool IsValidOrder(OrderedItem product);
     }
 }

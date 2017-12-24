@@ -13,5 +13,7 @@
         public string DescriptionWithoutName { get; set; }
 
         public double? Price { get; set; }
+
+        public string GroupFromItemName { get; set; }
     }
 }

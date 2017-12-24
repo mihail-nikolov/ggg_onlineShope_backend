@@ -14,5 +14,7 @@
         User UpdateContactInfo(User user);
 
         void CleanUserInfoFromOrders(User user);
+
+        bool IsValidUser(User user);
     }
 }

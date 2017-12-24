@@ -17,7 +17,7 @@
         {
             configuration.CreateMap<OrderedItem, OrderedItemResponseModelWIthUserInfo>("OrderedItemResponseModelWIthUserInfo")
               .ForMember(x => x.UserInfo, opt => opt.MapFrom(x => !string.IsNullOrEmpty(x.UserId) ?
-                                                             (x.User.IsCompany ? x.User.Bulstat + "; " : "") + x.User.Name + "; "
+                                                             (x.User.IsCompany ? x.User.Bulstat + "; " : string.Empty) + x.User.Name + "; "
                                                              + x.User.Email + "; " + x.User.PhoneNumber : string.Empty));
         }
     }

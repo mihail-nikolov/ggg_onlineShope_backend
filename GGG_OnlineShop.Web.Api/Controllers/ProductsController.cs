@@ -29,49 +29,6 @@
             this.users = users;
         }
 
-        [HttpPost]
-        [Route("FindByVehicleInfo")]
-        public IHttpActionResult FindByVehicleInfo(VehicleGlassRequestModel requestModel)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            try
-            {
-                var glasses = this.FindGlassesByVehicleInfo(requestModel);
-
-                return this.Ok(glasses);
-            }
-            catch (Exception e)
-            {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
-                                                 e.Message));
-            }
-        }
-
-        [HttpPost]
-        [Route("GetProductTypes")]
-        public IHttpActionResult GetProductTypes(VehicleGlassRequestModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            try
-            {
-                var productTypes = this.FindGlassesByVehicleInfo(model).Select(x => x.ProductType).Distinct().ToList();
-                return this.Ok(productTypes);
-            }
-            catch (Exception e)
-            {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
-                                                 e.Message));
-            }
-        }
-
         [HttpGet]
         public IHttpActionResult Get(int? id, string eurocode = "", string oescode = "", string code = "")
         {
@@ -144,7 +101,7 @@
 
         [HttpGet]
         [Route("GetPriceAndQUantities/{productId}")]
-        public IHttpActionResult GetPriceAndQUantities(int productId)
+        public IHttpActionResult GetPriceAndQuantities(int productId)
         {
             try
             {
@@ -160,6 +117,49 @@
 
                 var quantities = this.productQuantities.GetPriceAndQuantitiesByCode(code, user);
                 return this.Ok(quantities);
+            }
+            catch (Exception e)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
+                                                 e.Message));
+            }
+        }
+
+        [HttpPost]
+        [Route("GetProductTypes")]
+        public IHttpActionResult GetProductTypes(VehicleGlassRequestModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var productTypes = this.FindGlassesByVehicleInfo(model).Select(x => x.ProductType).Distinct().ToList();
+                return this.Ok(productTypes);
+            }
+            catch (Exception e)
+            {
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
+                                                 e.Message));
+            }
+        }
+
+        [HttpPost]
+        [Route("FindByVehicleInfo")]
+        public IHttpActionResult FindByVehicleInfo(VehicleGlassRequestModel requestModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var glasses = this.FindGlassesByVehicleInfo(requestModel);
+
+                return this.Ok(glasses.ToList());
             }
             catch (Exception e)
             {

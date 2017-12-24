@@ -16,27 +16,6 @@
     {
         BaseAutomapperConfig mapper = new BaseAutomapperConfig();
 
-        //[TestMethod]
-        //public void GetVehicleBodyTypeByMakeAndModelIds_ShouldReturnBadRequest_WhenInvalidModel()
-        //{
-        //    var bodyTypesMock = new Mock<IVehicleBodyTypesService>();
-        //    var vehiclesMock = new Mock<IVehiclesService>();
-
-        //    var controller = new BodyTypesController(bodyTypesMock.Object, vehiclesMock.Object);
-
-        //    var model = new VehicleBodyTypesRequestModel()
-        //    {
-        //        ModelId = 3
-        //    };
-
-        //    var result = controller.GetVehicleBodyTypeByMakeAndModelIds(model);
-
-        //    Assert.IsInstanceOfType(result, typeof(BadRequestErrorMessageResult));
-        //    string responseMessage = ((BadRequestErrorMessageResult)result).Message;
-        //    Assert.IsTrue(responseMessage.Contains("MakeId"));
-        //}
-
-
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
         public void GetVehicleBodyTypeByMakeAndModelIds_ShouldThrowException_WhenVehiclesServiceisNull()

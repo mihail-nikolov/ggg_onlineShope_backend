@@ -62,6 +62,11 @@
 
                 foreach (var item in quantities)
                 {
+                    if (!objectKeyName.ContainsKey(item.ObjectID))
+                    {
+                        continue;
+                    }
+
                     string storeName = objectKeyName[item.ObjectID];
 
                     if (productQuantities.ContainsKey(groupName))
@@ -77,14 +82,35 @@
                     }
                     else
                     {
-                        productQuantities[groupName] = new ProductInfoResponseModel()
+                        string groupFromGoodName = string.Empty;
+                        if (groupName == GlobalConstants.SharedGroup)
                         {
-                            Group = groupName,
-                            StoreQUantities = new Dictionary<string, int>() { { storeName, (int)item.Qtty } },
-                            Price = item.Price, // TODO double check which is this price. Also check if the product is pattern only (група общи)
-                            DescriptionWithName = good.Name,
-                            DescriptionWithoutName = good.Name2
-                        };
+                            var nameWithoutSharedPrefix = good.Name.Replace("Общи ", string.Empty);
+                            if (nameWithoutSharedPrefix == good.Name2)
+                            {
+                                // Общи glass is only added as a pattern for future db glass add
+                                continue;
+                            }
+                            else
+                            {
+                                int startIndexOfDescription = good.Name.IndexOf(good.Name2);
+                                groupFromGoodName = good.Name.Substring(0, startIndexOfDescription - 1).Replace("Общи ", string.Empty);
+                            }
+                        }
+
+                        // show the item only if it is not a pattern (priceout2 > 0)
+                        if (good.PriceOut2 > 0)
+                        {
+                            productQuantities[groupName] = new ProductInfoResponseModel()
+                            {
+                                Group = groupName,
+                                StoreQUantities = new Dictionary<string, int>() { { storeName, (int)item.Qtty } },
+                                Price = good.PriceOut2,
+                                DescriptionWithName = good.Name,
+                                DescriptionWithoutName = good.Name2,
+                                GroupFromItemName = groupFromGoodName
+                            };
+                        }
                     }
                 }
             }

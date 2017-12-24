@@ -38,7 +38,7 @@
         public T GetById(object id)
         {
             var item = this.DbSet.Find(id);
-            if (item.IsDeleted)
+            if (item == null || item.IsDeleted)
             {
                 return null;
             }

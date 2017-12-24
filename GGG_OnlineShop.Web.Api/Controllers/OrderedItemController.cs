@@ -23,6 +23,7 @@
 
         [HttpPost]
         [Route("order")]
+        // TODO send email to user (also when update order)
         public IHttpActionResult Order(OrderedItemRequestModel model)
         {
             try
@@ -30,17 +31,16 @@
                 IHttpActionResult result;
 
                 var userId = User.Identity.GetUserId();
-                // TODO think about introducing min length for strings -> because when passed they are always null!
                 // info
                 // if registered user - default: user company deliveryAddress
                 // else if UseAlternativeAddress and registered -> use passed fullAddress
-                // if nonRegisteredUser -> fullAddres (required)
+                // if nonRegisteredUser -> fullAddress (required)
                 if (!string.IsNullOrEmpty(userId))
                 {
                     model.UserId = userId;
 
                     var user = this.users.GetById(userId);
-                    if (!model.UseAlternativeAddress)
+                    if (!model.UseAlternativeAddress) // else - will use the passed address
                     {
                         model.FullAddress = $"{user.DeliveryCountry}; {user.DeliveryTown}; {user.DeliveryAddress}";
                     }
@@ -52,15 +52,15 @@
                 }
 
                 var order = this.Mapper.Map<OrderedItem>(model);
-
-                if (this.orders.ValidateOrder(order))
+                
+                if (this.orders.IsValidOrder(order))
                 {
                     this.orders.Add(order);
                     result = this.Ok();
                 }
                 else
                 {
-                    result = this.BadRequest("Error while valditing userInfo and/or paid price");
+                    result = this.BadRequest("Error while valditing order");
                 }
 
                 return result;

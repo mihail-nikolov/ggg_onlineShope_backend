@@ -67,8 +67,6 @@
 
         public ISecureDataFormat<AuthenticationTicket> AccessTokenFormat { get; private set; }
 
-        // TODO - double check bulstat required; isCompany, isDefferedPaymentAllowed checks; companyName usage; IsInvoiceNeeded checks for orderedItems
-
         // POST api/Account/Register
         [AllowAnonymous]
         [Route("Register")]
@@ -78,11 +76,12 @@
             {
                 return BadRequest(ModelState);
             }
+
             try
             {
                 IHttpActionResult result;
                 var user = this.Mapper.Map<User>(model);
-                if (user.IsCompany && string.IsNullOrEmpty(user.Bulstat))
+                if (!users.IsValidUser(user))
                 {
                     result = BadRequest(GlobalConstants.BulstatEmptyErrorMessage);
                 }
@@ -95,7 +94,10 @@
                     {
                         result = GetErrorResult(resultCreation);
                     }
-                    result = this.Ok();
+                    else
+                    {
+                        result = this.Ok();
+                    }
                 }
 
                 return result;

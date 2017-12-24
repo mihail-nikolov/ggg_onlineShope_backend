@@ -6,8 +6,9 @@
     using Common;
     using GGG_OnlineShop.Common;
     using Base;
+    using System;
 
-    public class UsersService : BaseDataService<User>, IUsersService 
+    public class UsersService : BaseDataService<User>, IUsersService
     {
         public UsersService(IInternalDbRepository<User> dataSet) : base(dataSet)
         {
@@ -58,6 +59,22 @@
             this.Save();
 
             return this.GetById(userFromDb.Id);
+        }
+
+        public bool IsValidUser(User user)
+        {
+            bool result = true;
+
+            if (user.IsCompany && string.IsNullOrEmpty(user.Bulstat))
+            {
+                result = false;
+            }
+            else if (!user.IsCompany && !string.IsNullOrEmpty(user.Bulstat))
+            {
+                result = false;
+            }
+
+            return result;
         }
     }
 }

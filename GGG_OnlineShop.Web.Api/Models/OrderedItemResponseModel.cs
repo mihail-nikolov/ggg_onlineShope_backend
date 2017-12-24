@@ -4,6 +4,7 @@
     using InternalApiDB.Models;
     using System;
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
 
     public class OrderedItemResponseModel : IMapFrom<OrderedItem>
     {
@@ -19,16 +20,9 @@
 
         public string Description { get; set; }
 
-        [JsonIgnore]
+        [JsonConverter(typeof(StringEnumConverter))]
+        [JsonProperty("Status", Required = Required.Always)]
         public DeliveryStatus Status { get; set; }
-
-        public string CurrentStatus
-        {
-            get
-            {
-                return this.Status.ToString();
-            }
-        }
 
         public string FullAddress { get; set; }
 

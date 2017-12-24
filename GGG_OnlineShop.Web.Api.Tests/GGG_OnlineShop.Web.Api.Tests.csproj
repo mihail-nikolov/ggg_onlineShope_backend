@@ -56,6 +56,7 @@
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Web" />
     <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
       <Private>True</Private>
@@ -92,6 +93,10 @@
     <ProjectReference Include="..\GGG_onlineShop.Data.Services\GGG_OnlineShop.Data.Services.csproj">
       <Project>{6AD37FF9-0DBF-4454-A883-68298E36DE36}</Project>
       <Name>GGG_OnlineShop.Data.Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GGG_onlineShop.Data\GGG_OnlineShop.InternalApiDB.Data.csproj">
+      <Project>{602C2947-92C6-4119-B519-3A2AA26B55AA}</Project>
+      <Name>GGG_OnlineShop.InternalApiDB.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\GGG_OnlineShop.Infrastructure\GGG_OnlineShop.Infrastructure.csproj">
       <Project>{A3437FD5-3A9C-490C-9BBB-19BEF4F1EACE}</Project>
