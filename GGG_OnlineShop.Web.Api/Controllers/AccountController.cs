@@ -83,7 +83,7 @@
                 var user = this.Mapper.Map<User>(model);
                 if (!users.IsValidUser(user))
                 {
-                    result = BadRequest(GlobalConstants.BulstatEmptyErrorMessage);
+                    result = BadRequest(GlobalConstants.InvalidCompanyBulstatCombination);
                 }
                 else
                 {
@@ -164,8 +164,7 @@
                 return BadRequest(ModelState);
             }
 
-            IdentityResult result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword,
-                model.NewPassword);
+            IdentityResult result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
 
             if (!result.Succeeded)
             {
@@ -182,9 +181,9 @@
             try
             {
                 var orders = this.orders.GetAllByUser(User.Identity.GetUserId())
-                                        .OrderByDescending(x => x.Status)
-                                        .ThenBy(x => x.CreatedOn)
-                                        .ThenBy(x => x.Id)
+                                        .OrderBy(x => x.Status)
+                                        .ThenByDescending(x => x.CreatedOn)
+                                        .ThenByDescending(x => x.Id)
                                         .To<OrderedItemResponseModel>()
                                         .ToList();
                 return this.Ok(orders);
@@ -205,7 +204,7 @@
             {
                 if (ModelState.IsValid)
                 {
-                    var user = await UserManager.FindByNameAsync(model.Email);
+                    var user = await UserManager.FindByNameAsync(model.Email); // TODO - is this needed?
                     if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
                     {
                         return BadRequest(ModelState);
@@ -217,6 +216,7 @@
                                             string.Format(GlobalConstants.ResetPasswordBody, code), GlobalConstants.SMTPServer,
                                             GlobalConstants.EmalToSendFrom, GlobalConstants.EmalToSendFromPassword);
 
+                    // TODO will return only OK (without code)
                     return Ok(code);
                 }
 
@@ -238,19 +238,20 @@
             {
                 return BadRequest(ModelState);
             }
+
             var user = await UserManager.FindByNameAsync(model.Email);
             if (user == null)
             {
                 return BadRequest(GlobalConstants.NoSuchAUserErroMessage);
             }
+
             var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
             if (result.Succeeded)
             {
                 return Ok();
             }
 
-            // Don't reveal that the user does not exist
-            return Ok();
+            return BadRequest();
         }
 
         [HttpPost]
@@ -258,7 +259,7 @@
         [Route("ConfirmEmail")]
         public async Task<IHttpActionResult> ConfirmEmail(string userId, string code)
         {
-            if (userId == null || code == null)
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(code))
             {
                 return this.BadRequest(string.Format(GlobalConstants.WrongCodeErrorMessage, userId));
             }
@@ -274,7 +275,7 @@
 
         [HttpPost]
         [Route("RemoveUser")]
-        public IHttpActionResult RemoveUser()
+        public async Task<IHttpActionResult> RemoveUser()
         {
             if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
@@ -283,7 +284,8 @@
 
             try
             {
-                var user = UserManager.FindByName(this.User.Identity.Name);
+                var username = this.User.Identity.Name;
+                var user = await UserManager.FindByNameAsync(username);
 
                 if (user.OrderedItems.Any())
                 {
@@ -291,7 +293,7 @@
                 }
 
                 IHttpActionResult result;
-                IdentityResult userRemove = UserManager.Delete(user);
+                IdentityResult userRemove = await UserManager.DeleteAsync(user);
                 if (userRemove.Succeeded)
                 {
                     result = this.Ok();

@@ -30,6 +30,13 @@
             this.emails = emails;
         }
 
+        public ManageUsersController(IUsersService users, IEmailsService emails, ApplicationUserManager manager)
+        {
+            this.users = users;
+            this.emails = emails;
+            this.UserManager = manager;
+        }
+
         public ApplicationUserManager UserManager
         {
             get
@@ -74,7 +81,7 @@
 
             if (model.IsCompany && string.IsNullOrEmpty(model.Bulstat))
             {
-                return BadRequest(GlobalConstants.BulstatEmptyErrorMessage);
+                return BadRequest(GlobalConstants.InvalidCompanyBulstatCombination);
             }
 
             try
