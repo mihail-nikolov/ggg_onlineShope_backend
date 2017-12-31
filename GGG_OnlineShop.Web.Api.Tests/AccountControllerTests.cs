@@ -303,7 +303,7 @@
         }
 
         [TestMethod]
-        public async Task ForgotPassword_ShouldReturnInvalidModelStateResult_WhenUserIsNull()
+        public async Task ForgotPassword_ShouldReturnBadRequest_WhenUserIsNull()
         {
             mapper.Execute();
             string testEmail = "testEmail";
@@ -322,12 +322,15 @@
 
             var result = await controller.ForgotPassword(request);
 
-            Assert.IsInstanceOfType(result, typeof(InvalidModelStateResult));
+            Assert.IsInstanceOfType(result, typeof(BadRequestErrorMessageResult));
+            string responseMessage = ((BadRequestErrorMessageResult)result).Message;
+            Assert.IsTrue(responseMessage.Contains(GlobalConstants.FindingUserError));
+
             userManagerMock.VerifyAll();
         }
 
         [TestMethod]
-        public async Task ForgotPassword_ShouldReturnInvalidModelStateResult_WhenEmailNotConfirmed()
+        public async Task ForgotPassword_ShouldReturnBadRequest_WhenEmailNotConfirmed()
         {
             mapper.Execute();
             string testEmail = "testEmail";
@@ -337,8 +340,6 @@
             var userManagerMock = new Mock<ApplicationUserManager>(userStore.Object);
             userManagerMock.Setup(x => x.FindByNameAsync(testEmail))
                                         .ReturnsAsync(() => new User() { Email = testEmail, EmailConfirmed = false, Id = testId });
-            userManagerMock.Setup(x => x.IsEmailConfirmedAsync(testId))
-                                       .ReturnsAsync(() => false);
 
             AccountEmailRequestModel request = new AccountEmailRequestModel()
             {
@@ -348,7 +349,10 @@
 
             var result = await controller.ForgotPassword(request);
 
-            Assert.IsInstanceOfType(result, typeof(InvalidModelStateResult));
+            Assert.IsInstanceOfType(result, typeof(BadRequestErrorMessageResult));
+            string responseMessage = ((BadRequestErrorMessageResult)result).Message;
+            Assert.IsTrue(responseMessage.Contains(GlobalConstants.FindingUserError));
+
             userManagerMock.VerifyAll();
         }
 
@@ -363,9 +367,7 @@
             var userStore = new Mock<IUserStore<User>>();
             var userManagerMock = new Mock<ApplicationUserManager>(userStore.Object);
             userManagerMock.Setup(x => x.FindByNameAsync(testEmail))
-                                        .ReturnsAsync(() => new User() { Email = testEmail, EmailConfirmed = false, Id = testId });
-            userManagerMock.Setup(x => x.IsEmailConfirmedAsync(testId))
-                                       .ReturnsAsync(() => true);
+                                        .ReturnsAsync(() => new User() { Email = testEmail, EmailConfirmed = true, Id = testId });
             userManagerMock.Setup(x => x.GeneratePasswordResetTokenAsync(testId))
                                       .ReturnsAsync(() => testCode);
 
