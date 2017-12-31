@@ -5,6 +5,7 @@
         public const string AdministratorRoleName = "admin";
         public const string ExternalDBRestrictionMessage = "Do not have rights on external DB";
         public const string DBContextRequiredErrorMessage = "An instance of DbContext is required to use this repository.";
+        public const string DbFilledInFinishedMessage = "Db filled/updated finished. Check log files for info/errors.";
         public const string AppDomainPath = "http://localhost:60918"; // TODO will change and also build on release!!!
 
 
@@ -46,6 +47,7 @@
         public const string InvalidCompanyBulstatCombination = "valid compinations: company + bulstat; not company without bulstat";
         public const string NoSuchAUserErroMessage = "No such a user";
         public const string SMTPServer = "smtp.gmail.com";
+        public const string FindingUserError = "Error while finding user";
         public const string EmalToSendFrom = "testggg9@gmail.com"; // TODO change to original email
         public const string EmalToSendFromPassword = "ggg12345";
         public const string ResetPasswordSubject = "Reset Password";

@@ -56,10 +56,10 @@
             try
             {
                 var allUsers = this.users.GetAll()
-                                .OrderBy(x => x.CreatedOn)
-                                .ThenBy(x => x.Id)
-                                .To<UserResponseModel>()
-                                .ToList();
+                                         .OrderByDescending(x => x.CreatedOn)
+                                         .ThenBy(x => x.Id)
+                                         .To<UserResponseModel>()
+                                         .ToList();
 
                 return this.Ok(allUsers);
             }
@@ -79,14 +79,15 @@
                 return BadRequest(ModelState);
             }
 
-            if (model.IsCompany && string.IsNullOrEmpty(model.Bulstat))
-            {
-                return BadRequest(GlobalConstants.InvalidCompanyBulstatCombination);
-            }
-
             try
             {
                 var user = this.Mapper.Map<User>(model);
+
+                if (!this.users.IsValidUser(user))
+                {
+                    return BadRequest(GlobalConstants.InvalidCompanyBulstatCombination);
+                }
+                
                 var updatedUser = this.Mapper.Map<UserResponseModel>(this.users.Update(user));
 
                 return this.Ok(updatedUser);
@@ -104,17 +105,18 @@
         {
             try
             {
-                var user = this.users.GetByEmail(model.Email);
-                var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                var callbackUrl = this.Url.Route("GGG_OnlineShop_WithAction", new { Controller = "Account", Action = "ConfirmEmail", userId = user.Id, code = code });
+                User user = this.users.GetByEmail(model.Email);
+                string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                string callbackUrl = this.Url.Route("GGG_OnlineShop_WithAction", new { Controller = "Account", Action = "ConfirmEmail", userId = user.Id, code = code });
 
-                var fullCallbackUrl = GlobalConstants.AppDomainPath + callbackUrl;
+                string fullCallbackUrl = GlobalConstants.AppDomainPath + callbackUrl;
 
                 this.emails.SendEmail(GlobalConstants.EmalToSendFrom, GlobalConstants.ConfirmEmailSubject,
-                                            string.Format(GlobalConstants.ConfirmEmailBody, fullCallbackUrl), GlobalConstants.SMTPServer,
-                                            GlobalConstants.EmalToSendFrom, GlobalConstants.EmalToSendFromPassword);
+                                      string.Format(GlobalConstants.ConfirmEmailBody, fullCallbackUrl), GlobalConstants.SMTPServer,
+                                      GlobalConstants.EmalToSendFrom, GlobalConstants.EmalToSendFromPassword);
 
                 return Ok(fullCallbackUrl);
+                // TODO fullCallbackUrl will not be shown
             }
             catch (Exception e)
             {

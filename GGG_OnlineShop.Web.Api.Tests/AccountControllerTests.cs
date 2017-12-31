@@ -3,23 +3,17 @@
     using Common;
     using Controllers;
     using Data.Services.Contracts;
-    using Data.Services.ExternalDb.Models;
     using InternalApiDB.Models;
     using Microsoft.AspNet.Identity;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Models;
     using Moq;
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Reflection;
     using System.Security.Claims;
     using System.Security.Principal;
     using System.Threading.Tasks;
-    using System.Web;
-    using System.Web.Http;
-    using System.Web.Http.Controllers;
     using System.Web.Http.Results;
 
     [TestClass]
@@ -134,7 +128,7 @@
         }
 
         [TestMethod]
-        public async Task Register_ShouldReturnOkResult_WhenCreateAsyncucceded()
+        public async Task Register_ShouldReturnOkResult_WhenUpdateContactInfoSucceded()
         {
             mapper.Execute();
             string testPassword = "1111";
@@ -166,7 +160,7 @@
         }
 
         [TestMethod]
-        public void UpdateUserInfo_ShouldReturnOkResult_WhenCreateAsyncSucceded()
+        public void UpdateUserInfo_ShouldReturnOkResult_WhenUpdateContactInfoSucceded()
         {
             mapper.Execute();
             string deliveryCountry = "BG";

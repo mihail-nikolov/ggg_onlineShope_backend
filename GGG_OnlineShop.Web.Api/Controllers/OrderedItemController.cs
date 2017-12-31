@@ -24,6 +24,7 @@
         [HttpPost]
         [Route("order")]
         // TODO send email to user (also when update order)
+        // think about how to send an email with order info to the user
         public IHttpActionResult Order(OrderedItemRequestModel model)
         {
             try

@@ -204,10 +204,10 @@
             {
                 if (ModelState.IsValid)
                 {
-                    var user = await UserManager.FindByNameAsync(model.Email); // TODO - is this needed?
-                    if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
+                    var user = await UserManager.FindByNameAsync(model.Email); 
+                    if (user == null || !user.EmailConfirmed) // TODO - retest
                     {
-                        return BadRequest(ModelState);
+                        return BadRequest(GlobalConstants.FindingUserError);
                     }
 
                     string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);

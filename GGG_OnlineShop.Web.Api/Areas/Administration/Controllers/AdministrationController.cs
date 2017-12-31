@@ -25,7 +25,6 @@
         [Route("dbInfoAddFromFile")]
         public IHttpActionResult DbInfoAddFromFile()
         {
-            GlassJsonInfoModel[] glasses = null;
             var httpRequest = HttpContext.Current.Request;
             string postedFilePath = string.Empty;
 
@@ -39,8 +38,8 @@
 
             try
             {
-                this.dbInfoFiller.FillInfo(glasses, postedFilePath);
-                return this.Ok("Db filled/updated finished. Check log files for info/errors.");
+                this.dbInfoFiller.FillInfo(null, postedFilePath);
+                return this.Ok(GlobalConstants.DbFilledInFinishedMessage);
             }
             catch (Exception e)
             {
@@ -57,7 +56,7 @@
             try
             {
                 this.dbInfoFiller.FillInfo(glasses, "");
-                return this.Ok("Db filled/updated finished. Check log files for info/errors.");
+                return this.Ok(GlobalConstants.DbFilledInFinishedMessage);
             }
             catch (Exception e)
             {

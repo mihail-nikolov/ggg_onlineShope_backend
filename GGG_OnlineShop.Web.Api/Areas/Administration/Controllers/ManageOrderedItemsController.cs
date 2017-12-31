@@ -56,11 +56,10 @@
                                         .ToList();
                 }
 
-                orders = orders.OrderBy(x => x.CreatedOn)
-                                      .ThenByDescending(x => x.Status)
-                                      .ThenBy(x => x.UserInfo)
-                                      .ThenBy(x => x.Id)
-                                      .ToList();
+                orders = orders.OrderBy(x => x.Status)
+                               .ThenByDescending(x => x.CreatedOn)
+                               .ThenBy(x => x.Id)
+                               .ToList();
 
                 return this.Ok(orders);
             }
