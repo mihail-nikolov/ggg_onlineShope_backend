@@ -4,7 +4,7 @@
     using Contracts;
     using System.Linq;
 
-    public class BaseDataExternalService<T> : IBaseDataExternalService<T>
+    public abstract class BaseDataExternalService<T> : IBaseDataExternalService<T>
             where T : class
     {
         public BaseDataExternalService(IExternalDbRepository<T> dataSet)

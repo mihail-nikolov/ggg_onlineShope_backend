@@ -8,7 +8,7 @@
     using System.Linq;
     using GGG_OnlineShop.Common;
 
-    public class BaseDataWithCreatorService<T> : BaseDataService<T>, IBaseDataWithCreatorService<T>
+    public abstract class BaseDataWithCreatorService<T> : BaseDataService<T>, IBaseDataWithCreatorService<T>
        where T : class, IDeletableEntity, IAuditInfo, IEntityWithCreator
     {
         public BaseDataWithCreatorService(IInternalDbRepository<T> dataSet, IInternalDbRepository<User> users)

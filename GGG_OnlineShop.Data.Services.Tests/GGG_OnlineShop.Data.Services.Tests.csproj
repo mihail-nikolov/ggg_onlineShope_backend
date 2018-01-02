@@ -50,11 +50,40 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="GoodGroupsServiceTests.cs" />
+    <Compile Include="GoodsServiceTests.cs" />
+    <Compile Include="ProductQuantitiesServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StoreServiceTests.cs" />
+    <Compile Include="VehicleSuperceedsServiceTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GGG_OnlineShop.Common\GGG_OnlineShop.Common.csproj">
+      <Project>{37895E29-1472-4A8B-BF00-0297412AEB8F}</Project>
+      <Name>GGG_OnlineShop.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GGG_OnlineShop.Data.Common\GGG_OnlineShop.Data.Common.csproj">
+      <Project>{4ACF8F02-0714-4E56-B83C-7F826FA41EDA}</Project>
+      <Name>GGG_OnlineShop.Data.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GGG_onlineShop.Data.Services\GGG_OnlineShop.Data.Services.csproj">
+      <Project>{6AD37FF9-0DBF-4454-A883-68298E36DE36}</Project>
+      <Name>GGG_OnlineShop.Data.Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GGG_onlineShop.Models\GGG_OnlineShop.InternalApiDB.Models.csproj">
+      <Project>{B8D0E014-1843-4AC3-A5C4-5E64875B2CBE}</Project>
+      <Name>GGG_OnlineShop.InternalApiDB.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SkladProDB.Models\SkladProDB.Models.csproj">
+      <Project>{23D4A163-B78F-4CF1-9F6C-9F62FBB0F491}</Project>
+      <Name>SkladProDB.Models</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

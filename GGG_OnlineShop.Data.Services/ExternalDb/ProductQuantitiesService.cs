@@ -2,8 +2,8 @@
 {
     using Contracts;
     using GGG_OnlineShop.Common;
-    using InternalApiDB.Models;
     using Models;
+    using SkladProDB.Models;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -25,26 +25,27 @@
 
         protected IObjectsService ObjectsService { get; set; }
 
-        public IEnumerable<ProductInfoResponseModel> GetPriceAndQuantitiesByCode(string code, User user)
+        public IEnumerable<ProductInfoResponseModel> GetPriceAndQuantitiesByCode(string code, InternalApiDB.Models.User user)
         {
-            Dictionary<string, ProductInfoResponseModel> productQuantities = new Dictionary<string, ProductInfoResponseModel>();
+            List<ProductInfoResponseModel> productQuantities = new List<ProductInfoResponseModel>();
+            var goods = this.Goods.GetAllByCode(code).ToList();
+            if (goods.Count == 0)
+            {
+                return productQuantities;
+            }
 
-            var goods = this.Goods.GetAllByCode(code);
+            HashSet<string> forbiddenGroups = GetForbiddenGroups(user);
+
             var goodGroupIds = goods.Select(x => x.GroupID).ToList();
-
             var goodGroups = this.GoodGroups.GetGoodGroupsByIds(goodGroupIds);
-
             var groupIdNameDictionary = new Dictionary<int?, string>();
-
             foreach (var goodGroup in goodGroups)
             {
                 groupIdNameDictionary[goodGroup.ID] = goodGroup.Name;
             }
 
-            HashSet<string> forbiddenGroups = GetForbiddenGroups(user);
             var objects = this.ObjectsService.GetAll().ToList();
             Dictionary<int?, string> objectKeyName = new Dictionary<int?, string>();
-
             foreach (var obj in objects)
             {
                 objectKeyName.Add(obj.ID, obj.Name);
@@ -52,14 +53,29 @@
 
             foreach (var good in goods)
             {
-                var quantities = this.Store.GetAllByGoodId(good.ID);
-                var groupName = groupIdNameDictionary[good.GroupID];
+                // show the item only if it is not a pattern (priceout2 > 0)
+                if (good.PriceOut2 <= 0)
+                {
+                    continue;
+                }
 
+                var groupName = groupIdNameDictionary[good.GroupID];
                 if (forbiddenGroups.Contains(groupName))
                 {
                     continue;
                 }
 
+                string groupFromGoodName = string.Empty;
+                if (groupName == GlobalConstants.SharedGroup)
+                {
+                    groupFromGoodName = GetGroupNameFromName(good);
+                    if (string.IsNullOrEmpty(groupFromGoodName))
+                    {
+                        continue;
+                    }
+                }
+
+                var quantities = this.Store.GetAllByGoodId(good.ID);
                 foreach (var item in quantities)
                 {
                     if (!objectKeyName.ContainsKey(item.ObjectID))
@@ -69,56 +85,53 @@
 
                     string storeName = objectKeyName[item.ObjectID];
 
-                    if (productQuantities.ContainsKey(groupName))
+                    ProductInfoResponseModel currentGoodResponse = productQuantities.Where(x => x.GoodId == good.ID).FirstOrDefault();
+                    if (currentGoodResponse != null)
                     {
-                        if (productQuantities[groupName].StoreQUantities.ContainsKey(storeName))
+                        int index = productQuantities.IndexOf(currentGoodResponse);
+                        if (productQuantities[index].StoreQUantities.ContainsKey(storeName))
                         {
-                            productQuantities[groupName].StoreQUantities[storeName] += (int)item.Qtty;
+                            productQuantities[index].StoreQUantities[storeName] += (int)item.Qtty;
                         }
                         else
                         {
-                            productQuantities[groupName].StoreQUantities.Add(storeName, (int)item.Qtty);
+                            productQuantities[index].StoreQUantities.Add(storeName, (int)item.Qtty);
                         }
                     }
                     else
                     {
-                        string groupFromGoodName = string.Empty;
-                        if (groupName == GlobalConstants.SharedGroup)
+                        productQuantities.Add(new ProductInfoResponseModel()
                         {
-                            var nameWithoutSharedPrefix = good.Name.Replace("Общи ", string.Empty);
-                            if (nameWithoutSharedPrefix == good.Name2)
-                            {
-                                // Общи glass is only added as a pattern for future db glass add
-                                continue;
-                            }
-                            else
-                            {
-                                int startIndexOfDescription = good.Name.IndexOf(good.Name2);
-                                groupFromGoodName = good.Name.Substring(0, startIndexOfDescription - 1).Replace("Общи ", string.Empty);
-                            }
-                        }
-
-                        // show the item only if it is not a pattern (priceout2 > 0)
-                        if (good.PriceOut2 > 0)
-                        {
-                            productQuantities[groupName] = new ProductInfoResponseModel()
-                            {
-                                Group = groupName,
-                                StoreQUantities = new Dictionary<string, int>() { { storeName, (int)item.Qtty } },
-                                Price = good.PriceOut2,
-                                DescriptionWithName = good.Name,
-                                DescriptionWithoutName = good.Name2,
-                                GroupFromItemName = groupFromGoodName
-                            };
-                        }
+                            GoodId = good.ID,
+                            Group = groupName,
+                            StoreQUantities = new Dictionary<string, int>() { { storeName, (int)item.Qtty } },
+                            Price = good.PriceOut2,
+                            DescriptionWithName = good.Name,
+                            DescriptionWithoutName = good.Name2,
+                            GroupFromItemName = groupFromGoodName
+                        });
                     }
                 }
             }
 
-            return productQuantities.Select(x => x.Value);
+            return productQuantities;
         }
 
-        private HashSet<string> GetForbiddenGroups(User user)
+        private string GetGroupNameFromName(Good good)
+        {
+            string groupFromGoodName = string.Empty;
+
+            var nameWithoutSharedPrefix = good.Name.Replace("Общи ", string.Empty);
+            if (nameWithoutSharedPrefix != good.Name2)
+            {
+                int startIndexOfDescription = good.Name.IndexOf(good.Name2);
+                groupFromGoodName = good.Name.Substring(0, startIndexOfDescription - 1).Replace("Общи ", string.Empty);
+            }
+
+            return groupFromGoodName;
+        }
+
+        private HashSet<string> GetForbiddenGroups(InternalApiDB.Models.User user)
         {
             HashSet<string> forbiddenGroups = new HashSet<string>();
 

@@ -4,6 +4,8 @@
 
     public class ProductInfoResponseModel
     {
+        public int GoodId { get; set; }
+
         public Dictionary<string, int> StoreQUantities { get; set; }
 
         public string Group { get; set; }

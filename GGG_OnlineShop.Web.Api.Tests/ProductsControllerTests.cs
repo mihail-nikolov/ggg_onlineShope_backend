@@ -29,7 +29,7 @@
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void GetPriceAndQUantities_ShouldThrowException_WhenVehicleGlassesServiceIsNull()
+        public void GetPriceAndQuantities_ShouldThrowException_WhenVehicleGlassesServiceIsNull()
         {
             var controller = new ProductsController(null, null, null, null);
 
@@ -193,7 +193,7 @@
         }
 
         [TestMethod]
-        public void GetPriceAndQUantities_ShouldReturnProductsQuantitiesAndPriceInfo_WhenIdPassed()
+        public void GetPriceAndQuantities_ShouldReturnProductsQuantitiesAndPriceInfo_WhenIdPassed()
         {
             mapper.Execute();
             int testId = 1;
