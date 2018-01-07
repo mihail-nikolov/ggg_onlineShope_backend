@@ -14,7 +14,7 @@
 
         public VehicleGlassImage GetByCaption(string caption)
         {
-            var image = this.Data.All().Where(i => i.Caption.ToLower() == caption.ToLower()).FirstOrDefault();
+            var image = this.Data.All().Where(i => i.Caption == caption).FirstOrDefault();
             return image;
         }
 

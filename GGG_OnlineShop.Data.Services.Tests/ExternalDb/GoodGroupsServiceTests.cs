@@ -1,12 +1,12 @@
-﻿namespace GGG_OnlineShop.Data.Services.Tests
+﻿namespace GGG_OnlineShop.Data.Services.Tests.ExternalDb
 {
     using Common;
     using SkladProDB.Models;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Moq;
-    using ExternalDb;
     using System.Collections.Generic;
     using System.Linq;
+    using Services.ExternalDb;
 
     [TestClass]
     public class GoodGroupsServiceTests

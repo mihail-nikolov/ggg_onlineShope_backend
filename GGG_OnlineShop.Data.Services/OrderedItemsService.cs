@@ -43,7 +43,7 @@
             // if not enough money paid
             if (result && (order.IsDepositNeeded && order.PaidPrice < neededPrice))
             {
-                var user = Users.GetById(order.UserId);
+                var user = order.User; // TODO test this!
                 // and registered user
                 if (user != null)
                 {

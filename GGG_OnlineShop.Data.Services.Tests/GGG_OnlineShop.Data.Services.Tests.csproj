@@ -34,12 +34,29 @@
       <HintPath>..\packages\Castle.Core.4.2.1\lib\net45\Castle.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Moq, Version=4.7.145.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <HintPath>..\packages\Moq.4.7.145\lib\net45\Moq.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -50,14 +67,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GoodGroupsServiceTests.cs" />
-    <Compile Include="GoodsServiceTests.cs" />
-    <Compile Include="ProductQuantitiesServiceTests.cs" />
+    <Compile Include="GlassesInfoDbFillerTests.cs" />
+    <Compile Include="ExternalDb\GoodGroupsServiceTests.cs" />
+    <Compile Include="ExternalDb\GoodsServiceTests.cs" />
+    <Compile Include="OrderedItemsServiceTests.cs" />
+    <Compile Include="ExternalDb\ProductQuantitiesServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StoreServiceTests.cs" />
+    <Compile Include="ExternalDb\StoreServiceTests.cs" />
+    <Compile Include="UsersServiceTests.cs" />
+    <Compile Include="VehicleAccessoriesServiceTests.cs" />
+    <Compile Include="VehicleBodyTypesServiceTests.cs" />
+    <Compile Include="VehicleGlassCharacteristicsServiceTests.cs" />
+    <Compile Include="VehicleGlassesServiceTests.cs" />
+    <Compile Include="VehicleGlassImagesServiceTests.cs" />
+    <Compile Include="VehicleInterchangeablePartsServiceTests.cs" />
+    <Compile Include="VehicleMakesServiceTests.cs" />
+    <Compile Include="VehicleModelsServiceTests.cs" />
+    <Compile Include="VehiclesServiceTests.cs" />
     <Compile Include="VehicleSuperceedsServiceTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

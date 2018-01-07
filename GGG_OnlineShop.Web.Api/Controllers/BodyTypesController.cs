@@ -50,6 +50,7 @@
             }
             catch (Exception e)
             {
+                // TODO should we throw exception?
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
                                                  e.Message));
             }

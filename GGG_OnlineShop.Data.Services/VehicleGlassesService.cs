@@ -78,17 +78,16 @@
         public IQueryable<VehicleGlass> GetByRandomCode(string code)
         {
             var glasses = this.Data.All().Where(g => g.EuroCode.ToLower().Contains(code.ToLower()))
-                            .Union(this.Data.All().Where(g => g.OesCode.ToLower().Contains(code.ToLower())))
-                            .Union(this.Data.All().Where(g => g.MaterialNumber.ToLower().Contains(code.ToLower())))
-                            .Union(this.Data.All().Where(g => g.IndustryCode.ToLower().Contains(code.ToLower())))
-                            .Union(this.Data.All().Where(g => g.LocalCode.ToLower().Contains(code.ToLower())));
+                   .Union(this.Data.All().Where(g => g.OesCode.ToLower() == code.ToLower())) // OesCode should always be full
+                   .Union(this.Data.All().Where(g => g.MaterialNumber.ToLower().Contains(code.ToLower())))
+                   .Union(this.Data.All().Where(g => g.IndustryCode.ToLower().Contains(code.ToLower())))
+                   .Union(this.Data.All().Where(g => g.LocalCode.ToLower().Contains(code.ToLower())));
             return glasses;
         }
 
         public IQueryable<VehicleGlassAccessory> GetAccessories(int glassId)
         {
-            IQueryable<VehicleGlassAccessory> accessories;
-            accessories = this.Data.GetById(glassId).VehicleGlassAccessories.AsQueryable();
+            var accessories = this.Data.GetById(glassId).VehicleGlassAccessories.AsQueryable();
 
             return accessories;
         }

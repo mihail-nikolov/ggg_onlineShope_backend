@@ -4,9 +4,9 @@
 
     public interface IVehicleAccessoriesService: IBaseDataService<VehicleGlassAccessory>
     {
-        VehicleGlassAccessory GetAccessoryByIndustryCode(string industryCode);
+        VehicleGlassAccessory GetByIndustryCode(string industryCode);
 
-        VehicleGlassAccessory GetAccessoryByMaterialNumber(string materialNumber);
+        VehicleGlassAccessory GetByMaterialNumber(string materialNumber);
 
         VehicleGlassAccessory GetAccessory(string industryCode, string materialNumber);
     }

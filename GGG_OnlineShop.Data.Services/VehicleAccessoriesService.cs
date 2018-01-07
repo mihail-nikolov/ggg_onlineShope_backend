@@ -14,21 +14,21 @@
 
         public VehicleGlassAccessory GetAccessory(string industryCode, string materialNumber)
         {
-            var glass = this.GetAccessoryByIndustryCode(industryCode);
-            if (glass == null)
+            var accessory = this.GetByIndustryCode(industryCode);
+            if (accessory == null)
             {
-                glass = this.GetAccessoryByMaterialNumber(materialNumber);
+                accessory = this.GetByMaterialNumber(materialNumber);
             }
 
-            return glass;
+            return accessory;
         }
 
-        public VehicleGlassAccessory GetAccessoryByMaterialNumber(string materialNumber)
+        public VehicleGlassAccessory GetByMaterialNumber(string materialNumber)
         {
             return this.Data.All().Where(a => a.MaterialNumber.ToLower() == materialNumber.ToLower()).FirstOrDefault();
         }
 
-        public VehicleGlassAccessory GetAccessoryByIndustryCode(string industryCode)
+        public VehicleGlassAccessory GetByIndustryCode(string industryCode)
         {
             return this.Data.All().Where(a => a.IndustryCode.ToLower() == industryCode.ToLower()).FirstOrDefault();
         }
