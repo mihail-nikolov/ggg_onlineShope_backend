@@ -29,6 +29,7 @@
             this.users = users;
         }
 
+
         [HttpGet]
         // TODO unittest
         [Route("GetItemByFullCode")]
@@ -38,9 +39,9 @@
             VehicleGlassResponseModel glass = null;
             if (!string.IsNullOrEmpty(eurocode))
             {
-                glass = this.Mapper.Map<VehicleGlassResponseModel>(this.glasses.GetByEuroCode(eurocode));
+                 glass = this.Mapper.Map<VehicleGlassResponseModel>(this.glasses.GetByEuroCode(eurocode));
             }
-
+             
             if (glass == null && !string.IsNullOrEmpty(materialNumber))
             {
                 glass = this.Mapper.Map<VehicleGlassResponseModel>(this.glasses.GetByMaterialNumber(materialNumber));
