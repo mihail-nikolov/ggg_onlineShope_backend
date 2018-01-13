@@ -28,6 +28,13 @@
         public IEnumerable<ProductInfoResponseModel> GetPriceAndQuantitiesByCode(string code, InternalApiDB.Models.User user)
         {
             List<ProductInfoResponseModel> productQuantities = new List<ProductInfoResponseModel>();
+
+            // if yesglass - contains -ALT - so should remove it
+            string yesglassMark = "-ALT";
+            if (code.Contains(yesglassMark))
+            {
+                code = code.Replace(yesglassMark, "");
+            }
             var goods = this.Goods.GetAllByCode(code).ToList();
             if (goods.Count == 0)
             {

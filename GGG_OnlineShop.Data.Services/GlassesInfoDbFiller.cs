@@ -13,7 +13,6 @@
     using Infrastructure;
     using System.IO;
     using System.Web;
-    using System.Linq;
 
     public class GlassesInfoDbFiller : IGlassesInfoDbFiller
     {
@@ -101,7 +100,7 @@
                 }
                 else
                 {
-                    this.AddArrayOfJsonsToDb(passedFile);
+                    this.AddArrayOfJsonsFromFileToDb(passedFile);
                 }
             }
             catch (Exception e)
@@ -136,7 +135,7 @@
             }
         }
 
-        private void AddArrayOfJsonsToDb(string passedFile)
+        private void AddArrayOfJsonsFromFileToDb(string passedFile)
         {
             string fileToUse = jsonFilePathToRead;
 
@@ -267,11 +266,11 @@
                 var bodyTypeIds = this.CheckAndGetBodyTypeId(glassInfoModel.BodyTypes);
                 var vehicles = this.CheckAndGetVehicleIds(makeId, modelId, bodyTypeIds);
 
-                var characteristics = this.CheckAndGetCharacteristics(glassInfoModel.Characteristics);
-                var images = this.CheckAndGetImages(glassInfoModel.Images);
-                var interchaneableParts = this.CheckAndGetInterchaneableParts(glassInfoModel.InterchangeableParts);
-                var superceeds = this.CheckAndGetAccessories(glassInfoModel.Accessories);
-                var accessories = this.CheckAndGetSuperceeds(glassInfoModel.Superceeds);
+                var characteristics = this.HandleCharacteristics(glassInfoModel.Characteristics);
+                var images = this.HandleImages(glassInfoModel.Images);
+                var interchaneableParts = this.HandleInterchaneableParts(glassInfoModel.InterchangeableParts);
+                var superceeds = this.HandleAccessories(glassInfoModel.Accessories);
+                var accessories = this.HandleSuperceeds(glassInfoModel.Superceeds);
 
                 this.CreateNewGlassWithAllRelations(glassInfoModel, vehicles, characteristics, images, interchaneableParts, accessories, superceeds);
 
@@ -281,57 +280,6 @@
             return added;
         }
 
-        private List<VehicleGlassSuperceed> CheckAndGetSuperceeds(List<SuperceedJsonInfoModel> superceeds)
-        {
-            List<VehicleGlassSuperceed> vehicleSupeceeds = new List<VehicleGlassSuperceed>();
-            foreach (var superceed in superceeds)
-            {
-                var superceedFromDb = this.Superceeds.GetSuperceed(superceed.OldEuroCode,
-                                                                   superceed.OldLocalCode,
-                                                                   superceed.OldMaterialNumber);
-                if (superceedFromDb == null)
-                {
-                    var newSuperceed = this.Mapper.Map<VehicleGlassSuperceed>(superceed);
-
-                    this.Superceeds.Add(newSuperceed);
-                    var superceedToAdd = this.Superceeds.GetSuperceed(superceed.OldEuroCode,
-                                                                      superceed.OldLocalCode,
-                                                                      superceed.OldMaterialNumber);
-                    vehicleSupeceeds.Add(superceedToAdd);
-                }
-                else
-                {
-                    vehicleSupeceeds.Add(superceedFromDb);
-                }
-            }
-
-            return vehicleSupeceeds;
-        }
-
-        private List<VehicleGlassAccessory> CheckAndGetAccessories(List<AccessoryJsonInfoModel> accessories)
-        {
-            List<VehicleGlassAccessory> vehicleAccessories = new List<VehicleGlassAccessory>();
-            foreach (var accessory in accessories)
-            {
-                var accessoryFromDb = this.Accessories.GetAccessory(accessory.IndustryCode, accessory.MaterialNumber);
-                if (accessoryFromDb == null)
-                {
-                    var newAccessory = this.Mapper.Map<VehicleGlassAccessory>(accessory);
-
-                    this.Accessories.Add(newAccessory);
-
-                    var accessoryToAdd = this.Accessories.GetAccessory(accessory.IndustryCode, accessory.MaterialNumber);
-                    vehicleAccessories.Add(accessoryToAdd);
-                }
-                else
-                {
-                    vehicleAccessories.Add(accessoryFromDb);
-                }
-            }
-
-            return vehicleAccessories;
-        }
-
         private void CreateNewGlassWithAllRelations(GlassJsonInfoModel glassInfoModel,
                                                     List<Vehicle> vehicles, List<VehicleGlassCharacteristic> characteristics,
                                                     List<VehicleGlassImage> images, List<VehicleGlassInterchangeablePart> interchaneableParts,
@@ -339,7 +287,6 @@
         {
             VehicleGlass newGlass = this.Mapper.Map<VehicleGlass>(glassInfoModel);
             this.Glasses.Add(newGlass);
-
 
             var glass = this.Glasses.GetGlass(newGlass.EuroCode, newGlass.MaterialNumber,
                                               newGlass.IndustryCode, newGlass.LocalCode);
@@ -377,7 +324,67 @@
             }
         }
 
-        private List<VehicleGlassInterchangeablePart> CheckAndGetInterchaneableParts(List<InterchangeableParJsonInfoModel> interchangeableParts)
+        // parses the superceed for a given product.
+        // if the same already exists -> return them 
+        // else adds them -> return them
+        private List<VehicleGlassSuperceed> HandleSuperceeds(List<SuperceedJsonInfoModel> superceeds)
+        {
+            List<VehicleGlassSuperceed> vehicleSupeceeds = new List<VehicleGlassSuperceed>();
+            foreach (var superceed in superceeds)
+            {
+                var superceedFromDb = this.Superceeds.GetSuperceed(superceed.OldEuroCode,
+                                                                   superceed.OldLocalCode,
+                                                                   superceed.OldMaterialNumber);
+                if (superceedFromDb == null)
+                {
+                    var newSuperceed = this.Mapper.Map<VehicleGlassSuperceed>(superceed);
+
+                    this.Superceeds.Add(newSuperceed);
+                    var superceedToAdd = this.Superceeds.GetSuperceed(superceed.OldEuroCode,
+                                                                      superceed.OldLocalCode,
+                                                                      superceed.OldMaterialNumber);
+                    vehicleSupeceeds.Add(superceedToAdd);
+                }
+                else
+                {
+                    vehicleSupeceeds.Add(superceedFromDb);
+                }
+            }
+
+            return vehicleSupeceeds;
+        }
+
+        // parses the accessories for a given product.
+        // if the same already exists -> return them 
+        // else adds them -> return them
+        private List<VehicleGlassAccessory> HandleAccessories(List<AccessoryJsonInfoModel> accessories)
+        {
+            List<VehicleGlassAccessory> vehicleAccessories = new List<VehicleGlassAccessory>();
+            foreach (var accessory in accessories)
+            {
+                var accessoryFromDb = this.Accessories.GetAccessory(accessory.IndustryCode, accessory.MaterialNumber);
+                if (accessoryFromDb == null)
+                {
+                    var newAccessory = this.Mapper.Map<VehicleGlassAccessory>(accessory);
+
+                    this.Accessories.Add(newAccessory);
+
+                    var accessoryToAdd = this.Accessories.GetAccessory(accessory.IndustryCode, accessory.MaterialNumber);
+                    vehicleAccessories.Add(accessoryToAdd);
+                }
+                else
+                {
+                    vehicleAccessories.Add(accessoryFromDb);
+                }
+            }
+
+            return vehicleAccessories;
+        }
+
+        // parses the interchangeable parts for a given product.
+        // if the same already exists -> return them 
+        // else adds them -> return them
+        private List<VehicleGlassInterchangeablePart> HandleInterchaneableParts(List<InterchangeableParJsonInfoModel> interchangeableParts)
         {
             List<VehicleGlassInterchangeablePart> vehicleInterchaneableParts = new List<VehicleGlassInterchangeablePart>();
             foreach (var interchangeablePart in interchangeableParts)
@@ -408,7 +415,10 @@
             return vehicleInterchaneableParts;
         }
 
-        private List<VehicleGlassImage> CheckAndGetImages(List<ImageJsonInfoModel> images)
+        // parses the images for a given product.
+        // if the same already exists -> return them 
+        // else adds them -> return them
+        private List<VehicleGlassImage> HandleImages(List<ImageJsonInfoModel> images)
         {
             List<VehicleGlassImage> imagesToadd = new List<VehicleGlassImage>();
             foreach (var image in images)
@@ -429,7 +439,10 @@
             return imagesToadd;
         }
 
-        private List<VehicleGlassCharacteristic> CheckAndGetCharacteristics(List<string> characteristics)
+        // parses the GetCharacteristics for a given product.
+        // if the same already exists -> return them 
+        // else adds them -> return them
+        private List<VehicleGlassCharacteristic> HandleCharacteristics(List<string> characteristics)
         {
             List<VehicleGlassCharacteristic> characteristicsToAdd = new List<VehicleGlassCharacteristic>();
             foreach (var characteristicName in characteristics)

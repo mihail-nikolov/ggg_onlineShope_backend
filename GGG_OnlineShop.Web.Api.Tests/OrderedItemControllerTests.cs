@@ -118,7 +118,7 @@
                 IsInvoiceNeeded = false,
                 ModifiedOn = null,
                 OtherCodes = null,
-                User = null,
+                User = testUser,
                 UserId = testId
             };
 
@@ -180,7 +180,7 @@
                 IsInvoiceNeeded = false,
                 ModifiedOn = null,
                 OtherCodes = null,
-                User = null,
+                User = testUser,
                 UserId = testId
             };
 

@@ -17,7 +17,7 @@ namespace GGG_OnlineShop.InternalApiDB.Data.Migrations
 
         private void SeedUsersAndAdmin(InternalApiDbContext context)
         {
-            // TODO  - remove when deploy
+            // TODO  - adapt when deploy
             const string AdministratorUserName = "admin@admin.com";
             const string AdministratorPassword = "admin123";
 

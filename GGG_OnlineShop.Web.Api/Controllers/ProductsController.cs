@@ -30,6 +30,43 @@
         }
 
         [HttpGet]
+        // TODO unittest
+        [Route("GetItemByFullCode")]
+        public IHttpActionResult GetItemByFullCode(string eurocode = "", string materialNumber = "", string industryCode = "", string localCode = "")
+        {
+            IHttpActionResult result = null;
+            VehicleGlassResponseModel glass = null;
+            if (!string.IsNullOrEmpty(eurocode))
+            {
+                glass = this.Mapper.Map<VehicleGlassResponseModel>(this.glasses.GetByEuroCode(eurocode));
+            }
+
+            if (glass == null && !string.IsNullOrEmpty(materialNumber))
+            {
+                glass = this.Mapper.Map<VehicleGlassResponseModel>(this.glasses.GetByMaterialNumber(materialNumber));
+            }
+
+            if (glass == null && !string.IsNullOrEmpty(industryCode))
+            {
+                glass = this.Mapper.Map<VehicleGlassResponseModel>(this.glasses.GetByIndustryCode(industryCode));
+            }
+
+            if (glass == null && !string.IsNullOrEmpty(localCode))
+            {
+                glass = this.Mapper.Map<VehicleGlassResponseModel>(this.glasses.GetByLocalCode(localCode));
+            }
+
+            result = Ok(glass);
+
+            if (glass == null)
+            {
+                result = BadRequest("No code passed");
+            }
+
+            return result;
+        }
+
+        [HttpGet]
         public IHttpActionResult Get(int? id, string eurocode = "", string oescode = "", string code = "")
         {
             try

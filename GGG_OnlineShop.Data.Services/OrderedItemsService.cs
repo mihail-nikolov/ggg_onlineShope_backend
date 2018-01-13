@@ -43,7 +43,7 @@
             // if not enough money paid
             if (result && (order.IsDepositNeeded && order.PaidPrice < neededPrice))
             {
-                var user = order.User; // TODO test this!
+                var user = order.User;
                 // and registered user
                 if (user != null)
                 {
@@ -61,7 +61,7 @@
             }
 
             if (result && ((string.IsNullOrEmpty(order.AnonymousUserInfo) || string.IsNullOrEmpty(order.AnonymousUserЕmail))
-                                                                 && string.IsNullOrEmpty(order.UserId)))
+                                                                 && order.User == null))
             {
                 result = false;
             }

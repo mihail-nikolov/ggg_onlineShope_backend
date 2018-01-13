@@ -48,12 +48,12 @@
         public const string NoSuchAUserErroMessage = "No such a user";
         public const string SMTPServer = "smtp.gmail.com";
         public const string FindingUserError = "Error while finding user";
-        public const string EmalToSendFrom = "testggg9@gmail.com"; // TODO change to original email
+        public const string EmalToSendFrom = "testggg9@gmail.com";
         public const string EmalToSendFromPassword = "ggg12345";
-        public const string ResetPasswordSubject = "Reset Password";
-        public const string ResetPasswordBody = "Please reset your password by using this code: {0}";
-        public const string ConfirmEmailSubject = "Confirm your account";
-        public const string ConfirmEmailBody = "Please confirm your account by clicking this link: {0}";
+        public const string ResetPasswordSubject = "Забравена парола";
+        public const string ResetPasswordBody = "Моля, обновете паролата си, използвайки следния код: {0}";
+        public const string ConfirmEmailSubject = "Потвърждаване на акаунт";
+        public const string ConfirmEmailBody = "Моля, потвърдете акаунта си, кликвайки на следния линк: {0}";
         public const string WrongCodeErrorMessage = "wrong code for {0}";
         public const string EmailConfirmationFailedErrorMessage = "email confirmation failed";
         public const string CannotRemoveAdminErrorMessage = "Cannot remove Admin";

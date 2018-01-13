@@ -101,6 +101,24 @@
         }
 
         [TestMethod]
+        public void GetPriceAndQuantitiesByCode_ShouldCallGetAllByCodeWithCleanedCode_WhenYesglassCodePassed()
+        {
+            string testCode = "2233AGN-ALT";
+            string cleanedTestCode = testCode.Replace("-ALT", "");
+
+            var goods = new List<Good>().AsQueryable();
+
+            var goodsServiceMock = new Mock<IGoodsService>();
+            goodsServiceMock.Setup(x => x.GetAllByCode(cleanedTestCode)).Returns(goods);
+
+            ProductQuantitiesService service = new ProductQuantitiesService(goodsServiceMock.Object, null, null, null);
+
+            service.GetPriceAndQuantitiesByCode(testCode, null);
+
+            goodsServiceMock.VerifyAll();
+        }
+
+        [TestMethod]
         public void GetPriceAndQuantitiesByCode_ShouldReturnEmptyList_WhenNoSuchAnObject()
         {
             string testCode = "2233AGN";

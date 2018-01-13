@@ -32,15 +32,17 @@
                 IHttpActionResult result;
 
                 var userId = User.Identity.GetUserId();
+                User user = null;
+                OrderedItem order = new OrderedItem();
+                
                 // info
                 // if registered user - default: user company deliveryAddress
                 // else if UseAlternativeAddress and registered -> use passed fullAddress
                 // if nonRegisteredUser -> fullAddress (required)
                 if (!string.IsNullOrEmpty(userId))
                 {
-                    model.UserId = userId;
-
-                    var user = this.users.GetById(userId);
+                    user = this.users.GetById(userId);
+                    
                     if (!model.UseAlternativeAddress) // else - will use the passed address
                     {
                         model.FullAddress = $"{user.DeliveryCountry}; {user.DeliveryTown}; {user.DeliveryAddress}";
@@ -52,8 +54,10 @@
                     return BadRequest(ModelState);
                 }
 
-                var order = this.Mapper.Map<OrderedItem>(model);
-                
+                order = this.Mapper.Map<OrderedItem>(model);
+                order.User = user;
+                order.UserId = userId;
+
                 if (this.orders.IsValidOrder(order))
                 {
                     this.orders.Add(order);
