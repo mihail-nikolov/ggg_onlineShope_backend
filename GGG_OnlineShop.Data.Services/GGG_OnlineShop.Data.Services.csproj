@@ -80,6 +80,7 @@
     <Compile Include="Contracts\IObjectsService.cs" />
     <Compile Include="Contracts\IOrderedItemsService.cs" />
     <Compile Include="Contracts\IProductQuantitiesService.cs" />
+    <Compile Include="Contracts\ISolutionBaseConfig.cs" />
     <Compile Include="Contracts\IStoreService.cs" />
     <Compile Include="Contracts\IUsersService.cs" />
     <Compile Include="Contracts\IVehicleAccessoriesService.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="Contracts\IVehicleModelsService.cs" />
     <Compile Include="Contracts\IVehiclesService.cs" />
     <Compile Include="Contracts\IVehicleSuperceedsService.cs" />
+    <Compile Include="SolutionBaseConfig.cs" />
     <Compile Include="EmailsService.cs" />
     <Compile Include="ExternalDb.Models\GlassInfoResponseModel.cs" />
     <Compile Include="ExternalDb\ObjectsService.cs" />

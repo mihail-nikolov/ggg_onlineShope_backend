@@ -32,7 +32,7 @@
 
             var controller = new AdministrationController(dbFillerMock.Object);
 
-            var result =  controller.DbInfoAdd(null);
+            var result = controller.DbInfoAdd(null);
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<string>));
             var responseContent = ((OkNegotiatedContentResult<string>)result).Content;

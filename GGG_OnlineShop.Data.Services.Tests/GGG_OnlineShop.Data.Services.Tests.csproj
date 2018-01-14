@@ -91,6 +91,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GGG_onlineShop.Common.Services\GGG_OnlineShop.Common.Services.csproj">
+      <Project>{18875225-361F-4C76-9CB0-E312C126FC63}</Project>
+      <Name>GGG_OnlineShop.Common.Services</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GGG_OnlineShop.Common\GGG_OnlineShop.Common.csproj">
       <Project>{37895E29-1472-4A8B-BF00-0297412AEB8F}</Project>
       <Name>GGG_OnlineShop.Common</Name>

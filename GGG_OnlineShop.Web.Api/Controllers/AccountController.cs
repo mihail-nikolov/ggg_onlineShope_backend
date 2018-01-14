@@ -205,7 +205,7 @@
                 if (ModelState.IsValid)
                 {
                     var user = await UserManager.FindByNameAsync(model.Email); 
-                    if (user == null || !user.EmailConfirmed) // TODO - retest
+                    if (user == null || !user.EmailConfirmed)
                     {
                         return BadRequest(GlobalConstants.FindingUserError);
                     }

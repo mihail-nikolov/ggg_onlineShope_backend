@@ -31,7 +31,6 @@
 
 
         [HttpGet]
-        // TODO unittest
         [Route("GetItemByFullCode")]
         public IHttpActionResult GetItemByFullCode(string eurocode = "", string materialNumber = "", string industryCode = "", string localCode = "")
         {

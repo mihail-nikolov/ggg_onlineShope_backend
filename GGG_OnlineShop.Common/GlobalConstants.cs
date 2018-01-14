@@ -8,7 +8,6 @@
         public const string DbFilledInFinishedMessage = "Db filled/updated finished. Check log files for info/errors.";
         public const string AppDomainPath = "http://localhost:60918"; // TODO will change and also build on release!!!
 
-
         public const char InterchangeablePartStringSeparator = ';';
         public const int InterchangeableEurocodeMaxLength = 400;
 

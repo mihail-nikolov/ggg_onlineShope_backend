@@ -11,16 +11,13 @@
     using System.Diagnostics;
     using GGG_OnlineShop.Common.Services.Contracts;
     using Infrastructure;
-    using System.IO;
-    using System.Web;
 
     public class GlassesInfoDbFiller : IGlassesInfoDbFiller
     {
-        private static string solutionDirectory = Path.GetDirectoryName(Path.GetDirectoryName(HttpRuntime.AppDomainAppPath));
-
-        private string errorsfilePathToWrite = $@"{solutionDirectory}\DbFillInErorrs_{DateTime.Now.ToString("ddMMyy_HHmm")}.txt";
-        private string parsedGlassesInfofilePath = $@"{solutionDirectory}\DbFillInInfo_{DateTime.Now.ToString("ddMMyy_HHmm")}.txt";
-        private string jsonFilePathToRead = $@"{solutionDirectory}\ggg\products_test.json";
+        private string solutionDirectory;
+        private string errorsfilePathToWrite;
+        private string parsedGlassesInfofilePath;
+        private string jsonFilePathToRead;
 
         private ISet<string> GlassesCodesProjectionFromDb;
 
@@ -35,7 +32,8 @@
                                    IVehicleSuperceedsService superceeds,
                                    IVehicleAccessoriesService accessories,
                                    ILogger logger,
-                                   IReader reader
+                                   IReader reader,
+                                   ISolutionBaseConfig solutionConfig
                                 )
         {
             this.Glasses = glasses;
@@ -51,6 +49,12 @@
 
             this.Logger = logger;
             this.Reader = reader;
+            this.SolutionConfig = solutionConfig;
+
+            solutionDirectory = this.SolutionConfig.GetSolutionPath();
+            errorsfilePathToWrite = $@"{solutionDirectory}\DbFillInErorrs_{DateTime.Now.ToString("ddMMyy_HHmm")}.txt";
+            parsedGlassesInfofilePath = $@"{solutionDirectory}\DbFillInInfo_{DateTime.Now.ToString("ddMMyy_HHmm")}.txt";
+            jsonFilePathToRead = $@"{solutionDirectory}\ggg\products_test.json";
         }
         //------------------------------ Services ----------------------------------------------
 
@@ -85,6 +89,8 @@
         protected ILogger Logger { get; set; }
 
         protected IReader Reader { get; set; }
+
+        protected ISolutionBaseConfig SolutionConfig { get; set; }
 
         //------------------------------ Public FillInfo ----------------------------------------------
 

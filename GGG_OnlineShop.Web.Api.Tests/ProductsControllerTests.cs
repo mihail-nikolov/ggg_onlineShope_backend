@@ -109,6 +109,80 @@
         }
 
         [TestMethod]
+        public void Get_ShouldReturnGlass_WhenIdPassed()
+        {
+            mapper.Execute();
+
+            var glassesMock = new Mock<IVehicleGlassesService>();
+
+            string testCode = "AC22AGNBL1C";
+            string testNumber = "testNumber";
+            var glass = new VehicleGlass()
+            {
+                Id = 1,
+                EuroCode = testCode,
+                VehicleGlassAccessories = new List<VehicleGlassAccessory>()
+                {
+                    new VehicleGlassAccessory() {IndustryCode = testCode, MaterialNumber = testNumber }
+                },
+                VehicleGlassInterchangeableParts = new List<VehicleGlassInterchangeablePart>()
+                {
+                    new VehicleGlassInterchangeablePart() {EuroCode = $"{testCode};CHEVROLET ASTRO VAN 1985 93;", MaterialNumber = testNumber }
+                }
+            };
+
+            glassesMock.Setup(v => v.GetById(1)).Returns(() => glass);
+
+            var controller = new ProductsController(null, glassesMock.Object, null, null);
+            var result = controller.Get(1);
+
+            Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<VehicleGlassResponseModel>));
+            var responseContent = ((OkNegotiatedContentResult<VehicleGlassResponseModel>)result).Content;
+
+            Assert.AreEqual(responseContent.Id, 1);
+            Assert.AreEqual(responseContent.Accessories.ToList()[0].MaterialNumber, testNumber);
+            Assert.AreEqual(responseContent.Accessories.ToList()[0].IndustryCode, testCode);
+            Assert.AreEqual(responseContent.InterchangeableParts.ToList()[0].MaterialNumber, testNumber);
+            glassesMock.VerifyAll();
+        }
+
+        [TestMethod]
+        public void Get_ShouldReturnGlassAndMapInterchangeablePartCorrectly()
+        {
+            mapper.Execute();
+
+            var glassesMock = new Mock<IVehicleGlassesService>();
+
+            string testCode = "AC22AGNBL1C;CHEVROLET ASTRO VAN 1985 93;";
+            string testNumber = "testNumber";
+            var glass = new VehicleGlass()
+            {
+                Id = 1,
+                EuroCode = testCode,
+                VehicleGlassAccessories = new List<VehicleGlassAccessory>()
+                {
+                    new VehicleGlassAccessory() {IndustryCode = testCode, MaterialNumber = testNumber }
+                },
+                VehicleGlassInterchangeableParts = new List<VehicleGlassInterchangeablePart>()
+                {
+                    new VehicleGlassInterchangeablePart() {EuroCode = testCode, MaterialNumber = testNumber }
+                }
+            };
+
+            glassesMock.Setup(v => v.GetById(1)).Returns(() => glass);
+
+            var controller = new ProductsController(null, glassesMock.Object, null, null);
+            var result = controller.Get(1);
+
+            Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<VehicleGlassResponseModel>));
+            var responseContent = ((OkNegotiatedContentResult<VehicleGlassResponseModel>)result).Content;
+
+            Assert.AreEqual(responseContent.InterchangeableParts.ToList()[0].EuroCode, testCode);
+            Assert.AreEqual(responseContent.InterchangeableParts.ToList()[0].CleanEurocode, "AC22AGNBL1C");
+            glassesMock.VerifyAll();
+        }
+
+        [TestMethod]
         public void Get_ShouldReturnGlass_WhenEurocodePassed()
         {
             mapper.Execute();
@@ -176,7 +250,6 @@
                 new VehicleGlass() {Id = 1 }, new VehicleGlass(){ Id = 2 }
             }.AsQueryable();
             string testCode = "testCode";
-
             glassesMock.Setup(v => v.GetByRandomCode(testCode)).Returns(() => glassesList);
 
             var controller = new ProductsController(null, glassesMock.Object, null, null);
@@ -190,6 +263,153 @@
             Assert.AreEqual(responseContent.Last().Id, 2);
 
             glassesMock.VerifyAll();
+        }
+
+        [TestMethod]
+        public void GetItemByFullCode_ShouldReturnGlass_WhenEurocodePassed()
+        {
+            mapper.Execute();
+
+            var glassesMock = new Mock<IVehicleGlassesService>();
+
+            var glass = new VehicleGlass() { Id = 2 };
+            string testCode = "testCode";
+            glassesMock.Setup(v => v.GetByEuroCode(testCode)).Returns(() => glass);
+
+            var controller = new ProductsController(null, glassesMock.Object, null, null);
+            var result = controller.GetItemByFullCode(testCode);
+
+            Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<VehicleGlassResponseModel>));
+            var responseContent = ((OkNegotiatedContentResult<VehicleGlassResponseModel>)result).Content;
+
+            Assert.AreEqual(responseContent.Id, 2);
+            glassesMock.VerifyAll();
+            glassesMock.Verify(x => x.GetByIndustryCode(It.IsAny<string>()), Times.Exactly(0));
+            glassesMock.Verify(x => x.GetByMaterialNumber(It.IsAny<string>()), Times.Exactly(0));
+            glassesMock.Verify(x => x.GetByLocalCode(It.IsAny<string>()), Times.Exactly(0));
+        }
+
+        [TestMethod]
+        public void GetItemByFullCode_ShouldReturnGlass_WhenMaterialNumberPassed()
+        {
+            mapper.Execute();
+
+            var glassesMock = new Mock<IVehicleGlassesService>();
+
+            var glass = new VehicleGlass() { Id = 2 };
+            string testCode = "testCode";
+            glassesMock.Setup(v => v.GetByMaterialNumber(testCode)).Returns(() => glass);
+
+            var controller = new ProductsController(null, glassesMock.Object, null, null);
+            var result = controller.GetItemByFullCode(null, testCode);
+
+            Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<VehicleGlassResponseModel>));
+            var responseContent = ((OkNegotiatedContentResult<VehicleGlassResponseModel>)result).Content;
+
+            Assert.AreEqual(responseContent.Id, 2);
+            glassesMock.VerifyAll();
+            glassesMock.Verify(x => x.GetByIndustryCode(It.IsAny<string>()), Times.Exactly(0));
+            glassesMock.Verify(x => x.GetByEuroCode(It.IsAny<string>()), Times.Exactly(0));
+            glassesMock.Verify(x => x.GetByLocalCode(It.IsAny<string>()), Times.Exactly(0));
+        }
+
+        [TestMethod]
+        public void GetItemByFullCode_ShouldReturnGlass_WhenLocalCodePassed()
+        {
+            mapper.Execute();
+
+            var glassesMock = new Mock<IVehicleGlassesService>();
+
+            var glass = new VehicleGlass() { Id = 2 };
+            string testCode = "testCode";
+
+            glassesMock.Setup(v => v.GetByLocalCode(testCode)).Returns(() => glass);
+
+            var controller = new ProductsController(null, glassesMock.Object, null, null);
+            var result = controller.GetItemByFullCode(null, null, null, testCode);
+
+            Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<VehicleGlassResponseModel>));
+            var responseContent = ((OkNegotiatedContentResult<VehicleGlassResponseModel>)result).Content;
+
+            Assert.AreEqual(responseContent.Id, 2);
+            glassesMock.VerifyAll();
+            glassesMock.Verify(x => x.GetByIndustryCode(It.IsAny<string>()), Times.Exactly(0));
+            glassesMock.Verify(x => x.GetByEuroCode(It.IsAny<string>()), Times.Exactly(0));
+            glassesMock.Verify(x => x.GetByMaterialNumber(It.IsAny<string>()), Times.Exactly(0));
+        }
+
+
+        [TestMethod]
+        public void GetItemByFullCode_ShouldReturnGlassByLocalCode_WhenByEuroCodeNotFoundAndLocalCodePassed()
+        {
+            mapper.Execute();
+
+            var glassesMock = new Mock<IVehicleGlassesService>();
+
+            string testCode = "testCode";
+            string testLocalCode = "testLocalCode";
+            var glass = new VehicleGlass() { Id = 2, LocalCode = testLocalCode};
+
+            glassesMock.Setup(v => v.GetByEuroCode(testCode)).Returns(() => null);
+            glassesMock.Setup(v => v.GetByLocalCode(testLocalCode)).Returns(() => glass);
+
+            var controller = new ProductsController(null, glassesMock.Object, null, null);
+            var result = controller.GetItemByFullCode(testCode, null, null, testLocalCode);
+
+            Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<VehicleGlassResponseModel>));
+            var responseContent = ((OkNegotiatedContentResult<VehicleGlassResponseModel>)result).Content;
+
+            Assert.AreEqual(responseContent.Id, 2);
+            Assert.AreEqual(responseContent.LocalCode, testLocalCode);
+            glassesMock.VerifyAll();
+            glassesMock.Verify(x => x.GetByIndustryCode(It.IsAny<string>()), Times.Exactly(0));
+            glassesMock.Verify(x => x.GetByMaterialNumber(It.IsAny<string>()), Times.Exactly(0));
+        }
+
+        [TestMethod]
+        public void GetItemByFullCode_ShouldReturnBadRequest_WhenNoCodeSend()
+        {
+            mapper.Execute();
+
+            var glassesMock = new Mock<IVehicleGlassesService>();
+
+            var controller = new ProductsController(null, glassesMock.Object, null, null);
+            var result = controller.GetItemByFullCode();
+
+            Assert.IsInstanceOfType(result, typeof(BadRequestErrorMessageResult));
+            var responseContent = ((BadRequestErrorMessageResult)result).Message;
+
+            Assert.AreEqual(responseContent, "No code passed");
+            glassesMock.VerifyAll();
+            glassesMock.Verify(x => x.GetByLocalCode(It.IsAny<string>()), Times.Exactly(0));
+            glassesMock.Verify(x => x.GetByIndustryCode(It.IsAny<string>()), Times.Exactly(0));
+            glassesMock.Verify(x => x.GetByEuroCode(It.IsAny<string>()), Times.Exactly(0));
+            glassesMock.Verify(x => x.GetByMaterialNumber(It.IsAny<string>()), Times.Exactly(0));
+        }
+
+        [TestMethod]
+        public void GetItemByFullCode_ShouldReturnGlass_WhenIndustrycodePassed()
+        {
+            mapper.Execute();
+
+            var glassesMock = new Mock<IVehicleGlassesService>();
+
+            var glass = new VehicleGlass() { Id = 2 };
+            string testCode = "testCode";
+
+            glassesMock.Setup(v => v.GetByIndustryCode(testCode)).Returns(() => glass);
+
+            var controller = new ProductsController(null, glassesMock.Object, null, null);
+            var result = controller.GetItemByFullCode(null, null, testCode);
+
+            Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<VehicleGlassResponseModel>));
+            var responseContent = ((OkNegotiatedContentResult<VehicleGlassResponseModel>)result).Content;
+
+            Assert.AreEqual(responseContent.Id, 2);
+            glassesMock.VerifyAll();
+            glassesMock.Verify(x => x.GetByLocalCode(It.IsAny<string>()), Times.Exactly(0));
+            glassesMock.Verify(x => x.GetByEuroCode(It.IsAny<string>()), Times.Exactly(0));
+            glassesMock.Verify(x => x.GetByMaterialNumber(It.IsAny<string>()), Times.Exactly(0));
         }
 
         [TestMethod]
