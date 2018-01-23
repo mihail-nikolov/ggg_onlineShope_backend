@@ -67,6 +67,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseAutomapperConfig.cs" />
     <Compile Include="GlassesInfoDbFillerTests.cs" />
     <Compile Include="ExternalDb\GoodGroupsServiceTests.cs" />
     <Compile Include="ExternalDb\GoodsServiceTests.cs" />
@@ -106,6 +107,10 @@
     <ProjectReference Include="..\GGG_onlineShop.Data.Services\GGG_OnlineShop.Data.Services.csproj">
       <Project>{6AD37FF9-0DBF-4454-A883-68298E36DE36}</Project>
       <Name>GGG_OnlineShop.Data.Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GGG_OnlineShop.Infrastructure\GGG_OnlineShop.Infrastructure.csproj">
+      <Project>{A3437FD5-3A9C-490C-9BBB-19BEF4F1EACE}</Project>
+      <Name>GGG_OnlineShop.Infrastructure</Name>
     </ProjectReference>
     <ProjectReference Include="..\GGG_onlineShop.Models\GGG_OnlineShop.InternalApiDB.Models.csproj">
       <Project>{B8D0E014-1843-4AC3-A5C4-5E64875B2CBE}</Project>

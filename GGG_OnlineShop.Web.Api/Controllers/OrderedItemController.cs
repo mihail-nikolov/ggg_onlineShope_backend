@@ -1,5 +1,6 @@
 ﻿namespace GGG_OnlineShop.Web.Api.Controllers
 {
+    using Common;
     using Data.Services.Contracts;
     using InternalApiDB.Models;
     using Microsoft.AspNet.Identity;
@@ -14,16 +15,17 @@
     {
         private readonly IOrderedItemsService orders;
         private readonly IUsersService users;
+        private readonly IEmailsService emails;
 
-        public OrderedItemController(IOrderedItemsService orders, IUsersService users)
+        public OrderedItemController(IOrderedItemsService orders, IUsersService users, IEmailsService emails)
         {
             this.orders = orders;
             this.users = users;
+            this.emails = emails; 
         }
 
         [HttpPost]
         [Route("order")]
-        // TODO send email to user (also when update order)
         // think about how to send an email with order info to the user
         public IHttpActionResult Order(OrderedItemRequestModel model)
         {
@@ -61,6 +63,10 @@
                 if (this.orders.IsValidOrder(order))
                 {
                     this.orders.Add(order);
+                    // TODO - will be the user email and test, adapt content - how to get last order?
+                    emails.SendEmail(GlobalConstants.EmalToSendFrom, GlobalConstants.ResetPasswordSubject,
+                                     string.Format(order.ToString()), GlobalConstants.SMTPServer,
+                                     GlobalConstants.EmalToSendFrom, GlobalConstants.EmalToSendFromPassword);
                     result = this.Ok();
                 }
                 else

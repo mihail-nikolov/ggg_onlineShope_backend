@@ -2,6 +2,7 @@
 {
     using Areas.Administration.Controllers;
     using Areas.Administration.Models.OrderedItems;
+    using Common;
     using Data.Services.Contracts;
     using InternalApiDB.Models;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -20,7 +21,7 @@
         [ExpectedException(typeof(ArgumentNullException))]
         public void Get_ShouldThrowException_WhenOrdersServiceIsNull()
         {
-            var controller = new ManageOrderedItemsController(null);
+            var controller = new ManageOrderedItemsController(null, null);
 
             controller.Get();
         }
@@ -32,7 +33,7 @@
             var usersMock = new Mock<IUsersService>();
 
             OrderedItemRequestUpdateStatusModel request = new OrderedItemRequestUpdateStatusModel();
-            var controller = new ManageOrderedItemsController(null);
+            var controller = new ManageOrderedItemsController(null, null);
 
             controller.Update(request);
         }
@@ -67,7 +68,7 @@
             var ordersMock = new Mock<IOrderedItemsService>();
             ordersMock.Setup(v => v.GetNewOrders()).Returns(orders);
 
-            var controller = new ManageOrderedItemsController(ordersMock.Object);
+            var controller = new ManageOrderedItemsController(ordersMock.Object, null);
 
             var result = controller.Get(pending: true);
 
@@ -107,7 +108,7 @@
             var ordersMock = new Mock<IOrderedItemsService>();
             ordersMock.Setup(v => v.GetOrderedProducts()).Returns(orders);
 
-            var controller = new ManageOrderedItemsController(ordersMock.Object);
+            var controller = new ManageOrderedItemsController(ordersMock.Object, null);
 
             var result = controller.Get(ordered: true);
 
@@ -147,7 +148,7 @@
             var ordersMock = new Mock<IOrderedItemsService>();
             ordersMock.Setup(v => v.GetDoneOrders()).Returns(orders);
 
-            var controller = new ManageOrderedItemsController(ordersMock.Object);
+            var controller = new ManageOrderedItemsController(ordersMock.Object, null);
 
             var result = controller.Get(done: true);
 
@@ -203,7 +204,7 @@
             var ordersMock = new Mock<IOrderedItemsService>();
             ordersMock.Setup(v => v.GetAll()).Returns(orders);
 
-            var controller = new ManageOrderedItemsController(ordersMock.Object);
+            var controller = new ManageOrderedItemsController(ordersMock.Object, null);
 
             var result = controller.Get();
 
@@ -251,7 +252,7 @@
             var ordersMock = new Mock<IOrderedItemsService>();
             ordersMock.Setup(v => v.GetNewOrders()).Returns(orders);
 
-            var controller = new ManageOrderedItemsController(ordersMock.Object);
+            var controller = new ManageOrderedItemsController(ordersMock.Object, null);
 
             var result = controller.Get(pending: true);
 
@@ -289,9 +290,11 @@
             ordersMock.Setup(v => v.GetById(testId)).Returns(order);
             ordersMock.Setup(v => v.Save());
 
+            var emailsMock = new Mock<IEmailsService>();
+
             OrderedItemRequestUpdateStatusModel request = new OrderedItemRequestUpdateStatusModel() { Id = 1, Status = DeliveryStatus.Done }; 
 
-            var controller = new ManageOrderedItemsController(ordersMock.Object);
+            var controller = new ManageOrderedItemsController(ordersMock.Object, emailsMock.Object);
 
             var result = controller.Update(request);
 
@@ -300,6 +303,39 @@
 
             Assert.AreEqual(responseContent.Id, testId);
             ordersMock.VerifyAll();
+        }
+
+        [TestMethod]
+        public void Update_ShouldSendEmaiToTheUser()
+        {
+            mapper.Execute();
+
+            int testId = 1;
+            var order = new OrderedItem()
+            {
+                Status = DeliveryStatus.New,
+                Id = testId
+            };
+
+            var ordersMock = new Mock<IOrderedItemsService>();
+            ordersMock.Setup(v => v.GetById(testId)).Returns(order);
+
+            var emailsMock = new Mock<IEmailsService>();
+            emailsMock.Setup(x => x.SendEmail(GlobalConstants.EmalToSendFrom, GlobalConstants.ResetPasswordSubject,
+                                 It.IsAny<string>(), GlobalConstants.SMTPServer, // TODO adapt later
+                                 GlobalConstants.EmalToSendFrom, GlobalConstants.EmalToSendFromPassword));
+
+            OrderedItemRequestUpdateStatusModel request = new OrderedItemRequestUpdateStatusModel() { Id = 1, Status = DeliveryStatus.Done };
+
+            var controller = new ManageOrderedItemsController(ordersMock.Object, emailsMock.Object);
+
+            var result = controller.Update(request);
+
+            Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<OrderedItemResponseModelWIthUserInfo>));
+            var responseContent = ((OkNegotiatedContentResult<OrderedItemResponseModelWIthUserInfo>)result).Content;
+
+            Assert.AreEqual(responseContent.Id, testId);
+            emailsMock.VerifyAll();
         }
     }
 }

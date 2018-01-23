@@ -7,6 +7,7 @@
     using AutoMapper;
     using GGG_OnlineShop.Common;
 
+    // could be used json properties, because the model is used only for deserialization from json
     public class GlassJsonInfoModel : IMapTo<VehicleGlass>, IHaveCustomMappings
     {
         public GlassJsonInfoModel()

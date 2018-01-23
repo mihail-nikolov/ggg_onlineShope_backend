@@ -17,10 +17,12 @@
     public class ManageOrderedItemsController : BaseController
     {
         private readonly IOrderedItemsService orders;
+        private readonly IEmailsService emails;
 
-        public ManageOrderedItemsController(IOrderedItemsService orders)
+        public ManageOrderedItemsController(IOrderedItemsService orders, IEmailsService emails)
         {
             this.orders = orders;
+            this.emails = emails;
         }
 
         [HttpGet]
@@ -84,8 +86,13 @@
                 var product = this.orders.GetById(model.Id);
                 product.Status = model.Status;
                 this.orders.Save();
-                
+
                 var updatedOrder = this.Mapper.Map<OrderedItemResponseModelWIthUserInfo>(this.orders.GetById(model.Id));
+
+                // TODO - will be the user email and test, adapt content - how to get last order?
+                emails.SendEmail(GlobalConstants.EmalToSendFrom, GlobalConstants.ResetPasswordSubject,
+                                 updatedOrder.ToString(), GlobalConstants.SMTPServer,
+                                 GlobalConstants.EmalToSendFrom, GlobalConstants.EmalToSendFromPassword);
 
                 return this.Ok(updatedOrder);
             }

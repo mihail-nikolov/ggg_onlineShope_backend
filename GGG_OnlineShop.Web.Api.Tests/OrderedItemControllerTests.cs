@@ -11,6 +11,7 @@
     using System.Reflection;
     using System.Security.Principal;
     using System.Security.Claims;
+    using Common;
 
     [TestClass]
     public class OrderedItemsControllerTests
@@ -22,7 +23,7 @@
         public void Order_ShouldThrowException_WhenUsersServiceIsNull()
         {
             var usersMock = new Mock<IUsersService>();
-            var controller = new OrderedItemController(null, usersMock.Object);
+            var controller = new OrderedItemController(null, usersMock.Object, null);
 
             var model = new OrderedItemRequestModel()
             {
@@ -66,8 +67,9 @@
 
             ordersMock.Setup(v => v.Add(It.IsAny<OrderedItem>()));
             ordersMock.Setup(v => v.IsValidOrder(It.IsAny<OrderedItem>())).Returns(true);
+            var emailsMock = new Mock<IEmailsService>();
 
-            var controller = new OrderedItemController(ordersMock.Object, usersMock.Object);
+            var controller = new OrderedItemController(ordersMock.Object, usersMock.Object, emailsMock.Object);
 
             var model = new OrderedItemRequestModel()
             {
@@ -124,11 +126,12 @@
 
             ordersMock.Setup(v => v.Add(It.IsAny<OrderedItem>()));
             ordersMock.Setup(v => v.IsValidOrder(It.IsAny<OrderedItem>())).Returns(true);
+            var emailsMock = new Mock<IEmailsService>();
 
             // moq the user
             var claim = new Claim("test", testId);
             var mockIdentity = Mock.Of<ClaimsIdentity>(ci => ci.FindFirst(It.IsAny<string>()) == claim);
-            var controller = new OrderedItemController(ordersMock.Object, usersMock.Object)
+            var controller = new OrderedItemController(ordersMock.Object, usersMock.Object, emailsMock.Object)
             {
                 User = Mock.Of<IPrincipal>(ip => ip.Identity == mockIdentity)
             };
@@ -186,11 +189,12 @@
 
             ordersMock.Setup(v => v.Add(It.IsAny<OrderedItem>()));
             ordersMock.Setup(v => v.IsValidOrder(It.IsAny<OrderedItem>())).Returns(true);
+            var emailsMock = new Mock<IEmailsService>();
 
             // moq the user
             var claim = new Claim("test", testId);
             var mockIdentity = Mock.Of<ClaimsIdentity>(ci => ci.FindFirst(It.IsAny<string>()) == claim);
-            var controller = new OrderedItemController(ordersMock.Object, usersMock.Object)
+            var controller = new OrderedItemController(ordersMock.Object, usersMock.Object, emailsMock.Object)
             {
                 User = Mock.Of<IPrincipal>(ip => ip.Identity == mockIdentity)
             };
@@ -211,6 +215,61 @@
             Assert.IsInstanceOfType(result, typeof(OkResult));
             ordersMock.Verify(m => m.IsValidOrder(It.Is<OrderedItem>(x => AreObjectsEqual(x, modelToAdd))));
             ordersMock.Verify(m => m.Add(It.Is<OrderedItem>(x => AreObjectsEqual(x, modelToAdd))));
+        }
+
+        [TestMethod]
+        public void Order_ShouldSendEmail_WhenValidOrder()
+        {
+            mapper.Execute();
+
+            var testId = "testId";
+            var testUser = new User() { DeliveryCountry = "BG", DeliveryTown = "SF", DeliveryAddress = "Liulin" };
+            var usersMock = new Mock<IUsersService>();
+            usersMock.Setup(v => v.GetById(testId)).Returns(() => testUser);
+
+            var ordersMock = new Mock<IOrderedItemsService>();
+            OrderedItem modelToAdd = new OrderedItem()
+            {
+                AnonymousUserInfo = null,
+                AnonymousUserЕmail = null,
+                Manufacturer = "nordglass",
+                Status = DeliveryStatus.New,
+                FullAddress = "AlternativeAddress",
+                User = testUser,
+                UserId = testId
+            };
+
+            ordersMock.Setup(v => v.Add(It.IsAny<OrderedItem>()));
+            ordersMock.Setup(v => v.IsValidOrder(It.IsAny<OrderedItem>())).Returns(true);
+
+            var emailsMock = new Mock<IEmailsService>();
+            emailsMock.Setup(x => x.SendEmail(GlobalConstants.EmalToSendFrom, GlobalConstants.ResetPasswordSubject,
+                               It.IsAny<string>(), GlobalConstants.SMTPServer, // TODO adapt later
+                               GlobalConstants.EmalToSendFrom, GlobalConstants.EmalToSendFromPassword));
+
+            // moq the user
+            var claim = new Claim("test", testId);
+            var mockIdentity = Mock.Of<ClaimsIdentity>(ci => ci.FindFirst(It.IsAny<string>()) == claim);
+            var controller = new OrderedItemController(ordersMock.Object, usersMock.Object, emailsMock.Object)
+            {
+                User = Mock.Of<IPrincipal>(ip => ip.Identity == mockIdentity)
+            };
+
+            var model = new OrderedItemRequestModel()
+            {
+                FullAddress = "AlternativeAddress",
+                Manufacturer = "nordglass",
+                Status = DeliveryStatus.New,
+                DeliveryNotes = "DeliveryNotes",
+                Description = "Description",
+                Price = 1,
+                UseAlternativeAddress = true
+            };
+
+            var result = controller.Order(model);
+
+            Assert.IsInstanceOfType(result, typeof(OkResult));
+            emailsMock.VerifyAll();
         }
 
         [TestMethod]
@@ -247,7 +306,7 @@
 
             ordersMock.Setup(v => v.IsValidOrder(It.IsAny<OrderedItem>())).Returns(false);
 
-            var controller = new OrderedItemController(ordersMock.Object, usersMock.Object);
+            var controller = new OrderedItemController(ordersMock.Object, usersMock.Object, null);
 
             var model = new OrderedItemRequestModel()
             {

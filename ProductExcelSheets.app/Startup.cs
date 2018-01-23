@@ -15,10 +15,14 @@
             ConsoleWriter consoleWriter = new ConsoleWriter();
             FileLogger fileLogger = new FileLogger();
             ConsoleReader consoleReader = new ConsoleReader();
-            string filePathName = @"D:\my documents\professional\GGG_OnlineShop\ggg\glasses.xlsx"; // should not be hardcoded
+
+            consoleWriter.LogInfo("enter fileName:");
+            string filePathName = consoleReader.Read();
+            //string filePathName = @"D:\my documents\professional\GGG_OnlineShop\ggg\glasses.xlsx";
             ExcelManager excelManager = new ExcelManager(fileLogger, infofilePathToWrite, filePathName);
 
             Engine engine = new Engine(consoleWriter, fileLogger, consoleReader, filePathName, excelManager, errorsfilePathToWrite, infofilePathToWrite);
+            engine.Startup();
         }
     }
 }

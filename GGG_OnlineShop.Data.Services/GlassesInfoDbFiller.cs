@@ -17,7 +17,7 @@
         private string solutionDirectory;
         private string errorsfilePathToWrite;
         private string parsedGlassesInfofilePath;
-        private string jsonFilePathToRead;
+        private string defaultJsonFilePathToRead;
 
         private ISet<string> GlassesCodesProjectionFromDb;
 
@@ -54,7 +54,7 @@
             solutionDirectory = this.SolutionConfig.GetSolutionPath();
             errorsfilePathToWrite = $@"{solutionDirectory}\DbFillInErorrs_{DateTime.Now.ToString("ddMMyy_HHmm")}.txt";
             parsedGlassesInfofilePath = $@"{solutionDirectory}\DbFillInInfo_{DateTime.Now.ToString("ddMMyy_HHmm")}.txt";
-            jsonFilePathToRead = $@"{solutionDirectory}\ggg\products_test.json";
+            defaultJsonFilePathToRead = $@"{solutionDirectory}\ggg\products_test.json";
         }
         //------------------------------ Services ----------------------------------------------
 
@@ -135,7 +135,7 @@
                 catch (Exception e)
                 {
                     // uncomment
-                    this.Logger.LogError($"Error while parsing jObject --{glass.ToString()}-- under index ({i}) to Glass: {e.Message}",
+                    this.Logger.LogError($"Error while adding GlassJsonInfoModel --{glass.ToString()}-- under index ({i}). Exception message: {e.Message}",
                                        errorsfilePathToWrite);
                 }
             }
@@ -143,7 +143,7 @@
 
         private void AddArrayOfJsonsFromFileToDb(string passedFile)
         {
-            string fileToUse = jsonFilePathToRead;
+            string fileToUse = defaultJsonFilePathToRead;
 
             if (!string.IsNullOrEmpty(passedFile))
             {
@@ -251,7 +251,7 @@
             {
                 // uncomment
                 this.Logger.LogError($"Error while parsing string to Jarray: {e.Message}", errorsfilePathToWrite);
-                return null;
+                return new JArray();
             }
         }
 
@@ -318,12 +318,10 @@
             {
                 interchangeablePart.VehicleGlasses.Add(glass);
             }
-
             foreach (var supereed in superceeds)
             {
                 supereed.VehicleGlasses.Add(glass);
             }
-
             foreach (var accessory in accessories)
             {
                 accessory.VehicleGlasses.Add(glass);
