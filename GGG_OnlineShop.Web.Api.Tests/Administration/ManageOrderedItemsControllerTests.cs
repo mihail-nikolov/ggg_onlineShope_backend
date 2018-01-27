@@ -283,7 +283,8 @@
             var order = new OrderedItem()
             {
                 Status = DeliveryStatus.New,
-                Id = testId
+                Id = testId,
+                AnonymousUserЕmail = "testEmail"
             };
 
             var ordersMock = new Mock<IOrderedItemsService>();
@@ -292,7 +293,7 @@
 
             var emailsMock = new Mock<IEmailsService>();
 
-            OrderedItemRequestUpdateStatusModel request = new OrderedItemRequestUpdateStatusModel() { Id = 1, Status = DeliveryStatus.Done }; 
+            OrderedItemRequestUpdateStatusModel request = new OrderedItemRequestUpdateStatusModel() { Id = 1, Status = DeliveryStatus.Done };
 
             var controller = new ManageOrderedItemsController(ordersMock.Object, emailsMock.Object);
 
@@ -306,7 +307,7 @@
         }
 
         [TestMethod]
-        public void Update_ShouldSendEmaiToTheUser()
+        public void Update_ShouldSendEmaiToTheAnonymousUser()
         {
             mapper.Execute();
 
@@ -314,15 +315,51 @@
             var order = new OrderedItem()
             {
                 Status = DeliveryStatus.New,
-                Id = testId
+                Id = testId,
+                AnonymousUserЕmail = "testEmail"
             };
 
             var ordersMock = new Mock<IOrderedItemsService>();
             ordersMock.Setup(v => v.GetById(testId)).Returns(order);
 
             var emailsMock = new Mock<IEmailsService>();
-            emailsMock.Setup(x => x.SendEmail(GlobalConstants.EmalToSendFrom, GlobalConstants.ResetPasswordSubject,
-                                 It.IsAny<string>(), GlobalConstants.SMTPServer, // TODO adapt later
+            emailsMock.Setup(x => x.SendEmail(order.AnonymousUserЕmail, GlobalConstants.OrderUpdated,
+                                 It.IsAny<string>(), GlobalConstants.SMTPServer, // TODO adapt content
+                                 GlobalConstants.EmalToSendFrom, GlobalConstants.EmalToSendFromPassword));
+
+            OrderedItemRequestUpdateStatusModel request = new OrderedItemRequestUpdateStatusModel() { Id = 1, Status = DeliveryStatus.Done };
+
+            var controller = new ManageOrderedItemsController(ordersMock.Object, emailsMock.Object);
+
+            var result = controller.Update(request);
+
+            Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<OrderedItemResponseModelWIthUserInfo>));
+            var responseContent = ((OkNegotiatedContentResult<OrderedItemResponseModelWIthUserInfo>)result).Content;
+
+            Assert.AreEqual(responseContent.Id, testId);
+            emailsMock.VerifyAll();
+        }
+
+        [TestMethod]
+        public void Update_ShouldSendEmaiToTheRegisteredUser()
+        {
+            mapper.Execute();
+
+            int testId = 1;
+            var testUser = new User { Email = "testEmail" };
+            var order = new OrderedItem()
+            {
+                Status = DeliveryStatus.New,
+                Id = testId,
+                User = testUser
+            };
+
+            var ordersMock = new Mock<IOrderedItemsService>();
+            ordersMock.Setup(v => v.GetById(testId)).Returns(order);
+
+            var emailsMock = new Mock<IEmailsService>();
+            emailsMock.Setup(x => x.SendEmail(testUser.Email, GlobalConstants.OrderUpdated,
+                                 It.IsAny<string>(), GlobalConstants.SMTPServer, // TODO adapt content
                                  GlobalConstants.EmalToSendFrom, GlobalConstants.EmalToSendFromPassword));
 
             OrderedItemRequestUpdateStatusModel request = new OrderedItemRequestUpdateStatusModel() { Id = 1, Status = DeliveryStatus.Done };

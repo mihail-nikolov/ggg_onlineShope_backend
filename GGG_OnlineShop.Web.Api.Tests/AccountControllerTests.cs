@@ -372,9 +372,9 @@
                                       .ReturnsAsync(() => testCode);
 
             var emailsMock = new Mock<IEmailsService>();
-            emailsMock.Setup(x => x.SendEmail(GlobalConstants.EmalToSendFrom, GlobalConstants.ResetPasswordSubject,
-                                            string.Format(GlobalConstants.ResetPasswordBody, testCode), GlobalConstants.SMTPServer,
-                                            GlobalConstants.EmalToSendFrom, GlobalConstants.EmalToSendFromPassword));
+            emailsMock.Setup(x => x.SendEmail(testEmail, GlobalConstants.ResetPasswordSubject,
+                                              string.Format(GlobalConstants.ResetPasswordBody, testCode), GlobalConstants.SMTPServer,
+                                              GlobalConstants.EmalToSendFrom, GlobalConstants.EmalToSendFromPassword));
 
             AccountEmailRequestModel request = new AccountEmailRequestModel()
             {

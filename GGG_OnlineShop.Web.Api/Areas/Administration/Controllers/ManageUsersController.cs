@@ -107,11 +107,11 @@
             {
                 User user = this.users.GetByEmail(model.Email);
                 string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                string callbackUrl = this.Url.Route("GGG_OnlineShop_WithAction", new { Controller = "Account", Action = "ConfirmEmail", userId = user.Id, code = code });
+                //string callbackUrl = this.Url.Route("GGG_OnlineShop_WithAction", new { Controller = "Account", Action = "ConfirmEmail", userId = user.Id, code = code });
 
-                string fullCallbackUrl = GlobalConstants.AppDomainPath + callbackUrl;
+                string fullCallbackUrl = $"{GlobalConstants.AppDomainPath}/confirmemail?userid={user.Id}&code={code}";
 
-                this.emails.SendEmail(GlobalConstants.EmalToSendFrom, GlobalConstants.ConfirmEmailSubject,
+                this.emails.SendEmail(user.Email, GlobalConstants.ConfirmEmailSubject,
                                       string.Format(GlobalConstants.ConfirmEmailBody, fullCallbackUrl), GlobalConstants.SMTPServer,
                                       GlobalConstants.EmalToSendFrom, GlobalConstants.EmalToSendFromPassword);
 

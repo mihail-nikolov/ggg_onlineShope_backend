@@ -21,7 +21,7 @@
         {
             this.orders = orders;
             this.users = users;
-            this.emails = emails; 
+            this.emails = emails;
         }
 
         [HttpPost]
@@ -36,7 +36,7 @@
                 var userId = User.Identity.GetUserId();
                 User user = null;
                 OrderedItem order = new OrderedItem();
-                
+
                 // info
                 // if registered user - default: user company deliveryAddress
                 // else if UseAlternativeAddress and registered -> use passed fullAddress
@@ -44,7 +44,7 @@
                 if (!string.IsNullOrEmpty(userId))
                 {
                     user = this.users.GetById(userId);
-                    
+
                     if (!model.UseAlternativeAddress) // else - will use the passed address
                     {
                         model.FullAddress = $"{user.DeliveryCountry}; {user.DeliveryTown}; {user.DeliveryAddress}";
@@ -64,8 +64,9 @@
                 {
                     this.orders.Add(order);
                     // TODO - will be the user email and test, adapt content - how to get last order?
-                    emails.SendEmail(GlobalConstants.EmalToSendFrom, GlobalConstants.ResetPasswordSubject,
-                                     string.Format(order.ToString()), GlobalConstants.SMTPServer,
+                    string emailTo = !string.IsNullOrEmpty(order.AnonymousUserЕmail) ? order.AnonymousUserЕmail : order.User.Email;
+                    emails.SendEmail(emailTo, GlobalConstants.OrderMade,
+                                     $"направена поръчка: {order.ToString()}. //TODO: add more info", GlobalConstants.SMTPServer,
                                      GlobalConstants.EmalToSendFrom, GlobalConstants.EmalToSendFromPassword);
                     result = this.Ok();
                 }

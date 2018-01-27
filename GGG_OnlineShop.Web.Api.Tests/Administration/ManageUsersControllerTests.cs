@@ -131,7 +131,7 @@
             string testId = "testId";
             string testCode = "testCode";
             string testRoute = "/testRoute";
-            string fullCallbackUrl = GlobalConstants.AppDomainPath + testRoute;
+            string fullCallbackUrl = $"{GlobalConstants.AppDomainPath}/confirmemail?userid={testId}&code={testCode}";
 
             var usersMock = new Mock<IUsersService>();
             usersMock.Setup(x => x.GetByEmail(testEmail)).Returns(() => new User() { Id = testId, Email = testEmail });
@@ -141,7 +141,7 @@
             userManagerMock.Setup(x => x.GenerateEmailConfirmationTokenAsync(testId)).ReturnsAsync(testCode);
 
             var emailsMock = new Mock<IEmailsService>();
-            emailsMock.Setup(x => x.SendEmail(GlobalConstants.EmalToSendFrom, GlobalConstants.ConfirmEmailSubject,
+            emailsMock.Setup(x => x.SendEmail(testEmail, GlobalConstants.ConfirmEmailSubject,
                                               string.Format(GlobalConstants.ConfirmEmailBody, fullCallbackUrl), GlobalConstants.SMTPServer,
                                               GlobalConstants.EmalToSendFrom, GlobalConstants.EmalToSendFromPassword));
 

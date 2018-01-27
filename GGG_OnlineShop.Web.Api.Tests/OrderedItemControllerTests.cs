@@ -223,7 +223,7 @@
             mapper.Execute();
 
             var testId = "testId";
-            var testUser = new User() { DeliveryCountry = "BG", DeliveryTown = "SF", DeliveryAddress = "Liulin" };
+            var testUser = new User() { DeliveryCountry = "BG", DeliveryTown = "SF", DeliveryAddress = "Liulin", Email = "testEmail" };
             var usersMock = new Mock<IUsersService>();
             usersMock.Setup(v => v.GetById(testId)).Returns(() => testUser);
 
@@ -243,9 +243,9 @@
             ordersMock.Setup(v => v.IsValidOrder(It.IsAny<OrderedItem>())).Returns(true);
 
             var emailsMock = new Mock<IEmailsService>();
-            emailsMock.Setup(x => x.SendEmail(GlobalConstants.EmalToSendFrom, GlobalConstants.ResetPasswordSubject,
-                               It.IsAny<string>(), GlobalConstants.SMTPServer, // TODO adapt later
-                               GlobalConstants.EmalToSendFrom, GlobalConstants.EmalToSendFromPassword));
+            emailsMock.Setup(x => x.SendEmail(testUser.Email, GlobalConstants.OrderMade,
+                                  It.IsAny<string>(), GlobalConstants.SMTPServer, // TODO add 1 more test
+                                  GlobalConstants.EmalToSendFrom, GlobalConstants.EmalToSendFromPassword));
 
             // moq the user
             var claim = new Claim("test", testId);

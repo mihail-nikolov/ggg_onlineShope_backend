@@ -211,9 +211,9 @@
                     }
 
                     string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                    // TODO - will be the user email
+                    // TODO
                     //      - will return only OK (without code)
-                    this.emails.SendEmail(GlobalConstants.EmalToSendFrom, GlobalConstants.ResetPasswordSubject,
+                    this.emails.SendEmail(user.Email, GlobalConstants.ResetPasswordSubject,
                                             string.Format(GlobalConstants.ResetPasswordBody, code), GlobalConstants.SMTPServer,
                                             GlobalConstants.EmalToSendFrom, GlobalConstants.EmalToSendFromPassword);
 

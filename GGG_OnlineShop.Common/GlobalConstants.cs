@@ -6,7 +6,7 @@
         public const string ExternalDBRestrictionMessage = "Do not have rights on external DB";
         public const string DBContextRequiredErrorMessage = "An instance of DbContext is required to use this repository.";
         public const string DbFilledInFinishedMessage = "Db filled/updated finished. Check log files for info/errors.";
-        public const string AppDomainPath = "http://localhost:60918"; // TODO will change and also build on release!!!
+        public const string AppDomainPath = "http://shop.glassgoldgroup.eu"; // TODO will change and also build on release!!!
 
         public const char InterchangeablePartStringSeparator = ';';
         public const int InterchangeableEurocodeMaxLength = 400;
@@ -53,6 +53,8 @@
         public const string ResetPasswordBody = "Моля, обновете паролата си, използвайки следния код: {0}";
         public const string ConfirmEmailSubject = "Потвърждаване на акаунт";
         public const string ConfirmEmailBody = "Моля, потвърдете акаунта си, кликвайки на следния линк: {0}";
+        public const string OrderMade = "направена поръчка";
+        public const string OrderUpdated = "нов статус на поръчка";
         public const string WrongCodeErrorMessage = "wrong code for {0}";
         public const string EmailConfirmationFailedErrorMessage = "email confirmation failed";
         public const string CannotRemoveAdminErrorMessage = "Cannot remove Admin";
