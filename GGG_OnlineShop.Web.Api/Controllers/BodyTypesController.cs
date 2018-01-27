@@ -50,7 +50,16 @@
             }
             catch (Exception e)
             {
-                // TODO should we throw exception?
+                // TODO introduce DB logger -if it fails file logger
+                //try
+                //{
+                //    dbLogger.LogError(e, controller, action);
+                //}
+                //catch (Exception ex)
+                //{
+                //    fileLogger.LogError();
+                //    return InternalServerError();
+                //}
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
                                                  e.Message));
             }

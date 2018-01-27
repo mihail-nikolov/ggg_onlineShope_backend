@@ -63,7 +63,7 @@
                 if (this.orders.IsValidOrder(order))
                 {
                     this.orders.Add(order);
-                    // TODO - will be the user email and test, adapt content - how to get last order?
+                    // TODO  test, adapt content.how to get last order?
                     string emailTo = !string.IsNullOrEmpty(order.AnonymousUserЕmail) ? order.AnonymousUserЕmail : order.User.Email;
                     emails.SendEmail(emailTo, GlobalConstants.OrderMade,
                                      $"направена поръчка: {order.ToString()}. //TODO: add more info", GlobalConstants.SMTPServer,

@@ -89,7 +89,7 @@
 
                 var updatedOrder = this.Mapper.Map<OrderedItemResponseModelWIthUserInfo>(this.orders.GetById(model.Id));
                 string emailTo = !string.IsNullOrEmpty(product.AnonymousUserЕmail) ? product.AnonymousUserЕmail : product.User.Email;
-                // TODO - test, adapt content - how to get last order?
+                // TODO - test, adapt content
                 emails.SendEmail(emailTo, GlobalConstants.OrderUpdated,
                                  $"нов статус на поръчка: {updatedOrder.ToString()}", GlobalConstants.SMTPServer,
                                  GlobalConstants.EmalToSendFrom, GlobalConstants.EmalToSendFromPassword);

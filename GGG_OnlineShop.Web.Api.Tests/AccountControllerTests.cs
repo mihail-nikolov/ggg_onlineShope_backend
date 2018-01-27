@@ -575,7 +575,7 @@
             userManagerMock.VerifyAll();
         }
 
-        // TODO
+        // TODO uncomment when functionallity ready
         //[TestMethod]
         //public void RemoveUser_ShouldReturnBadRequest_WhenAdmin()
         //{

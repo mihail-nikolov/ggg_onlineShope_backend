@@ -218,7 +218,7 @@
         }
 
         [TestMethod]
-        public void Order_ShouldSendEmail_WhenValidOrder()
+        public void Order_ShouldSendEmailToRegisteredUser_WhenValidOrder()
         {
             mapper.Execute();
 
@@ -228,23 +228,13 @@
             usersMock.Setup(v => v.GetById(testId)).Returns(() => testUser);
 
             var ordersMock = new Mock<IOrderedItemsService>();
-            OrderedItem modelToAdd = new OrderedItem()
-            {
-                AnonymousUserInfo = null,
-                AnonymousUserЕmail = null,
-                Manufacturer = "nordglass",
-                Status = DeliveryStatus.New,
-                FullAddress = "AlternativeAddress",
-                User = testUser,
-                UserId = testId
-            };
 
             ordersMock.Setup(v => v.Add(It.IsAny<OrderedItem>()));
             ordersMock.Setup(v => v.IsValidOrder(It.IsAny<OrderedItem>())).Returns(true);
 
             var emailsMock = new Mock<IEmailsService>();
             emailsMock.Setup(x => x.SendEmail(testUser.Email, GlobalConstants.OrderMade,
-                                  It.IsAny<string>(), GlobalConstants.SMTPServer, // TODO add 1 more test
+                                  It.IsAny<string>(), GlobalConstants.SMTPServer,
                                   GlobalConstants.EmalToSendFrom, GlobalConstants.EmalToSendFromPassword));
 
             // moq the user
@@ -264,6 +254,46 @@
                 Description = "Description",
                 Price = 1,
                 UseAlternativeAddress = true
+            };
+
+            var result = controller.Order(model);
+
+            Assert.IsInstanceOfType(result, typeof(OkResult));
+            emailsMock.VerifyAll();
+        }
+
+        [TestMethod]
+        public void Order_ShouldSendEmailToAnonymousUser_WhenValidOrder()
+        {
+            mapper.Execute();
+
+            var testId = "testId";
+            var anonymousEmail = "anonymousEmail";
+            var usersMock = new Mock<IUsersService>();
+            usersMock.Setup(v => v.GetById(testId)).Returns(() => null);
+
+            var ordersMock = new Mock<IOrderedItemsService>();
+
+            ordersMock.Setup(v => v.Add(It.IsAny<OrderedItem>()));
+            ordersMock.Setup(v => v.IsValidOrder(It.IsAny<OrderedItem>())).Returns(true);
+
+            var emailsMock = new Mock<IEmailsService>();
+            emailsMock.Setup(x => x.SendEmail(anonymousEmail, GlobalConstants.OrderMade,
+                                  It.IsAny<string>(), GlobalConstants.SMTPServer,
+                                  GlobalConstants.EmalToSendFrom, GlobalConstants.EmalToSendFromPassword));
+
+            var controller = new OrderedItemController(ordersMock.Object, usersMock.Object, emailsMock.Object);
+
+            var model = new OrderedItemRequestModel()
+            {
+                FullAddress = "AlternativeAddress",
+                Manufacturer = "nordglass",
+                Status = DeliveryStatus.New,
+                DeliveryNotes = "DeliveryNotes",
+                Description = "Description",
+                Price = 1,
+                UseAlternativeAddress = true,
+                AnonymousUserЕmail = anonymousEmail
             };
 
             var result = controller.Order(model);

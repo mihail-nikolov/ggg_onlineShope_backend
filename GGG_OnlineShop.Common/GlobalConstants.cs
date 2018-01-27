@@ -6,7 +6,8 @@
         public const string ExternalDBRestrictionMessage = "Do not have rights on external DB";
         public const string DBContextRequiredErrorMessage = "An instance of DbContext is required to use this repository.";
         public const string DbFilledInFinishedMessage = "Db filled/updated finished. Check log files for info/errors.";
-        public const string AppDomainPath = "http://shop.glassgoldgroup.eu"; // TODO will change and also build on release!!!
+        public const string AppDomainPath = "http://shop.glassgoldgroup.eu"; 
+        // TODO build on release!!!
 
         public const char InterchangeablePartStringSeparator = ';';
         public const int InterchangeableEurocodeMaxLength = 400;
