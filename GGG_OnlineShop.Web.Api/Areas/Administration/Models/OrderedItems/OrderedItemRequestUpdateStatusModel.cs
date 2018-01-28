@@ -10,5 +10,28 @@
 
         [Required]
         public DeliveryStatus Status{ get; set; }
+
+        public override string ToString()
+        {
+            string status = string.Empty;
+            if (Status == DeliveryStatus.New)
+            {
+                status = "Нова";
+            }
+            else if (Status == DeliveryStatus.Ordered)
+            {
+                status = "На път";
+            }
+            else if (Status == DeliveryStatus.Done)
+            {
+                status = "завършена";
+            }
+
+            string info = $@"
+ID:     {Id}
+Статус: {status}
+";
+            return info;
+        }
     }
 }

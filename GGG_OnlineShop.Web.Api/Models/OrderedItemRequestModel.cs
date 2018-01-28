@@ -55,5 +55,41 @@
         public string UserId { get; set; }
 
         public bool UseAlternativeAddress { get; set; }
+
+        public override string ToString()
+        {
+            string invoice = IsInvoiceNeeded ? "да" : "не";
+            string deposit = IsDepositNeeded ? "да" : "не";
+            string installation = WithInstallation ? "да" : "не";
+            string status = string.Empty;
+            if (Status == DeliveryStatus.New)
+            {
+                status = "Нова";
+            }
+            else if (Status == DeliveryStatus.Ordered)
+            {
+                status = "На път";
+            }
+            else if (Status == DeliveryStatus.Done)
+            {
+                status = "завършена";
+            }
+
+            string info = $@"
+Производител:        {Manufacturer}
+EuroCode:            {EuroCode}
+Други кодове:        {OtherCodes}
+Описание:            {Description}
+Пълен адрес:         {FullAddress}
+Статус:              {status}
+Бележки за доставка: {DeliveryNotes}
+Необходим монтаж:    {installation}
+Необходим депозит:   {deposit}
+Необходима фактура:  {invoice}
+Цена:                {Price} лв
+Платено:             {PaidPrice} лв
+";
+            return info;
+        }
     }
 }

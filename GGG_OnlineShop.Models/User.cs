@@ -8,7 +8,6 @@
     using System.ComponentModel.DataAnnotations;
     using Base;
     using System;
-    using System.ComponentModel.DataAnnotations.Schema;
     using Common;
 
     public class User : IdentityUser, IAuditInfo, IDeletableEntity
@@ -25,7 +24,7 @@
         [Range(GlobalConstants.MinPercentageReduction, GlobalConstants.MaxPercentageReduction)]
         public double PercentageReduction { get; set; }
 
-        [Index(IsUnique = true)] // min length is valid check only when company => bulstat is passed, else the bulstat is not part of the json object
+        // min length is valid check only when company => bulstat is passed, else the bulstat is not part of the json object
         [StringLength(GlobalConstants.BulstatMaxLength, ErrorMessage = GlobalConstants.MinAndMaxLengthErrorMessage, MinimumLength = GlobalConstants.BulstatMinLength)]
         public string Bulstat { get; set; }
 

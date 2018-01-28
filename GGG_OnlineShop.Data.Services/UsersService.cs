@@ -60,13 +60,23 @@
             return this.GetById(userFromDb.Id);
         }
 
+        // Probably to return string with the needed info
         public bool IsValidUser(User user)
         {
             bool result = true;
 
-            if (user.IsCompany && string.IsNullOrEmpty(user.Bulstat))
+            if (user.IsCompany)
             {
-                result = false;
+                if (string.IsNullOrEmpty(user.Bulstat))
+                {
+                    result = false;
+                }
+
+                if (result && Data.All().FirstOrDefault(x => x.Bulstat == user.Bulstat) != null)
+                {
+                    result = false;
+                }
+                
             }
             else if (!user.IsCompany && !string.IsNullOrEmpty(user.Bulstat))
             {

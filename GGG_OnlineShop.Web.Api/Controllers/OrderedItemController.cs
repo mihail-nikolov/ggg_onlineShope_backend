@@ -51,6 +51,7 @@
                     }
                 }
 
+                model.Status = DeliveryStatus.New;
                 if (!ModelState.IsValid)
                 {
                     return BadRequest(ModelState);
@@ -63,10 +64,11 @@
                 if (this.orders.IsValidOrder(order))
                 {
                     this.orders.Add(order);
-                    // TODO  test, adapt content.how to get last order?
+                    // TODO  test sending the email. User everywhere the ID of just added entity!
+
                     string emailTo = !string.IsNullOrEmpty(order.AnonymousUserЕmail) ? order.AnonymousUserЕmail : order.User.Email;
-                    emails.SendEmail(emailTo, GlobalConstants.OrderMade,
-                                     $"направена поръчка: {order.ToString()}. //TODO: add more info", GlobalConstants.SMTPServer,
+                    emails.SendEmail(emailTo, string.Format(GlobalConstants.OrderMade, order.Id),
+                                     $"направена поръчка: {model.ToString()}", GlobalConstants.SMTPServer,
                                      GlobalConstants.EmalToSendFrom, GlobalConstants.EmalToSendFromPassword);
                     result = this.Ok();
                 }

@@ -143,11 +143,35 @@
         }
 
         [TestMethod]
+        public void IsValidUser_ShouldReturnFalse_WhenCompanyAndBulstatNotUnique()
+        {
+            var user = new User() { Bulstat = "test", IsCompany = true };
+
+            var users = new List<User>
+            {
+                user
+            }.AsQueryable();
+
+            var repositoryMock = new Mock<IInternalDbRepository<User>>();
+            repositoryMock.Setup(x => x.All()).Returns(users);
+
+            var service = new UsersService(repositoryMock.Object);
+
+            var response = service.IsValidUser(user);
+            Assert.IsFalse(response);
+        }
+
+        [TestMethod]
         public void IsValidUser_ShouldReturnFalse_WhenNotCompanyBulstatNotNull()
         {
             var user = new User() { Bulstat = "123", IsCompany = false };
 
-            var service = new UsersService(null);
+            //var users = new List<User> { }.AsQueryable();
+
+            var repositoryMock = new Mock<IInternalDbRepository<User>>();
+            repositoryMock.Setup(x => x.All()).Returns(() => null);
+
+            var service = new UsersService(repositoryMock.Object);
 
             var response = service.IsValidUser(user);
             Assert.IsFalse(response);

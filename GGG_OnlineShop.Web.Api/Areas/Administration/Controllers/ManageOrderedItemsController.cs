@@ -87,11 +87,11 @@
                 product.Status = model.Status;
                 this.orders.Save();
 
-                var updatedOrder = this.Mapper.Map<OrderedItemResponseModelWIthUserInfo>(this.orders.GetById(model.Id));
+                var updatedOrder = this.Mapper.Map<OrderedItemResponseModelWIthUserInfo>(product); // TODO test this
                 string emailTo = !string.IsNullOrEmpty(product.AnonymousUserЕmail) ? product.AnonymousUserЕmail : product.User.Email;
-                // TODO - test, adapt content
-                emails.SendEmail(emailTo, GlobalConstants.OrderUpdated,
-                                 $"нов статус на поръчка: {updatedOrder.ToString()}", GlobalConstants.SMTPServer,
+                // TODO  test sending the email
+                emails.SendEmail(emailTo, string.Format(GlobalConstants.OrderUpdated, product.Id),
+                                 $"Нов статус на поръчка {model.ToString()}", GlobalConstants.SMTPServer,
                                  GlobalConstants.EmalToSendFrom, GlobalConstants.EmalToSendFromPassword);
 
                 return this.Ok(updatedOrder);
