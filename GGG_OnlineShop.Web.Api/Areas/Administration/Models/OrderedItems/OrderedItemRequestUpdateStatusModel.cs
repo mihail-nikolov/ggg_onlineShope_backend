@@ -1,5 +1,6 @@
 ﻿namespace GGG_OnlineShop.Web.Api.Areas.Administration.Models.OrderedItems
 {
+    using Common;
     using InternalApiDB.Models;
     using System.ComponentModel.DataAnnotations;
 
@@ -13,19 +14,7 @@
 
         public override string ToString()
         {
-            string status = string.Empty;
-            if (Status == DeliveryStatus.New)
-            {
-                status = "Нова";
-            }
-            else if (Status == DeliveryStatus.Ordered)
-            {
-                status = "На път";
-            }
-            else if (Status == DeliveryStatus.Done)
-            {
-                status = "завършена";
-            }
+            string status = EnglishBulgarianDictionary.Namings[Status.ToString()];
 
             string info = $@"
 ID:     {Id}

@@ -158,22 +158,19 @@
             var service = new UsersService(repositoryMock.Object);
 
             var response = service.IsValidUser(user);
+
             Assert.IsFalse(response);
+            repositoryMock.VerifyAll();
         }
 
         [TestMethod]
         public void IsValidUser_ShouldReturnFalse_WhenNotCompanyBulstatNotNull()
         {
             var user = new User() { Bulstat = "123", IsCompany = false };
-
-            //var users = new List<User> { }.AsQueryable();
-
-            var repositoryMock = new Mock<IInternalDbRepository<User>>();
-            repositoryMock.Setup(x => x.All()).Returns(() => null);
-
-            var service = new UsersService(repositoryMock.Object);
+            var service = new UsersService(null);
 
             var response = service.IsValidUser(user);
+
             Assert.IsFalse(response);
         }
 
@@ -182,9 +179,16 @@
         {
             var user = new User() { Bulstat = "123", IsCompany = true };
 
-            var service = new UsersService(null);
+            var users = new List<User>
+            {
+            }.AsQueryable();
+            var repositoryMock = new Mock<IInternalDbRepository<User>>();
+            repositoryMock.Setup(x => x.All()).Returns(users);
+
+            var service = new UsersService(repositoryMock.Object);
 
             var response = service.IsValidUser(user);
+
             Assert.IsTrue(response);
         }
 
@@ -192,10 +196,10 @@
         public void IsValidUser_ShouldReturnTrue_WhenNotCompanyAndNoBulstat()
         {
             var user = new User() { Bulstat = null, IsCompany = false };
-
             var service = new UsersService(null);
 
             var response = service.IsValidUser(user);
+
             Assert.IsTrue(response);
         }
     }

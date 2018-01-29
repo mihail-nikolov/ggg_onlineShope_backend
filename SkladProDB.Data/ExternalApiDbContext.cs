@@ -8,6 +8,9 @@
         public ExternalApiDbContext()
             : base("name=SkladProDb")
         {
+            // all except this:
+            // Configuration.UseDatabaseNullSemantics
+            // are true by default
         }
 
         public static ExternalApiDbContext Create()

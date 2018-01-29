@@ -233,7 +233,7 @@
             ordersMock.Setup(v => v.IsValidOrder(It.IsAny<OrderedItem>())).Returns(true);
 
             var emailsMock = new Mock<IEmailsService>();
-            emailsMock.Setup(x => x.SendEmail(testUser.Email, GlobalConstants.OrderMade,
+            emailsMock.Setup(x => x.SendEmail(testUser.Email, string.Format(GlobalConstants.OrderMade, It.IsAny<string>()),
                                   It.IsAny<string>(), GlobalConstants.SMTPServer,
                                   GlobalConstants.EmalToSendFrom, GlobalConstants.EmalToSendFromPassword));
 
@@ -268,7 +268,23 @@
             mapper.Execute();
 
             var testId = "testId";
-            var anonymousEmail = "anonymousEmail";
+            string eurocode = "2233A";
+            string othercodes = "3212; AS1312";
+            string anonymousEmail = "anonymousEmail";
+            string fullAddress = "Sofia BG";
+            string manufacturer = "nordglass";
+            bool isInvoiceNeeded = true;
+            bool isInstallationNeeded = false;
+            string deliveryNotes = "DeliveryNotes";
+            string description = "ALFA-ROMEO Windscreen";
+            double price = 102;
+            double paidPrice = 70;
+            DeliveryStatus status = DeliveryStatus.New;
+
+            string isInstallationNeededBG = EnglishBulgarianDictionary.Namings[isInstallationNeeded.ToString()];
+            string isInvoiceNeededBG = EnglishBulgarianDictionary.Namings[isInvoiceNeeded.ToString()];
+            string statusBG = EnglishBulgarianDictionary.Namings[status.ToString()];
+
             var usersMock = new Mock<IUsersService>();
             usersMock.Setup(v => v.GetById(testId)).Returns(() => null);
 
@@ -278,21 +294,32 @@
             ordersMock.Setup(v => v.IsValidOrder(It.IsAny<OrderedItem>())).Returns(true);
 
             var emailsMock = new Mock<IEmailsService>();
-            emailsMock.Setup(x => x.SendEmail(anonymousEmail, GlobalConstants.OrderMade,
-                                  It.IsAny<string>(), GlobalConstants.SMTPServer,
+            emailsMock.Setup(x => x.SendEmail(
+                                  anonymousEmail, string.Format(GlobalConstants.OrderMade, It.IsAny<string>()),
+                                  It.Is<string>(y => y.Contains(eurocode) && y.Contains(othercodes) && y.Contains(fullAddress) &&
+                                                     y.Contains(manufacturer) && y.Contains(isInvoiceNeededBG) &&
+                                                     y.Contains(deliveryNotes) && y.Contains(description) &&
+                                                     y.Contains(statusBG) && y.Contains(isInstallationNeededBG) &&
+                                                     y.Contains(price.ToString()) && y.Contains(paidPrice.ToString())),
+                                  GlobalConstants.SMTPServer,
                                   GlobalConstants.EmalToSendFrom, GlobalConstants.EmalToSendFromPassword));
 
             var controller = new OrderedItemController(ordersMock.Object, usersMock.Object, emailsMock.Object);
 
             var model = new OrderedItemRequestModel()
             {
-                FullAddress = "AlternativeAddress",
-                Manufacturer = "nordglass",
-                Status = DeliveryStatus.New,
-                DeliveryNotes = "DeliveryNotes",
-                Description = "Description",
-                Price = 1,
+                FullAddress = fullAddress,
+                Manufacturer = manufacturer,
+                EuroCode = eurocode,
+                OtherCodes = othercodes,
+                Status = status,
+                DeliveryNotes = deliveryNotes,
+                Description = description,
+                Price = price,
+                PaidPrice = paidPrice,
                 UseAlternativeAddress = true,
+                IsInvoiceNeeded = isInvoiceNeeded,
+                WithInstallation = isInstallationNeeded,
                 AnonymousUserЕmail = anonymousEmail
             };
 

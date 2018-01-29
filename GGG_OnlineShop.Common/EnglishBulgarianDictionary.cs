@@ -4,9 +4,10 @@
 
     public class EnglishBulgarianDictionary
     {
-        public Dictionary<string, string> Namings = new Dictionary<string, string>()
+        public static Dictionary<string, string> Namings = new Dictionary<string, string>()
         {
-            { "Done", "Завършена" },  { "New", "Нова" },
+            { "Done", "Завършена" },  { "New", "Нова" }, { "Ordered", "На път" },
+            { "True", "Да" },  { "False", "Не" }
         };
     }
 }

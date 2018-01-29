@@ -58,22 +58,10 @@
 
         public override string ToString()
         {
-            string invoice = IsInvoiceNeeded ? "да" : "не";
-            string deposit = IsDepositNeeded ? "да" : "не";
-            string installation = WithInstallation ? "да" : "не";
-            string status = string.Empty;
-            if (Status == DeliveryStatus.New)
-            {
-                status = "Нова";
-            }
-            else if (Status == DeliveryStatus.Ordered)
-            {
-                status = "На път";
-            }
-            else if (Status == DeliveryStatus.Done)
-            {
-                status = "завършена";
-            }
+            string invoice = EnglishBulgarianDictionary.Namings[IsInvoiceNeeded.ToString()];
+            string deposit = EnglishBulgarianDictionary.Namings[IsDepositNeeded.ToString()];
+            string installation = EnglishBulgarianDictionary.Namings[IsInvoiceNeeded.ToString()];
+            string status = EnglishBulgarianDictionary.Namings[Status.ToString()];
 
             string info = $@"
 Производител:        {Manufacturer}

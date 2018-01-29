@@ -12,6 +12,9 @@
         public InternalApiDbContext()
             : base("GGG_OnlineShopInternalDb", throwIfV1Schema: false)
         {
+            // all except this:
+            // Configuration.UseDatabaseNullSemantics
+            // are true by default
         }
 
         public static InternalApiDbContext Create()
