@@ -2,12 +2,9 @@
 {
     using Api.Controllers;
     using Common;
-    using Common.Services.Contracts;
     using Data.Services.Contracts;
     using Data.Services.JsonParseModels;
     using System;
-    using System.Net;
-    using System.Net.Http;
     using System.Reflection;
     using System.Web;
     using System.Web.Http;
@@ -48,9 +45,7 @@
             catch (Exception e)
             {
                HandlExceptionLogging(e, "", controllerName);
-                // TODO return InternalServerError(); 
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
-                                                 e.Message));
+               return InternalServerError();                            
             }
         }
 
@@ -67,9 +62,7 @@
             catch (Exception e)
             {
                HandlExceptionLogging(e, "", controllerName);
-                // TODO return InternalServerError(); 
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
-                                                 e.Message));
+               return InternalServerError();                               
             }
         }
     }

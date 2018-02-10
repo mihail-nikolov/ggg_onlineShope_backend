@@ -26,16 +26,14 @@
             }
         }
 
-        protected IHttpActionResult HandlExceptionLogging(Exception exc, string comment, string controller, [CallerMemberName]string action = "")
+        protected void HandlExceptionLogging(Exception exc, string comment, string controller, [CallerMemberName]string action = "")
         {
             try
             {
                 Logger.LogError(exc, comment, controller, action);
-                return InternalServerError();
             }
             catch (Exception e)
             {
-                return InternalServerError();
             }
         }
         // uncomment if needed

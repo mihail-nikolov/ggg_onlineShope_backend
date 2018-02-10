@@ -7,6 +7,7 @@
     using InternalApiDB.Data;
     using InternalApiDB.Models;
     using System;
+    using System.Net;
     using System.Web.Http;
     using System.Web.Mvc;
 
@@ -31,6 +32,7 @@
             }
             catch (Exception)
             {
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);
             }
         }
     }

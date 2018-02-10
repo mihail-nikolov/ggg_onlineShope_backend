@@ -7,7 +7,6 @@
     using System.Web.Http;
     using System;
     using System.Net.Http;
-    using System.Net;
     using Models.Users;
     using Infrastructure;
     using InternalApiDB.Models;
@@ -69,9 +68,7 @@
             catch (Exception e)
             {
                 HandlExceptionLogging(e, "", controllerName);
-                // TODO return InternalServerError(); 
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
-                                                 e.Message));
+                return InternalServerError();                    
             }
         }
 
@@ -100,9 +97,7 @@
             catch (Exception e)
             {
                 HandlExceptionLogging(e, "", controllerName);
-                // TODO return InternalServerError(); 
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
-                                                 e.Message));
+                return InternalServerError(); 
             }
         }
 
@@ -128,9 +123,7 @@
             catch (Exception e)
             {
                 HandlExceptionLogging(e, "", controllerName);
-                // TODO return InternalServerError(); 
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
-                                                 e.Message));
+                return InternalServerError();                                
             }
         }
 
@@ -170,8 +163,8 @@
         //    }
         //    catch (Exception e)
         //    {
-        //        throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
-        //                                         e.Message));
+        //        
+        //                                         
         //    }
         //}
     }

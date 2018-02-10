@@ -5,13 +5,10 @@
     using Data.Services.Contracts;
     using System.Web.Http;
     using System;
-    using System.Net.Http;
     using System.Linq;
     using Models.OrderedItems;
     using Infrastructure;
-    using System.Net;
     using System.Collections.Generic;
-    using Common.Services.Contracts;
     using System.Reflection;
 
     [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
@@ -72,9 +69,7 @@
             catch (Exception e)
             {
                HandlExceptionLogging(e, "", controllerName);
-                // TODO return InternalServerError(); 
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
-                                                 e.Message));
+               return InternalServerError();                     
             }
         }
 
@@ -104,9 +99,7 @@
             catch (Exception e)
             {
                HandlExceptionLogging(e, "", controllerName);
-                // TODO return InternalServerError(); 
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
-                                                 e.Message));
+               return InternalServerError();                             
             }
         }
     }

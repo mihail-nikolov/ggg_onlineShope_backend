@@ -1,15 +1,12 @@
 ﻿namespace GGG_OnlineShop.Web.Api.Controllers
 {
     using Common;
-    using Common.Services.Contracts;
     using Data.Services.Contracts;
     using InternalApiDB.Models;
     using InternalApiDB.Models.Enums;
     using Microsoft.AspNet.Identity;
     using Models;
     using System;
-    using System.Net;
-    using System.Net.Http;
     using System.Reflection;
     using System.Web.Http;
 
@@ -87,9 +84,7 @@
             catch (Exception e)
             {
                HandlExceptionLogging(e, "", controllerName);
-                // TODO return InternalServerError(); 
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
-                                                 e.Message));
+               return InternalServerError(); 
             }
         }
     }

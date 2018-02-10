@@ -18,7 +18,6 @@
     using Providers;
     using Results;
     using InternalApiDB.Models;
-    using System.Net;
     using Data.Services.Contracts;
     using System.Linq;
     using Infrastructure;
@@ -108,9 +107,7 @@
             catch (Exception e)
             {
                HandlExceptionLogging(e, "", controllerName);
-                // TODO return InternalServerError(); 
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
-                                                 e.Message));
+               return InternalServerError(); 
             }
         }
 
@@ -129,9 +126,7 @@
             catch (Exception e)
             {
                HandlExceptionLogging(e, "", controllerName);
-                // TODO return InternalServerError(); 
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
-                                                 e.Message));
+               return InternalServerError(); 
             }
         }
 
@@ -158,9 +153,7 @@
             catch (Exception e)
             {
                HandlExceptionLogging(e, "", controllerName);
-                // TODO return InternalServerError(); 
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
-                                                 e.Message));
+               return InternalServerError(); 
             }
         }
 
@@ -200,9 +193,7 @@
             catch (Exception e)
             {
                HandlExceptionLogging(e, "", controllerName);
-                // TODO return InternalServerError(); 
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
-                                                 e.Message));
+               return InternalServerError(); 
             }
         }
 
@@ -235,9 +226,7 @@
             catch (Exception e)
             {
                HandlExceptionLogging(e, "", controllerName);
-                // TODO return InternalServerError(); 
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
-                                                 e.Message));
+               return InternalServerError(); 
             }
         }
 
@@ -321,9 +310,7 @@
             catch (Exception e)
             {
                HandlExceptionLogging(e, "", controllerName);
-                // TODO return InternalServerError(); 
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
-                                                 e.Message));
+               return InternalServerError(); 
             }
         }
 
