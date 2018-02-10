@@ -2,6 +2,7 @@
 {
     using Common;
     using InternalApiDB.Models;
+    using InternalApiDB.Models.Enums;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Moq;
     using System.Collections.Generic;

@@ -19,7 +19,7 @@
         [ExpectedException(typeof(ArgumentNullException))]
         public void DbInfoAdd_ShouldThrowException_WhenDbInfoFillerIsNull()
         {
-            var controller = new AdministrationController(null);
+            var controller = new AdministrationController(null, null); // TODO
 
             controller.DbInfoAdd(null);
         }
@@ -30,7 +30,7 @@
             var dbFillerMock = new Mock<IGlassesInfoDbFiller>();
             dbFillerMock.Setup(x => x.FillInfo(It.IsAny<GlassJsonInfoModel[]>(), ""));
 
-            var controller = new AdministrationController(dbFillerMock.Object);
+            var controller = new AdministrationController(dbFillerMock.Object, null); // TODO
 
             var result = controller.DbInfoAdd(null);
 
@@ -47,7 +47,7 @@
         {
             HttpContext.Current = new HttpContext(new HttpRequest(null, "http://testUri.com", null), new HttpResponse(null));
 
-            var controller = new AdministrationController(null);
+            var controller = new AdministrationController(null, null); // TODO
             var result = controller.DbInfoAddFromFile();
         }
 
@@ -60,7 +60,7 @@
 
             HttpContext.Current = new HttpContext(new HttpRequest(testFile, "http://testUri.com", null), new HttpResponse(null));
 
-            var controller = new AdministrationController(dbFillerMock.Object);
+            var controller = new AdministrationController(dbFillerMock.Object, null); // TODO
 
             var result = controller.DbInfoAddFromFile();
 

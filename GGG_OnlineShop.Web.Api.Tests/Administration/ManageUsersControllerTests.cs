@@ -25,7 +25,7 @@
         [ExpectedException(typeof(ArgumentNullException))]
         public void Get_ShouldThrowException_WhenUsersServiceIsNull()
         {
-            var controller = new ManageUsersController(null, null);
+            var controller = new ManageUsersController(null, null, null); // TODO
 
             controller.Get();
         }
@@ -34,7 +34,7 @@
         [ExpectedException(typeof(ArgumentNullException))]
         public void UpdateUserInfo_ShouldThrowException_WhenUsersServiceIsNull()
         {
-            var controller = new ManageUsersController(null, null);
+            var controller = new ManageUsersController(null, null, null); // TODO
 
             controller.UpdateUserInfo(null);
         }
@@ -43,7 +43,7 @@
         [ExpectedException(typeof(AggregateException))]
         public void SendEmailConfirmation_ShouldThrowException_WhenUsersServiceIsNull()
         {
-            var controller = new ManageUsersController(null, null);
+            var controller = new ManageUsersController(null, null, null); // TODO
 
             controller.SendEmailConfirmation(null).Wait();
         }
@@ -56,7 +56,7 @@
             var users = new Mock<IUsersService>();
             users.Setup(x => x.IsValidUser(It.IsAny<User>())).Returns(() => false);
 
-            var controller = new ManageUsersController(users.Object, null);
+            var controller = new ManageUsersController(users.Object, null, null); // TODO
 
             var result = controller.UpdateUserInfo(null);
 
@@ -77,7 +77,7 @@
             users.Setup(x => x.Update(It.IsAny<User>())).Returns(() => new User() { Id = testId, IsPilkingtonVisible = true });
 
             UserUpdateModel request = new UserUpdateModel() { Id = testId, IsPilkingtonVisible = true };
-            var controller = new ManageUsersController(users.Object, null);
+            var controller = new ManageUsersController(users.Object, null, null); // TODO
 
             var result = controller.UpdateUserInfo(request);
 
@@ -109,7 +109,7 @@
             var usersMock = new Mock<IUsersService>();
             usersMock.Setup(x => x.GetAll()).Returns(users);
 
-            var controller = new ManageUsersController(usersMock.Object, null);
+            var controller = new ManageUsersController(usersMock.Object, null, null); // TODO
 
             var result = controller.Get();
 
@@ -149,7 +149,7 @@
             urlMock.Setup(m => m.Route(It.IsAny<string>(), It.IsAny<object>())).Returns(testRoute);
 
             AccountEmailRequestModel request = new AccountEmailRequestModel() { Email = testEmail };
-            var controller = new ManageUsersController(usersMock.Object, emailsMock.Object, userManagerMock.Object)
+            var controller = new ManageUsersController(usersMock.Object, emailsMock.Object, userManagerMock.Object, null) // TODO
             { Url = urlMock.Object };
 
             var result = await controller.SendEmailConfirmation(request);

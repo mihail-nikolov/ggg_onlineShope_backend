@@ -1,5 +1,6 @@
 ﻿namespace GGG_OnlineShop.Web.Api.Controllers
 {
+    using Common.Services.Contracts;
     using Data.Services.Contracts;
     using Models;
     using System;
@@ -7,6 +8,7 @@
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Reflection;
     using System.Web.Http;
 
     [RoutePrefix("api/Models")]
@@ -14,9 +16,11 @@
     {
         private readonly IVehiclesService vehicles;
         private readonly IVehicleModelsService models;
+        private readonly string controllerName = MethodBase.GetCurrentMethod().DeclaringType.Name;
 
         public ModelsController(IVehicleModelsService models,
-                                IVehiclesService vehicles)
+                                IVehiclesService vehicles, ILogsService dbLogger)
+            : base(dbLogger)
         {
             this.models = models;
             this.vehicles = vehicles;
@@ -43,6 +47,8 @@
             }
             catch (Exception e)
             {
+               HandlExceptionLogging(e, "", controllerName);
+                // TODO return InternalServerError(); 
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
                                                  e.Message));
             }

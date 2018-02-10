@@ -9,7 +9,7 @@
         public static void Initialize()
         {
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<InternalApiDbContext, Configuration>());
-            InternalApiDbContext.Create().Database.Initialize(true);
+            InternalApiDbContext.Create().Database.Initialize(false);
         }
     }
 }

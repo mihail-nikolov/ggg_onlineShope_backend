@@ -2,11 +2,13 @@
 {
     using Api.Controllers;
     using Common;
+    using Common.Services.Contracts;
     using Data.Services.Contracts;
     using Data.Services.JsonParseModels;
     using System;
     using System.Net;
     using System.Net.Http;
+    using System.Reflection;
     using System.Web;
     using System.Web.Http;
 
@@ -15,8 +17,10 @@
     public class AdministrationController : BaseController
     {
         private readonly IGlassesInfoDbFiller dbInfoFiller;
+        private readonly string controllerName = MethodBase.GetCurrentMethod().DeclaringType.Name;
 
-        public AdministrationController(IGlassesInfoDbFiller dbInfoFiller)
+        public AdministrationController(IGlassesInfoDbFiller dbInfoFiller, ILogsService dbLogger)
+            : base(dbLogger)
         {
             this.dbInfoFiller = dbInfoFiller;
         }
@@ -43,6 +47,8 @@
             }
             catch (Exception e)
             {
+               HandlExceptionLogging(e, "", controllerName);
+                // TODO return InternalServerError(); 
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
                                                  e.Message));
             }
@@ -60,6 +66,8 @@
             }
             catch (Exception e)
             {
+               HandlExceptionLogging(e, "", controllerName);
+                // TODO return InternalServerError(); 
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
                                                  e.Message));
             }

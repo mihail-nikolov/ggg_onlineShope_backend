@@ -21,7 +21,7 @@
         public void GetVehicleModelByMake_ShouldThrowException_WhenVehiclesServiceisNull()
         {
             var modelsMock = new Mock<IVehicleModelsService>();
-            var controller = new ModelsController(modelsMock.Object, null);
+            var controller = new ModelsController(modelsMock.Object, null, null); // TODO
 
             var result = controller.GetVehicleModelByMake(1);
         }
@@ -44,7 +44,7 @@
             VehicleModel model2 = new VehicleModel() { Id = 2, Name = "A4" };
             modelsMock.Setup(v => v.GetById(2)).Returns(model2);
 
-            var controller = new ModelsController(modelsMock.Object, vehiclesMock.Object);
+            var controller = new ModelsController(modelsMock.Object, vehiclesMock.Object, null); // TODO
 
             var result = controller.GetVehicleModelByMake(1);
 

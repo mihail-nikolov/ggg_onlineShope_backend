@@ -2,6 +2,7 @@
 {
     using Base;
     using Common;
+    using Enums;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 

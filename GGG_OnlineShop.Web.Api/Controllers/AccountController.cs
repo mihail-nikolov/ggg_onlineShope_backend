@@ -23,18 +23,21 @@
     using System.Linq;
     using Infrastructure;
     using Common;
+    using System.Reflection;
 
     [Authorize]
     [RoutePrefix("api/Account")]
     public class AccountController : BaseController
     {
         private const string LocalLoginProvider = "Local";
+        private readonly string controllerName = MethodBase.GetCurrentMethod().DeclaringType.Name;
         private ApplicationUserManager _userManager;
         private readonly IUsersService users;
         private readonly IOrderedItemsService orders;
         private readonly IEmailsService emails;
 
-        public AccountController(IUsersService users, IOrderedItemsService orders, IEmailsService emails)
+        public AccountController(IUsersService users, IOrderedItemsService orders, IEmailsService emails, ILogsService dbLogger)
+            : base(dbLogger)
         {
             this.users = users;
             this.orders = orders;
@@ -42,8 +45,8 @@
         }
 
         public AccountController(IUsersService users, IOrderedItemsService orders, IEmailsService emails,
-            ApplicationUserManager userManager,
-            ISecureDataFormat<AuthenticationTicket> accessTokenFormat)
+            ApplicationUserManager userManager, ISecureDataFormat<AuthenticationTicket> accessTokenFormat, ILogsService dbLogger)
+            : base(dbLogger)
         {
             this.users = users;
             this.orders = orders;
@@ -104,6 +107,8 @@
             }
             catch (Exception e)
             {
+               HandlExceptionLogging(e, "", controllerName);
+                // TODO return InternalServerError(); 
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
                                                  e.Message));
             }
@@ -123,6 +128,8 @@
             }
             catch (Exception e)
             {
+               HandlExceptionLogging(e, "", controllerName);
+                // TODO return InternalServerError(); 
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
                                                  e.Message));
             }
@@ -150,6 +157,8 @@
             }
             catch (Exception e)
             {
+               HandlExceptionLogging(e, "", controllerName);
+                // TODO return InternalServerError(); 
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
                                                  e.Message));
             }
@@ -190,6 +199,8 @@
             }
             catch (Exception e)
             {
+               HandlExceptionLogging(e, "", controllerName);
+                // TODO return InternalServerError(); 
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
                                                  e.Message));
             }
@@ -204,7 +215,7 @@
             {
                 if (ModelState.IsValid)
                 {
-                    var user = await UserManager.FindByNameAsync(model.Email); 
+                    var user = await UserManager.FindByNameAsync(model.Email);
                     if (user == null || !user.EmailConfirmed)
                     {
                         return BadRequest(GlobalConstants.FindingUserError);
@@ -223,6 +234,8 @@
             }
             catch (Exception e)
             {
+               HandlExceptionLogging(e, "", controllerName);
+                // TODO return InternalServerError(); 
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
                                                  e.Message));
             }
@@ -307,6 +320,8 @@
 
             catch (Exception e)
             {
+               HandlExceptionLogging(e, "", controllerName);
+                // TODO return InternalServerError(); 
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
                                                  e.Message));
             }

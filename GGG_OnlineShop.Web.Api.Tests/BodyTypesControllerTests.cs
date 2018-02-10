@@ -21,7 +21,7 @@
         public void GetVehicleBodyTypeByMakeAndModelIds_ShouldThrowException_WhenVehiclesServiceisNull()
         {
             var bodyTypesMock = new Mock<IVehicleBodyTypesService>();
-            var controller = new BodyTypesController(bodyTypesMock.Object, null);
+            var controller = new BodyTypesController(bodyTypesMock.Object, null, null); // TODO
 
             var model = new VehicleBodyTypesRequestModel()
             {
@@ -50,7 +50,7 @@
             VehicleBodyType bodyType2 = new VehicleBodyType() { Id = 2, Code = "H3", Description = "Hatcback 3dr" };
             bodyTypesMock.Setup(v => v.GetById(2)).Returns(bodyType2);
 
-            var controller = new BodyTypesController(bodyTypesMock.Object, vehiclesMock.Object);
+            var controller = new BodyTypesController(bodyTypesMock.Object, vehiclesMock.Object, null); // TODO
             var model = new VehicleBodyTypesRequestModel()
             {
                 MakeId = 1,

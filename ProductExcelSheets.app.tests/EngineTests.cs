@@ -76,8 +76,7 @@
             mockedFileLogger.Verify(x => x.LogError("-------------------------- DESCRIPTION REPLACEMENT: targetSheet1 --------------------------",
                                         "test.err"), Times.Once);
 
-            mockedFileLogger.Verify(x => x.LogError("There is not such a sheet", "test.err"),
-                                    Times.Once);
+            mockedFileLogger.Verify(x => x.LogError("There is not such a sheet", "test.err"), Times.Once);
         }
 
         // ============================================================================
@@ -113,8 +112,7 @@
             mockedFileLogger.Verify(x => x.LogError("-------------------------- DESCRIPTION ADAPTATION: sourceSheetName --------------------------",
                                         "test.err"), Times.Once);
 
-            mockedFileLogger.Verify(x => x.LogError("There is not such a sheet", "test.err"),
-                                    Times.Once);
+            mockedFileLogger.Verify(x => x.LogError("There is not such a sheet", "test.err"), Times.Once);
         }
 
         // ============================================================================
@@ -150,8 +148,7 @@
             mockedFileLogger.Verify(x => x.LogError("-------------------------- Adding Quantities: targetSheet1 --------------------------",
                                         "test.err"), Times.Once);
 
-            mockedFileLogger.Verify(x => x.LogError("There is not such a sheet", "test.err"),
-                                    Times.Once);
+            mockedFileLogger.Verify(x => x.LogError("There is not such a sheet", "test.err"), Times.Once);
         }
 
         // ============================================================================
@@ -164,11 +161,8 @@
                           mockedReader, "test", mockedExcelManager.Object, "test.err", "test.info");
             engine.Startup();
 
-            mockedExcelManager.Verify(x => x.AddInterchangeables("sourceSheetName", "targetSheet1"),
-                                    Times.Once);
-
-            mockedExcelManager.Verify(x => x.AddInterchangeables("sourceSheetName", "targetSheet2"),
-                                   Times.Once);
+            mockedExcelManager.Verify(x => x.AddInterchangeables("sourceSheetName", "targetSheet1"), Times.Once);
+            mockedExcelManager.Verify(x => x.AddInterchangeables("sourceSheetName", "targetSheet2"), Times.Once);
         }
 
         [TestCase]
@@ -187,8 +181,7 @@
             mockedFileLogger.Verify(x => x.LogError("-------------------------- Adding interchangeables: targetSheet1 --------------------------",
                                         "test.err"), Times.Once);
 
-            mockedFileLogger.Verify(x => x.LogError("There is not such a sheet", "test.err"),
-                                    Times.Once);
+            mockedFileLogger.Verify(x => x.LogError("There is not such a sheet", "test.err"), Times.Once);
         }
 
         // ============================================================================
@@ -224,8 +217,7 @@
             mockedFileLogger.Verify(x => x.LogError("-------------------------- OESCode add: targetSheet1 --------------------------",
                                         "test.err"), Times.Once);
 
-            mockedFileLogger.Verify(x => x.LogError("There is not such a sheet", "test.err"),
-                                    Times.Once);
+            mockedFileLogger.Verify(x => x.LogError("There is not such a sheet", "test.err"), Times.Once);
         }
 
 
@@ -259,12 +251,8 @@
                           mockedReader, "test", mockedExcelManager.Object, "test.err", "test.info");
             engine.Startup();
 
-            mockedFileLogger.Verify(x => x.LogError("-------------------------- Adding Product Places: targetSheet1 --------------------------",
-                                        "test.err"), Times.Once);
-
-            mockedFileLogger.Verify(x => x.LogError("There is not such a sheet", "test.err"),
-                                    Times.Once);
+            mockedFileLogger.Verify(x => x.LogError("-------------------------- Adding Product Places: targetSheet1 --------------------------","test.err"));
+            mockedFileLogger.Verify(x => x.LogError("There is not such a sheet", "test.err"), Times.Once);
         }
-
     }
 }

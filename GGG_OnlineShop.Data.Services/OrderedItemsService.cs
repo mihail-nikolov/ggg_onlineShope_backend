@@ -6,6 +6,7 @@
     using System.Linq;
     using GGG_OnlineShop.Common;
     using Base;
+    using InternalApiDB.Models.Enums;
 
     public class OrderedItemsService : BaseDataWithCreatorService<OrderedItem>, IOrderedItemsService
     {

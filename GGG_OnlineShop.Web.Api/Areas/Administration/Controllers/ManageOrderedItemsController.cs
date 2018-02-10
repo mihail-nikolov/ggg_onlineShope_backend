@@ -11,6 +11,8 @@
     using Infrastructure;
     using System.Net;
     using System.Collections.Generic;
+    using Common.Services.Contracts;
+    using System.Reflection;
 
     [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
     [RoutePrefix("api/Administration/ManageOrderedItems")]
@@ -18,8 +20,10 @@
     {
         private readonly IOrderedItemsService orders;
         private readonly IEmailsService emails;
+        private readonly string controllerName = MethodBase.GetCurrentMethod().DeclaringType.Name;
 
-        public ManageOrderedItemsController(IOrderedItemsService orders, IEmailsService emails)
+        public ManageOrderedItemsController(IOrderedItemsService orders, IEmailsService emails, ILogsService dbLogger)
+            :base(dbLogger)
         {
             this.orders = orders;
             this.emails = emails;
@@ -67,6 +71,8 @@
             }
             catch (Exception e)
             {
+               HandlExceptionLogging(e, "", controllerName);
+                // TODO return InternalServerError(); 
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
                                                  e.Message));
             }
@@ -97,6 +103,8 @@
             }
             catch (Exception e)
             {
+               HandlExceptionLogging(e, "", controllerName);
+                // TODO return InternalServerError(); 
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
                                                  e.Message));
             }

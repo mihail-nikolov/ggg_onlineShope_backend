@@ -20,7 +20,7 @@
         [ExpectedException(typeof(ArgumentNullException))]
         public void Get_ShouldThrowException_WhenMakesServiceisNull()
         {
-            var controller = new MakesController(null);
+            var controller = new MakesController(null, null); // TODO
             var result = controller.Get();
         }
 
@@ -39,7 +39,7 @@
             makesMock.Setup(v => v.GetAll())
                     .Returns(makes);
 
-            var controller = new MakesController(makesMock.Object);
+            var controller = new MakesController(makesMock.Object, null); // TODO
 
             var result = controller.Get();
 

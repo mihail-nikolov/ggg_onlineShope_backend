@@ -1,6 +1,7 @@
 ﻿namespace GGG_OnlineShop.Web.Api.Controllers
 {
     using Common;
+    using Common.Services.Contracts;
     using Data.Services.Contracts;
     using Infrastructure;
     using InternalApiDB.Models;
@@ -10,6 +11,7 @@
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Reflection;
     using System.Web.Http;
 
     [RoutePrefix("api/Products")]
@@ -19,9 +21,11 @@
         private readonly IVehicleGlassesService glasses;
         private readonly IProductQuantitiesService productQuantities;
         private readonly IUsersService users;
+        private readonly string controllerName = MethodBase.GetCurrentMethod().DeclaringType.Name;
 
         public ProductsController(IVehiclesService vehicles, IVehicleGlassesService glasses,
-                                  IProductQuantitiesService productQuantities, IUsersService users)
+                                  IProductQuantitiesService productQuantities, IUsersService users, ILogsService dbLogger)
+            : base(dbLogger)
         {
             this.vehicles = vehicles;
             this.glasses = glasses;
@@ -131,6 +135,8 @@
             }
             catch (Exception e)
             {
+               HandlExceptionLogging(e, "", controllerName);
+                // TODO return InternalServerError(); 
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
                                                  e.Message));
             }
@@ -157,6 +163,8 @@
             }
             catch (Exception e)
             {
+               HandlExceptionLogging(e, "", controllerName);
+                // TODO return InternalServerError(); 
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
                                                  e.Message));
             }
@@ -178,6 +186,8 @@
             }
             catch (Exception e)
             {
+               HandlExceptionLogging(e, "", controllerName);
+                // TODO return InternalServerError(); 
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
                                                  e.Message));
             }
@@ -200,6 +210,8 @@
             }
             catch (Exception e)
             {
+               HandlExceptionLogging(e, "", controllerName);
+                // TODO return InternalServerError(); 
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
                                                  e.Message));
             }

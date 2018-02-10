@@ -4,6 +4,7 @@
     using Controllers;
     using Data.Services.Contracts;
     using InternalApiDB.Models;
+    using InternalApiDB.Models.Enums;
     using Microsoft.AspNet.Identity;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Models;
@@ -25,7 +26,7 @@
         [ExpectedException(typeof(AggregateException))]
         public void Register_ShouldThrowException_WhenAutoMapperNotInitialized()
         {
-            var controller = new AccountController(null, null, null);
+            var controller = new AccountController(null, null, null, null); // TODO
 
             controller.Register(null).Wait();
         }
@@ -34,7 +35,7 @@
         [ExpectedException(typeof(ArgumentNullException))]
         public void Get_ShouldThrowException_WhenAUsersNull()
         {
-            var controller = new AccountController(null, null, null);
+            var controller = new AccountController(null, null, null, null); // TODO
 
             controller.Get();
         }
@@ -43,7 +44,7 @@
         [ExpectedException(typeof(ArgumentNullException))]
         public void UpdateUserInfo_ShouldThrowException_WhenAutoMapperNotInitialized()
         {
-            var controller = new AccountController(null, null, null);
+            var controller = new AccountController(null, null, null, null); // TODO
 
             controller.UpdateUserInfo(null);
         }
@@ -52,7 +53,7 @@
         [ExpectedException(typeof(ArgumentNullException))]
         public void GetMyOrders_ShouldThrowException_WhenOrdersNotInitialized()
         {
-            var controller = new AccountController(null, null, null);
+            var controller = new AccountController(null, null, null, null); // TODO
 
             controller.GetMyOrders();
         }
@@ -61,7 +62,7 @@
         [ExpectedException(typeof(AggregateException))]
         public void ForgotPassword_ShouldThrowException_WhenEmailsNotInitialized()
         {
-            var controller = new AccountController(null, null, null);
+            var controller = new AccountController(null, null, null, null); // TODO
 
             controller.ForgotPassword(null).Wait();
         }
@@ -80,7 +81,7 @@
                 Bulstat = "1234"
             };
 
-            var controller = new AccountController(usersMock.Object, null, null);
+            var controller = new AccountController(usersMock.Object, null, null, null); // TODO
 
             var result = await controller.Register(request);
 
@@ -117,7 +118,7 @@
                 Password = testPassword
             };
 
-            var controller = new AccountController(usersMock.Object, null, null, userManagerMock.Object, null);
+            var controller = new AccountController(usersMock.Object, null, null, userManagerMock.Object, null, null); // TODO
 
             var result = await controller.Register(request);
 
@@ -149,7 +150,7 @@
                 Password = testPassword
             };
 
-            var controller = new AccountController(usersMock.Object, null, null, userManagerMock.Object, null);
+            var controller = new AccountController(usersMock.Object, null, null, userManagerMock.Object, null, null); // TODO
 
             var result = await controller.Register(request);
 
@@ -178,7 +179,7 @@
                 DeliveryCountry = deliveryCountry
             };
 
-            var controller = new AccountController(usersMock.Object, null, null)
+            var controller = new AccountController(usersMock.Object, null, null, null) // TODO
             {
                 User = Mock.Of<IPrincipal>(ip => ip.Identity == mockIdentity)
             };
@@ -217,7 +218,7 @@
                 NewPassword = newPassword
             };
 
-            var controller = new AccountController(null, null, null, userManagerMock.Object, null)
+            var controller = new AccountController(null, null, null, userManagerMock.Object, null, null) // TODO
             {
                 User = Mock.Of<IPrincipal>(ip => ip.Identity == mockIdentity)
             };
@@ -253,7 +254,7 @@
                 NewPassword = newPassword
             };
 
-            var controller = new AccountController(null, null, null, userManagerMock.Object, null)
+            var controller = new AccountController(null, null, null, userManagerMock.Object, null, null) // TODO
             {
                 User = Mock.Of<IPrincipal>(ip => ip.Identity == mockIdentity)
             };
@@ -285,7 +286,7 @@
             var ordersMock = new Mock<IOrderedItemsService>();
             ordersMock.Setup(x => x.GetAllByUser(testUserId)).Returns(orders);
 
-            var controller = new AccountController(null, ordersMock.Object, null)
+            var controller = new AccountController(null, ordersMock.Object, null, null) // TODO
             {
                 User = Mock.Of<IPrincipal>(ip => ip.Identity == mockIdentity)
             };
@@ -318,7 +319,7 @@
                 Email = testEmail
             };
 
-            var controller = new AccountController(null, null, null, userManagerMock.Object, null);
+            var controller = new AccountController(null, null, null, userManagerMock.Object, null, null); // TODO
 
             var result = await controller.ForgotPassword(request);
 
@@ -345,7 +346,7 @@
             {
                 Email = testEmail
             };
-            var controller = new AccountController(null, null, null, userManagerMock.Object, null);
+            var controller = new AccountController(null, null, null, userManagerMock.Object, null, null); // TODO
 
             var result = await controller.ForgotPassword(request);
 
@@ -380,7 +381,7 @@
             {
                 Email = testEmail
             };
-            var controller = new AccountController(null, null, emailsMock.Object, userManagerMock.Object, null);
+            var controller = new AccountController(null, null, emailsMock.Object, userManagerMock.Object, null, null); // TODO
 
             var result = await controller.ForgotPassword(request);
 
@@ -415,7 +416,7 @@
                 Code = testCode,
                 Password = testPassword
             };
-            var controller = new AccountController(null, null, null, userManagerMock.Object, null);
+            var controller = new AccountController(null, null, null, userManagerMock.Object, null, null); // TODO
 
             var result = await controller.ResetPassword(request);
 
@@ -448,7 +449,7 @@
                 Code = testCode,
                 Password = testPassword
             };
-            var controller = new AccountController(null, null, null, userManagerMock.Object, null);
+            var controller = new AccountController(null, null, null, userManagerMock.Object, null, null); // TODO
 
             var result = await controller.ResetPassword(request);
 
@@ -472,7 +473,7 @@
             {
                 Email = testEmail
             };
-            var controller = new AccountController(null, null, null, userManagerMock.Object, null);
+            var controller = new AccountController(null, null, null, userManagerMock.Object, null, null); // TODO
 
             var result = await controller.ResetPassword(request);
 
@@ -496,7 +497,7 @@
             userManagerMock.Setup(x => x.ConfirmEmailAsync(testId, testCode))
                                        .Returns(Task.FromResult(IdentityResult.Success));
 
-            var controller = new AccountController(null, null, null, userManagerMock.Object, null);
+            var controller = new AccountController(null, null, null, userManagerMock.Object, null, null); // TODO
 
             var result = await controller.ConfirmEmail(testId, testCode);
 
@@ -519,7 +520,7 @@
             userManagerMock.Setup(x => x.ConfirmEmailAsync(testId, testCode))
                                       .ReturnsAsync(() => new IdentityResult(errors));
 
-            var controller = new AccountController(null, null, null, userManagerMock.Object, null);
+            var controller = new AccountController(null, null, null, userManagerMock.Object, null, null); // TODO
 
             var result = await controller.ConfirmEmail(testId, testCode);
 
@@ -540,7 +541,7 @@
             var userStore = new Mock<IUserStore<User>>();
             var userManagerMock = new Mock<ApplicationUserManager>(userStore.Object);
 
-            var controller = new AccountController(null, null, null, userManagerMock.Object, null);
+            var controller = new AccountController(null, null, null, userManagerMock.Object, null, null); // TODO
 
             var result = await controller.ConfirmEmail(null, testCode);
 
@@ -562,7 +563,7 @@
             var userStore = new Mock<IUserStore<User>>();
             var userManagerMock = new Mock<ApplicationUserManager>(userStore.Object);
 
-            var controller = new AccountController(null, null, null, userManagerMock.Object, null);
+            var controller = new AccountController(null, null, null, userManagerMock.Object, null, null); // TODO
 
             var result = await controller.ConfirmEmail(testId, null);
 
@@ -626,7 +627,7 @@
             var usersMock = new Mock<IUsersService>();
             usersMock.Setup(x => x.CleanUserInfoFromOrders(It.IsAny<User>()));
 
-            AccountController controller = new AccountController(usersMock.Object, null, null, userManagerMock.Object, null)
+            AccountController controller = new AccountController(usersMock.Object, null, null, userManagerMock.Object, null, null) // TODO
             {
                 User = Mock.Of<IPrincipal>(ip => ip.Identity == mockIdentity)
             };
@@ -670,7 +671,7 @@
             var usersMock = new Mock<IUsersService>();
             usersMock.Setup(x => x.CleanUserInfoFromOrders(It.IsAny<User>()));
 
-            AccountController controller = new AccountController(usersMock.Object, null, null, userManagerMock.Object, null)
+            AccountController controller = new AccountController(usersMock.Object, null, null, userManagerMock.Object, null, null) // TODO
             {
                 User = Mock.Of<IPrincipal>(ip => ip.Identity == mockIdentity)
             };

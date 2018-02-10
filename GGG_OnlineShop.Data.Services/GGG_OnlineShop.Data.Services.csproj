@@ -72,6 +72,7 @@
     <Compile Include="Contracts\IBaseDataService{T}.cs" />
     <Compile Include="Contracts\IBaseDataWithCreatorService{T}.cs" />
     <Compile Include="Base\BaseDataService{T}.cs" />
+    <Compile Include="Contracts\ILogsService.cs" />
     <Compile Include="Contracts\IEmailsService.cs" />
     <Compile Include="Contracts\IGlassesInfoDbFiller.cs" />
     <Compile Include="Contracts\IGoodGroupsService.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="Contracts\IVehicleModelsService.cs" />
     <Compile Include="Contracts\IVehiclesService.cs" />
     <Compile Include="Contracts\IVehicleSuperceedsService.cs" />
+    <Compile Include="LogsService.cs" />
     <Compile Include="SolutionBaseConfig.cs" />
     <Compile Include="EmailsService.cs" />
     <Compile Include="ExternalDb.Models\GlassInfoResponseModel.cs" />

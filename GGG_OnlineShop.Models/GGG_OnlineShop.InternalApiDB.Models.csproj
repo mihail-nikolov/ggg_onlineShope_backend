@@ -59,7 +59,9 @@
   <ItemGroup>
     <Compile Include="Base\BaseModel{TKey}.cs" />
     <Compile Include="Base\IEntityWithCreator.cs" />
-    <Compile Include="DeliveryStatus.cs" />
+    <Compile Include="Enums\DeliveryStatus.cs" />
+    <Compile Include="Enums\LogType.cs" />
+    <Compile Include="Log.cs" />
     <Compile Include="VehicleBodyType.cs" />
     <Compile Include="VehicleGlass.cs" />
     <Compile Include="VehicleGlassAccessory.cs" />

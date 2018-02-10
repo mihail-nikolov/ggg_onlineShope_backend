@@ -1,5 +1,6 @@
 ﻿namespace GGG_OnlineShop.Web.Api.Controllers
 {
+    using Common.Services.Contracts;
     using Data.Services.Contracts;
     using Models;
     using System;
@@ -7,6 +8,7 @@
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Reflection;
     using System.Web.Http;
 
     [RoutePrefix("api/BodyTypes")]
@@ -14,10 +16,11 @@
     {
         private readonly IVehiclesService vehicles;
         private readonly IVehicleBodyTypesService bodyTypes;
+        private readonly string controllerName = MethodBase.GetCurrentMethod().DeclaringType.Name;
 
-        public BodyTypesController(
-                                 IVehicleBodyTypesService bodyTypes,
-                                 IVehiclesService vehicles)
+        public BodyTypesController(IVehicleBodyTypesService bodyTypes,
+                                   IVehiclesService vehicles, ILogsService dbLogger)
+            : base(dbLogger)
         {
             this.vehicles = vehicles;
             this.bodyTypes = bodyTypes;
@@ -50,16 +53,8 @@
             }
             catch (Exception e)
             {
-                // TODO introduce DB logger -if it fails file logger
-                //try
-                //{
-                //    dbLogger.LogError(e, controller, action);
-                //}
-                //catch (Exception ex)
-                //{
-                //    fileLogger.LogError();
-                //    return InternalServerError();
-                //}
+               HandlExceptionLogging(e, "", controllerName);
+                // TODO return InternalServerError(); 
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
                                                  e.Message));
             }

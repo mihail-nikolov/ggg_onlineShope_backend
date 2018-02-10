@@ -1,7 +1,7 @@
 ﻿namespace GGG_OnlineShop.Web.Api.Areas.Administration.Models.OrderedItems
 {
     using Common;
-    using InternalApiDB.Models;
+    using InternalApiDB.Models.Enums;
     using System.ComponentModel.DataAnnotations;
 
     public class OrderedItemRequestUpdateStatusModel

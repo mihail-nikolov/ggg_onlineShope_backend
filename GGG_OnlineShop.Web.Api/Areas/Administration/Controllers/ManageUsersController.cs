@@ -14,6 +14,7 @@
     using Api.Models;
     using System.Threading.Tasks;
     using Microsoft.AspNet.Identity.Owin;
+    using System.Reflection;
 
     [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
     [RoutePrefix("api/Administration/ManageUsers")]
@@ -22,15 +23,17 @@
         private readonly IUsersService users;
         private readonly IEmailsService emails;
         private ApplicationUserManager _userManager;
+        private readonly string controllerName = MethodBase.GetCurrentMethod().DeclaringType.Name;
 
-
-        public ManageUsersController(IUsersService users, IEmailsService emails)
+        public ManageUsersController(IUsersService users, IEmailsService emails, ILogsService dbLogger)
+            : base(dbLogger)
         {
             this.users = users;
             this.emails = emails;
         }
 
-        public ManageUsersController(IUsersService users, IEmailsService emails, ApplicationUserManager manager)
+        public ManageUsersController(IUsersService users, IEmailsService emails, ApplicationUserManager manager, ILogsService dbLogger)
+            : base(dbLogger)
         {
             this.users = users;
             this.emails = emails;
@@ -65,6 +68,8 @@
             }
             catch (Exception e)
             {
+                HandlExceptionLogging(e, "", controllerName);
+                // TODO return InternalServerError(); 
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
                                                  e.Message));
             }
@@ -87,13 +92,15 @@
                 {
                     return BadRequest(GlobalConstants.InvalidCompanyBulstatCombination);
                 }
-                
+
                 var updatedUser = this.Mapper.Map<UserResponseModel>(this.users.Update(user));
 
                 return this.Ok(updatedUser);
             }
             catch (Exception e)
             {
+                HandlExceptionLogging(e, "", controllerName);
+                // TODO return InternalServerError(); 
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
                                                  e.Message));
             }
@@ -120,6 +127,8 @@
             }
             catch (Exception e)
             {
+                HandlExceptionLogging(e, "", controllerName);
+                // TODO return InternalServerError(); 
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
                                                  e.Message));
             }

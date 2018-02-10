@@ -5,6 +5,7 @@
     using System;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
+    using InternalApiDB.Models.Enums;
 
     public class OrderedItemResponseModel : IMapFrom<OrderedItem>
     {

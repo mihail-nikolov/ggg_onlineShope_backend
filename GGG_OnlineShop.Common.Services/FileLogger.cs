@@ -9,11 +9,11 @@
         {
         }
 
-        public void LogError(string errorMessage, string placeToWriteErrors)
+        public void LogError(string error, string placeToWriteErrors = "")
         {
             using (StreamWriter sw = File.AppendText(placeToWriteErrors))
             {
-                sw.WriteLine(errorMessage);
+                sw.WriteLine(error);
             }
         }
 

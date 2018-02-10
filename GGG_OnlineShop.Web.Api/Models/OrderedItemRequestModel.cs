@@ -3,6 +3,7 @@
     using Common;
     using Infrastructure;
     using InternalApiDB.Models;
+    using InternalApiDB.Models.Enums;
     using System.ComponentModel.DataAnnotations;
 
     public class OrderedItemRequestModel : IMapTo<OrderedItem>

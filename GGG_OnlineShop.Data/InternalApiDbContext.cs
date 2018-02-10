@@ -22,6 +22,9 @@
             return new InternalApiDbContext();
         }
 
+        // TODO change to Logs later
+        public IDbSet<Log> Logs { get; set; }
+
         public IDbSet<OrderedItem> OrderedItems { get; set; }
 
         public IDbSet<VehicleGlass> VehicleGlasses { get; set; }

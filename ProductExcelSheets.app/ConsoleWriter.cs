@@ -5,9 +5,9 @@
 
     class ConsoleWriter : ILogger
     {
-        public void LogError(string errorMessage, string placeToWriteErrors = "")
+        public void LogError(string error, string placeToWriteErrors = "")
         {
-            Console.WriteLine($@"[Error]: {errorMessage}");
+            Console.WriteLine($@"[Error]: {error}");
         }
 
         public void LogInfo(string info, string placeToWriteInfo = "")

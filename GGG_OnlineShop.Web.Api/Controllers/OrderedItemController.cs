@@ -1,13 +1,16 @@
 ﻿namespace GGG_OnlineShop.Web.Api.Controllers
 {
     using Common;
+    using Common.Services.Contracts;
     using Data.Services.Contracts;
     using InternalApiDB.Models;
+    using InternalApiDB.Models.Enums;
     using Microsoft.AspNet.Identity;
     using Models;
     using System;
     using System.Net;
     using System.Net.Http;
+    using System.Reflection;
     using System.Web.Http;
 
     [RoutePrefix("api/OrderedItems")]
@@ -16,8 +19,10 @@
         private readonly IOrderedItemsService orders;
         private readonly IUsersService users;
         private readonly IEmailsService emails;
+        private readonly string controllerName = MethodBase.GetCurrentMethod().DeclaringType.Name;
 
-        public OrderedItemController(IOrderedItemsService orders, IUsersService users, IEmailsService emails)
+        public OrderedItemController(IOrderedItemsService orders, IUsersService users, IEmailsService emails, ILogsService dbLogger)
+            :base(dbLogger)
         {
             this.orders = orders;
             this.users = users;
@@ -81,6 +86,8 @@
             }
             catch (Exception e)
             {
+               HandlExceptionLogging(e, "", controllerName);
+                // TODO return InternalServerError(); 
                 throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed,
                                                  e.Message));
             }
