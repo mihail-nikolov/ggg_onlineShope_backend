@@ -15,13 +15,23 @@
     public class MakesControllerTests
     {
         BaseAutomapperConfig mapper = new BaseAutomapperConfig();
+        private readonly Mock<ILogsService> mockedLogger = new Mock<ILogsService>();
+        private readonly string controllerName = "MakesController";
+
+        public MakesControllerTests()
+        {
+            mockedLogger.Setup(x => x.LogError(It.IsAny<Exception>(), "", controllerName, It.IsAny<string>()));
+        }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void Get_ShouldThrowException_WhenMakesServiceisNull()
+        public void Get_ShouldReturnInternalServerErrorAndLogError_WhenMakesServiceisNull()
         {
-            var controller = new MakesController(null, null); // TODO
+            var controller = new MakesController(null, mockedLogger.Object);
+
             var result = controller.Get();
+
+            Assert.IsInstanceOfType(result, typeof(InternalServerErrorResult));
+            mockedLogger.Verify(x => x.LogError(It.IsAny<Exception>(), "", controllerName, "Get"));
         }
 
         [TestMethod]
@@ -39,7 +49,7 @@
             makesMock.Setup(v => v.GetAll())
                     .Returns(makes);
 
-            var controller = new MakesController(makesMock.Object, null); // TODO
+            var controller = new MakesController(makesMock.Object, null);
 
             var result = controller.Get();
 

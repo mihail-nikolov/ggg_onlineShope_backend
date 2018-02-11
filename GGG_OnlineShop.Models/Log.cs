@@ -9,9 +9,11 @@
     public class Log : BaseModel<int>
     {
         [Required]
+        [StringLength(GlobalConstants.LogPlaceMaxLength, ErrorMessage = GlobalConstants.MinAndMaxLengthErrorMessage, MinimumLength = GlobalConstants.LogPlaceMinLength)]
         public string Place { get; set; }
 
         [Required]
+        [StringLength(GlobalConstants.LogTypeMaxLength, ErrorMessage = GlobalConstants.MinAndMaxLengthErrorMessage, MinimumLength = GlobalConstants.LogTypeMinLength)]
         [Column("Type")]
         public string TypeString
         {
@@ -19,7 +21,7 @@
             private set { Type = value.ParseEnum<LogType>(); }
         }
 
-        [Required]
+        [StringLength(GlobalConstants.LogInfoMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
         public string Info { get; set; }
 
         public string Comment { get; set; }

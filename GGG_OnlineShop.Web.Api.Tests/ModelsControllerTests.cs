@@ -15,15 +15,24 @@
     public class ModelsControllerTests
     {
         BaseAutomapperConfig mapper = new BaseAutomapperConfig();
+        private readonly Mock<ILogsService> mockedLogger = new Mock<ILogsService>();
+        private readonly string controllerName = "ModelsController";
+
+        public ModelsControllerTests()
+        {
+            mockedLogger.Setup(x => x.LogError(It.IsAny<Exception>(), "", controllerName, It.IsAny<string>()));
+        }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void GetVehicleModelByMake_ShouldThrowException_WhenVehiclesServiceisNull()
+        public void GetVehicleModelByMake_ShouldReturnInternalServerErrorAndLogError_WhenVehiclesServiceisNull()
         {
             var modelsMock = new Mock<IVehicleModelsService>();
-            var controller = new ModelsController(modelsMock.Object, null, null); // TODO
+            var controller = new ModelsController(modelsMock.Object, null, mockedLogger.Object);
 
             var result = controller.GetVehicleModelByMake(1);
+
+            Assert.IsInstanceOfType(result, typeof(InternalServerErrorResult));
+            mockedLogger.Verify(x => x.LogError(It.IsAny<Exception>(), "", controllerName, "GetVehicleModelByMake"));
         }
 
         [TestMethod]
@@ -44,7 +53,7 @@
             VehicleModel model2 = new VehicleModel() { Id = 2, Name = "A4" };
             modelsMock.Setup(v => v.GetById(2)).Returns(model2);
 
-            var controller = new ModelsController(modelsMock.Object, vehiclesMock.Object, null); // TODO
+            var controller = new ModelsController(modelsMock.Object, vehiclesMock.Object, null);
 
             var result = controller.GetVehicleModelByMake(1);
 

@@ -20,32 +20,45 @@
     public class ManageUsersControllerTests
     {
         BaseAutomapperConfig mapper = new BaseAutomapperConfig();
+        private readonly Mock<ILogsService> mockedLogger = new Mock<ILogsService>();
+        private readonly string controllerName = "ManageUsersController";
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void Get_ShouldThrowException_WhenUsersServiceIsNull()
+        public ManageUsersControllerTests()
         {
-            var controller = new ManageUsersController(null, null, null); // TODO
-
-            controller.Get();
+            mockedLogger.Setup(x => x.LogError(It.IsAny<Exception>(), "", controllerName, It.IsAny<string>()));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void UpdateUserInfo_ShouldThrowException_WhenUsersServiceIsNull()
+        public void Get_ShouldReturnInternalServerErrorAndLogError_WhenUsersServiceIsNull()
         {
-            var controller = new ManageUsersController(null, null, null); // TODO
+            var controller = new ManageUsersController(null, null, null, mockedLogger.Object);
 
-            controller.UpdateUserInfo(null);
+            var result = controller.Get();
+
+            Assert.IsInstanceOfType(result, typeof(InternalServerErrorResult));
+            mockedLogger.Verify(x => x.LogError(It.IsAny<Exception>(), "", controllerName, "Get"));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(AggregateException))]
-        public void SendEmailConfirmation_ShouldThrowException_WhenUsersServiceIsNull()
+        public void UpdateUserInfo_ShouldReturnInternalServerErrorAndLogError_WhenUsersServiceIsNull()
         {
-            var controller = new ManageUsersController(null, null, null); // TODO
+            var controller = new ManageUsersController(null, null, null, mockedLogger.Object);
 
-            controller.SendEmailConfirmation(null).Wait();
+            var result = controller.UpdateUserInfo(null);
+
+            Assert.IsInstanceOfType(result, typeof(InternalServerErrorResult));
+            mockedLogger.Verify(x => x.LogError(It.IsAny<Exception>(), "", controllerName, "UpdateUserInfo"));
+        }
+
+        [TestMethod]
+        public async Task SendEmailConfirmation_ShouldReturnInternalServerErrorAndLogError_WhenUsersServiceIsNull()
+        {
+            var controller = new ManageUsersController(null, null, null, mockedLogger.Object);
+
+            var result = await controller.SendEmailConfirmation(null);
+
+            Assert.IsInstanceOfType(result, typeof(InternalServerErrorResult));
+            mockedLogger.Verify(x => x.LogError(It.IsAny<Exception>(), "", controllerName, "SendEmailConfirmation"));
         }
 
         [TestMethod]
@@ -56,7 +69,7 @@
             var users = new Mock<IUsersService>();
             users.Setup(x => x.IsValidUser(It.IsAny<User>())).Returns(() => false);
 
-            var controller = new ManageUsersController(users.Object, null, null); // TODO
+            var controller = new ManageUsersController(users.Object, null, null);
 
             var result = controller.UpdateUserInfo(null);
 
@@ -77,7 +90,7 @@
             users.Setup(x => x.Update(It.IsAny<User>())).Returns(() => new User() { Id = testId, IsPilkingtonVisible = true });
 
             UserUpdateModel request = new UserUpdateModel() { Id = testId, IsPilkingtonVisible = true };
-            var controller = new ManageUsersController(users.Object, null, null); // TODO
+            var controller = new ManageUsersController(users.Object, null, null);
 
             var result = controller.UpdateUserInfo(request);
 
@@ -109,7 +122,7 @@
             var usersMock = new Mock<IUsersService>();
             usersMock.Setup(x => x.GetAll()).Returns(users);
 
-            var controller = new ManageUsersController(usersMock.Object, null, null); // TODO
+            var controller = new ManageUsersController(usersMock.Object, null, null);
 
             var result = controller.Get();
 
@@ -149,7 +162,7 @@
             urlMock.Setup(m => m.Route(It.IsAny<string>(), It.IsAny<object>())).Returns(testRoute);
 
             AccountEmailRequestModel request = new AccountEmailRequestModel() { Email = testEmail };
-            var controller = new ManageUsersController(usersMock.Object, emailsMock.Object, userManagerMock.Object, null) // TODO
+            var controller = new ManageUsersController(usersMock.Object, emailsMock.Object, userManagerMock.Object, null)
             { Url = urlMock.Object };
 
             var result = await controller.SendEmailConfirmation(request);

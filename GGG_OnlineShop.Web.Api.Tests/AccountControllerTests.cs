@@ -15,56 +15,75 @@
     using System.Security.Claims;
     using System.Security.Principal;
     using System.Threading.Tasks;
+    using System.Web;
+    using System.Web.Http.Controllers;
     using System.Web.Http.Results;
 
     [TestClass]
     public class AccountControllerTests
     {
         BaseAutomapperConfig mapper = new BaseAutomapperConfig();
+        private readonly Mock<ILogsService> mockedLogger = new Mock<ILogsService>();
+        private readonly string controllerName = "AccountController";
 
         [TestMethod]
-        [ExpectedException(typeof(AggregateException))]
-        public void Register_ShouldThrowException_WhenAutoMapperNotInitialized()
+        public async Task Register_ShouldReturnInternalServerErrorAndLogError_WhenAutoMapperNotInitialized()
         {
-            var controller = new AccountController(null, null, null, null); // TODO
+            mockedLogger.Setup(x => x.LogError(It.IsAny<Exception>(), "", controllerName, "Register"));
+            var controller = new AccountController(null, null, null, mockedLogger.Object);
 
-            controller.Register(null).Wait();
+            var result = await controller.Register(null);
+
+            Assert.IsInstanceOfType(result, typeof(InternalServerErrorResult));
+            mockedLogger.VerifyAll();
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void Get_ShouldThrowException_WhenAUsersNull()
+        public void Get_ShouldReturnInternalServerErrorAndLogError_WhenAUsersNull()
         {
-            var controller = new AccountController(null, null, null, null); // TODO
+            mockedLogger.Setup(x => x.LogError(It.IsAny<Exception>(), "", controllerName, "Get"));
+            var controller = new AccountController(null, null, null, mockedLogger.Object);
 
-            controller.Get();
+            var result = controller.Get();
+
+            Assert.IsInstanceOfType(result, typeof(InternalServerErrorResult));
+            mockedLogger.VerifyAll();
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void UpdateUserInfo_ShouldThrowException_WhenAutoMapperNotInitialized()
+        public void UpdateUserInfo_ShouldReturnInternalServerErrorAndLogError_WhenAutoMapperNotInitialized()
         {
-            var controller = new AccountController(null, null, null, null); // TODO
+            mockedLogger.Setup(x => x.LogError(It.IsAny<Exception>(), "", controllerName, "UpdateUserInfo"));
+            var controller = new AccountController(null, null, null, mockedLogger.Object);
 
-            controller.UpdateUserInfo(null);
+            var result = controller.UpdateUserInfo(null);
+
+            Assert.IsInstanceOfType(result, typeof(InternalServerErrorResult));
+            mockedLogger.VerifyAll();
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void GetMyOrders_ShouldThrowException_WhenOrdersNotInitialized()
+        public void GetMyOrders_ShouldReturnInternalServerErrorAndLogError_WhenOrdersNotInitialized()
         {
-            var controller = new AccountController(null, null, null, null); // TODO
+            mockedLogger.Setup(x => x.LogError(It.IsAny<Exception>(), "", controllerName, "GetMyOrders"));
+            var controller = new AccountController(null, null, null, mockedLogger.Object);
 
-            controller.GetMyOrders();
+            var result = controller.GetMyOrders();
+
+            Assert.IsInstanceOfType(result, typeof(InternalServerErrorResult));
+            mockedLogger.VerifyAll();
         }
 
         [TestMethod]
-        [ExpectedException(typeof(AggregateException))]
-        public void ForgotPassword_ShouldThrowException_WhenEmailsNotInitialized()
+        public async Task ForgotPassword_ShouldReturnInternalServerErrorAndLogError_WhenEmailsNotInitialized()
         {
-            var controller = new AccountController(null, null, null, null); // TODO
+            mockedLogger.Setup(x => x.LogError(It.IsAny<Exception>(), "", controllerName, "ForgotPassword"));
+            var controller = new AccountController(null, null, null, mockedLogger.Object);
 
-            controller.ForgotPassword(null).Wait();
+            var result = await controller.ForgotPassword(null);
+
+            Assert.IsInstanceOfType(result, typeof(InternalServerErrorResult));
+            mockedLogger.VerifyAll();
         }
 
         [TestMethod]
@@ -81,7 +100,7 @@
                 Bulstat = "1234"
             };
 
-            var controller = new AccountController(usersMock.Object, null, null, null); // TODO
+            var controller = new AccountController(usersMock.Object, null, null, null);
 
             var result = await controller.Register(request);
 
@@ -118,7 +137,7 @@
                 Password = testPassword
             };
 
-            var controller = new AccountController(usersMock.Object, null, null, userManagerMock.Object, null, null); // TODO
+            var controller = new AccountController(usersMock.Object, null, null, userManagerMock.Object, null, null);
 
             var result = await controller.Register(request);
 
@@ -150,7 +169,7 @@
                 Password = testPassword
             };
 
-            var controller = new AccountController(usersMock.Object, null, null, userManagerMock.Object, null, null); // TODO
+            var controller = new AccountController(usersMock.Object, null, null, userManagerMock.Object, null, null);
 
             var result = await controller.Register(request);
 
@@ -179,7 +198,7 @@
                 DeliveryCountry = deliveryCountry
             };
 
-            var controller = new AccountController(usersMock.Object, null, null, null) // TODO
+            var controller = new AccountController(usersMock.Object, null, null, null)
             {
                 User = Mock.Of<IPrincipal>(ip => ip.Identity == mockIdentity)
             };
@@ -218,7 +237,7 @@
                 NewPassword = newPassword
             };
 
-            var controller = new AccountController(null, null, null, userManagerMock.Object, null, null) // TODO
+            var controller = new AccountController(null, null, null, userManagerMock.Object, null, null)
             {
                 User = Mock.Of<IPrincipal>(ip => ip.Identity == mockIdentity)
             };
@@ -254,7 +273,7 @@
                 NewPassword = newPassword
             };
 
-            var controller = new AccountController(null, null, null, userManagerMock.Object, null, null) // TODO
+            var controller = new AccountController(null, null, null, userManagerMock.Object, null, null)
             {
                 User = Mock.Of<IPrincipal>(ip => ip.Identity == mockIdentity)
             };
@@ -286,7 +305,7 @@
             var ordersMock = new Mock<IOrderedItemsService>();
             ordersMock.Setup(x => x.GetAllByUser(testUserId)).Returns(orders);
 
-            var controller = new AccountController(null, ordersMock.Object, null, null) // TODO
+            var controller = new AccountController(null, ordersMock.Object, null, null)
             {
                 User = Mock.Of<IPrincipal>(ip => ip.Identity == mockIdentity)
             };
@@ -319,7 +338,7 @@
                 Email = testEmail
             };
 
-            var controller = new AccountController(null, null, null, userManagerMock.Object, null, null); // TODO
+            var controller = new AccountController(null, null, null, userManagerMock.Object, null, null);
 
             var result = await controller.ForgotPassword(request);
 
@@ -346,7 +365,7 @@
             {
                 Email = testEmail
             };
-            var controller = new AccountController(null, null, null, userManagerMock.Object, null, null); // TODO
+            var controller = new AccountController(null, null, null, userManagerMock.Object, null, null);
 
             var result = await controller.ForgotPassword(request);
 
@@ -381,7 +400,7 @@
             {
                 Email = testEmail
             };
-            var controller = new AccountController(null, null, emailsMock.Object, userManagerMock.Object, null, null); // TODO
+            var controller = new AccountController(null, null, emailsMock.Object, userManagerMock.Object, null, null);
 
             var result = await controller.ForgotPassword(request);
 
@@ -416,7 +435,7 @@
                 Code = testCode,
                 Password = testPassword
             };
-            var controller = new AccountController(null, null, null, userManagerMock.Object, null, null); // TODO
+            var controller = new AccountController(null, null, null, userManagerMock.Object, null, null);
 
             var result = await controller.ResetPassword(request);
 
@@ -449,7 +468,7 @@
                 Code = testCode,
                 Password = testPassword
             };
-            var controller = new AccountController(null, null, null, userManagerMock.Object, null, null); // TODO
+            var controller = new AccountController(null, null, null, userManagerMock.Object, null, null);
 
             var result = await controller.ResetPassword(request);
 
@@ -473,7 +492,7 @@
             {
                 Email = testEmail
             };
-            var controller = new AccountController(null, null, null, userManagerMock.Object, null, null); // TODO
+            var controller = new AccountController(null, null, null, userManagerMock.Object, null, null);
 
             var result = await controller.ResetPassword(request);
 
@@ -497,7 +516,7 @@
             userManagerMock.Setup(x => x.ConfirmEmailAsync(testId, testCode))
                                        .Returns(Task.FromResult(IdentityResult.Success));
 
-            var controller = new AccountController(null, null, null, userManagerMock.Object, null, null); // TODO
+            var controller = new AccountController(null, null, null, userManagerMock.Object, null, null);
 
             var result = await controller.ConfirmEmail(testId, testCode);
 
@@ -520,7 +539,7 @@
             userManagerMock.Setup(x => x.ConfirmEmailAsync(testId, testCode))
                                       .ReturnsAsync(() => new IdentityResult(errors));
 
-            var controller = new AccountController(null, null, null, userManagerMock.Object, null, null); // TODO
+            var controller = new AccountController(null, null, null, userManagerMock.Object, null, null);
 
             var result = await controller.ConfirmEmail(testId, testCode);
 
@@ -541,7 +560,7 @@
             var userStore = new Mock<IUserStore<User>>();
             var userManagerMock = new Mock<ApplicationUserManager>(userStore.Object);
 
-            var controller = new AccountController(null, null, null, userManagerMock.Object, null, null); // TODO
+            var controller = new AccountController(null, null, null, userManagerMock.Object, null, null);
 
             var result = await controller.ConfirmEmail(null, testCode);
 
@@ -563,7 +582,7 @@
             var userStore = new Mock<IUserStore<User>>();
             var userManagerMock = new Mock<ApplicationUserManager>(userStore.Object);
 
-            var controller = new AccountController(null, null, null, userManagerMock.Object, null, null); // TODO
+            var controller = new AccountController(null, null, null, userManagerMock.Object, null, null);
 
             var result = await controller.ConfirmEmail(testId, null);
 
@@ -576,29 +595,33 @@
             userManagerMock.VerifyAll();
         }
 
-        // TODO uncomment when functionallity ready
-        //[TestMethod]
-        //public void RemoveUser_ShouldReturnBadRequest_WhenAdmin()
-        //{
-        //    mapper.Execute();
-        //    string testUserId = "testUserId";
+        [TestMethod]
+        public async Task RemoveUser_ShouldReturnBadRequest_WhenAdmin()
+        {
+            mapper.Execute();
+            string testUserId = "testUserId";
 
-        //    // moq the user
-        //    var claim = new Claim("test", testUserId);
-        //    var mockIdentity = Mock.Of<ClaimsIdentity>(ci => ci.FindFirst(It.IsAny<string>()) == claim);
+            // moq the user
+            var claim = new Claim("test", testUserId);
+            var mockIdentity = Mock.Of<ClaimsIdentity>(ci => ci.FindFirst(It.IsAny<string>()) == claim);
 
-        //    var controller = new AccountController(null, null, null)
-        //    {
-        //        User = Mock.Of<IPrincipal>(ip => ip.Identity == mockIdentity)
-        //    };
+            // moq identity and role
+            var mockPrincipal = new Mock<IPrincipal>();
+            mockPrincipal.Setup(x => x.IsInRole(It.IsAny<string>())).Returns(true);
+            mockPrincipal.Setup(x => x.Identity).Returns(mockIdentity);
 
-        //    var result = controller.RemoveUser();
+            var controller = new AccountController(null, null, null, null)
+            {
+                User = mockPrincipal.Object
+            };
 
-        //    Assert.IsInstanceOfType(result, typeof(BadRequestErrorMessageResult));
+            var result = await controller.RemoveUser();
 
-        //    string responseMessage = ((BadRequestErrorMessageResult)result).Message;
-        //    Assert.IsTrue(responseMessage.Contains(GlobalConstants.CannotRemoveAdminErrorMessage));
-        //}
+            Assert.IsInstanceOfType(result, typeof(BadRequestErrorMessageResult));
+
+            string responseMessage = ((BadRequestErrorMessageResult)result).Message;
+            Assert.IsTrue(responseMessage.Contains(GlobalConstants.CannotRemoveAdminErrorMessage));
+        }
 
         [TestMethod]
         public async Task RemoveUser_ShouldReturnOkResult()
@@ -627,7 +650,7 @@
             var usersMock = new Mock<IUsersService>();
             usersMock.Setup(x => x.CleanUserInfoFromOrders(It.IsAny<User>()));
 
-            AccountController controller = new AccountController(usersMock.Object, null, null, userManagerMock.Object, null, null) // TODO
+            AccountController controller = new AccountController(usersMock.Object, null, null, userManagerMock.Object, null, null)
             {
                 User = Mock.Of<IPrincipal>(ip => ip.Identity == mockIdentity)
             };
@@ -671,7 +694,7 @@
             var usersMock = new Mock<IUsersService>();
             usersMock.Setup(x => x.CleanUserInfoFromOrders(It.IsAny<User>()));
 
-            AccountController controller = new AccountController(usersMock.Object, null, null, userManagerMock.Object, null, null) // TODO
+            AccountController controller = new AccountController(usersMock.Object, null, null, userManagerMock.Object, null, null)
             {
                 User = Mock.Of<IPrincipal>(ip => ip.Identity == mockIdentity)
             };

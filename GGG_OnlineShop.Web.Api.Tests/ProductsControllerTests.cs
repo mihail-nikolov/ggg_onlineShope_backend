@@ -17,47 +17,63 @@
     public class ProductsControllerTests
     {
         BaseAutomapperConfig mapper = new BaseAutomapperConfig();
+        private readonly Mock<ILogsService> mockedLogger = new Mock<ILogsService>();
+        private readonly string controllerName = "ProductsController";
+
+        public ProductsControllerTests()
+        {
+            mockedLogger.Setup(x => x.LogError(It.IsAny<Exception>(), "", controllerName, It.IsAny<string>()));
+        }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void Get_ShouldThrowException_WhenVehicleGlassesServiceIsNull()
+        public void Get_ShouldReturnInternalServerErrorAndLogError_WhenVehicleGlassesServiceIsNull()
         {
-            var controller = new ProductsController(null, null, null, null, null); // TODO
+           
+            var controller = new ProductsController(null, null, null, null, mockedLogger.Object);
 
             var result = controller.Get(2);
+
+            Assert.IsInstanceOfType(result, typeof(InternalServerErrorResult));
+            mockedLogger.Verify(x => x.LogError(It.IsAny<Exception>(), "", controllerName, "Get"));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void GetPriceAndQuantities_ShouldThrowException_WhenVehicleGlassesServiceIsNull()
+        public void GetPriceAndQuantities_ShouldReturnInternalServerErrorAndLogError_WhenVehicleGlassesServiceIsNull()
         {
-            var controller = new ProductsController(null, null, null, null, null); // TODO
+            var controller = new ProductsController(null, null, null, null, mockedLogger.Object);
 
             var result = controller.GetPriceAndQuantities(2);
+
+            Assert.IsInstanceOfType(result, typeof(InternalServerErrorResult));
+            mockedLogger.Verify(x => x.LogError(It.IsAny<Exception>(), "", controllerName, "GetPriceAndQuantities"));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void GetProductTypes_ShouldThrowException_WhenVehiclesServiceIsNull()
+        public void GetProductTypes_ShouldReturnInternalServerErrorAndLogError_WhenVehiclesServiceIsNull()
         {
-            var controller = new ProductsController(null, null, null, null, null); // TODO
+            var controller = new ProductsController(null, null, null, null, mockedLogger.Object);
 
             var result = controller.GetProductTypes(null);
+
+            Assert.IsInstanceOfType(result, typeof(InternalServerErrorResult));
+            mockedLogger.Verify(x => x.LogError(It.IsAny<Exception>(), "", controllerName, "GetProductTypes"));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void FindByVehicleInfo_ShouldThrowException_WhenVehiclesServiceIsNull()
+        public void FindByVehicleInfo_ShouldReturnInternalServerErrorAndLogError_WhenVehiclesServiceIsNull()
         {
-            var controller = new ProductsController(null, null, null, null, null); // TODO
+            var controller = new ProductsController(null, null, null, null, mockedLogger.Object);
 
             var result = controller.FindByVehicleInfo(null);
+
+            Assert.IsInstanceOfType(result, typeof(InternalServerErrorResult));
+            mockedLogger.Verify(x => x.LogError(It.IsAny<Exception>(), "", controllerName, "FindByVehicleInfo"));
         }
 
         [TestMethod]
         public void Get_ShouldReturnBadRequest_WhenNoArgumentsPassed()
         {
-            var controller = new ProductsController(null, null, null, null, null); // TODO
+            var controller = new ProductsController(null, null, null, null, null);
             var result = controller.Get(null);
 
             Assert.IsInstanceOfType(result, typeof(BadRequestErrorMessageResult));
@@ -71,7 +87,7 @@
         {
             string testEurocode = "445";
 
-            var controller = new ProductsController(null, null, null, null, null); // TODO
+            var controller = new ProductsController(null, null, null, null, null);
             var result = controller.Get(null, testEurocode);
 
             Assert.IsInstanceOfType(result, typeof(BadRequestErrorMessageResult));
@@ -85,7 +101,7 @@
         {
             string testCode = "445";
 
-            var controller = new ProductsController(null, null, null, null, null); // TODO
+            var controller = new ProductsController(null, null, null, null, null);
             var result = controller.Get(null, null, testCode);
 
             Assert.IsInstanceOfType(result, typeof(BadRequestErrorMessageResult));
@@ -98,7 +114,7 @@
         public void Get_ShouldReturnBadRequest_WhenCodeLessThan4Symbols()
         {
             string testEurocode = "445";
-            var controller = new ProductsController(null, null, null, null, null); // TODO
+            var controller = new ProductsController(null, null, null, null, null);
 
             var result = controller.Get(null, null, null, testEurocode);
 
@@ -133,7 +149,7 @@
 
             glassesMock.Setup(v => v.GetById(1)).Returns(() => glass);
 
-            var controller = new ProductsController(null, glassesMock.Object, null, null, null); // TODO
+            var controller = new ProductsController(null, glassesMock.Object, null, null, null);
             var result = controller.Get(1);
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<VehicleGlassResponseModel>));
@@ -171,7 +187,7 @@
 
             glassesMock.Setup(v => v.GetById(1)).Returns(() => glass);
 
-            var controller = new ProductsController(null, glassesMock.Object, null, null, null); // TODO
+            var controller = new ProductsController(null, glassesMock.Object, null, null, null);
             var result = controller.Get(1);
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<VehicleGlassResponseModel>));
@@ -197,7 +213,7 @@
 
             glassesMock.Setup(v => v.GetGlassesByEuroCode(testEurocode)).Returns(() => glassesList);
 
-            var controller = new ProductsController(null, glassesMock.Object, null, null, null); // TODO
+            var controller = new ProductsController(null, glassesMock.Object, null, null, null);
             var result = controller.Get(null, testEurocode);
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<List<VehicleGlassShortResponseModel>>));
@@ -225,7 +241,7 @@
 
             glassesMock.Setup(v => v.GetByOesCode(testOesCode)).Returns(() => glassesList);
 
-            var controller = new ProductsController(null, glassesMock.Object, null, null, null); // TODO
+            var controller = new ProductsController(null, glassesMock.Object, null, null, null);
             var result = controller.Get(null, null, testOesCode);
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<List<VehicleGlassShortResponseModel>>));
@@ -252,7 +268,7 @@
             string testCode = "testCode";
             glassesMock.Setup(v => v.GetByRandomCode(testCode)).Returns(() => glassesList);
 
-            var controller = new ProductsController(null, glassesMock.Object, null, null, null); // TODO
+            var controller = new ProductsController(null, glassesMock.Object, null, null, null);
             var result = controller.Get(null, null, null, testCode);
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<List<VehicleGlassShortResponseModel>>));
@@ -276,7 +292,7 @@
             string testCode = "testCode";
             glassesMock.Setup(v => v.GetByEuroCode(testCode)).Returns(() => glass);
 
-            var controller = new ProductsController(null, glassesMock.Object, null, null, null); // TODO
+            var controller = new ProductsController(null, glassesMock.Object, null, null, null);
             var result = controller.GetItemByFullCode(testCode);
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<VehicleGlassResponseModel>));
@@ -300,7 +316,7 @@
             string testCode = "testCode";
             glassesMock.Setup(v => v.GetByMaterialNumber(testCode)).Returns(() => glass);
 
-            var controller = new ProductsController(null, glassesMock.Object, null, null, null); // TODO
+            var controller = new ProductsController(null, glassesMock.Object, null, null, null);
             var result = controller.GetItemByFullCode(null, testCode);
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<VehicleGlassResponseModel>));
@@ -325,7 +341,7 @@
 
             glassesMock.Setup(v => v.GetByLocalCode(testCode)).Returns(() => glass);
 
-            var controller = new ProductsController(null, glassesMock.Object, null, null, null); // TODO
+            var controller = new ProductsController(null, glassesMock.Object, null, null, null);
             var result = controller.GetItemByFullCode(null, null, null, testCode);
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<VehicleGlassResponseModel>));
@@ -353,7 +369,7 @@
             glassesMock.Setup(v => v.GetByEuroCode(testCode)).Returns(() => null);
             glassesMock.Setup(v => v.GetByLocalCode(testLocalCode)).Returns(() => glass);
 
-            var controller = new ProductsController(null, glassesMock.Object, null, null, null); // TODO
+            var controller = new ProductsController(null, glassesMock.Object, null, null, null);
             var result = controller.GetItemByFullCode(testCode, null, null, testLocalCode);
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<VehicleGlassResponseModel>));
@@ -373,7 +389,7 @@
 
             var glassesMock = new Mock<IVehicleGlassesService>();
 
-            var controller = new ProductsController(null, glassesMock.Object, null, null, null); // TODO
+            var controller = new ProductsController(null, glassesMock.Object, null, null, null);
             var result = controller.GetItemByFullCode();
 
             Assert.IsInstanceOfType(result, typeof(BadRequestErrorMessageResult));
@@ -399,7 +415,7 @@
 
             glassesMock.Setup(v => v.GetByIndustryCode(testCode)).Returns(() => glass);
 
-            var controller = new ProductsController(null, glassesMock.Object, null, null, null); // TODO
+            var controller = new ProductsController(null, glassesMock.Object, null, null, null);
             var result = controller.GetItemByFullCode(null, null, testCode);
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<VehicleGlassResponseModel>));
@@ -440,7 +456,7 @@
             var productPriceAndQuantitiesMock = new Mock<IProductQuantitiesService>();
             productPriceAndQuantitiesMock.Setup(x => x.GetPriceAndQuantitiesByCode(testCode, testUser)).Returns(productQuantitiesAndPriceInfo);
 
-            var controller = new ProductsController(null, glassesMock.Object, productPriceAndQuantitiesMock.Object, usersMock.Object, null); // TODO
+            var controller = new ProductsController(null, glassesMock.Object, productPriceAndQuantitiesMock.Object, usersMock.Object, null);
             var result = controller.GetPriceAndQuantities(testId);
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<IEnumerable<ProductInfoResponseModel>>));
@@ -476,7 +492,7 @@
             vehiclesMock.Setup(x => x.GetVehicleByMakeModelAndBodyTypeIds(request.MakeId, null, null)).Returns(vehicle);
             vehiclesMock.Setup(x => x.GetApplicableGLasses(vehicle)).Returns(glasses);
 
-            var controller = new ProductsController(vehiclesMock.Object, null, null, null, null); // TODO
+            var controller = new ProductsController(vehiclesMock.Object, null, null, null, null);
             var result = controller.GetProductTypes(request);
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<List<string>>));
@@ -509,7 +525,7 @@
             vehiclesMock.Setup(x => x.GetVehicleByMakeModelAndBodyTypeIds(request.MakeId, null, null)).Returns(vehicle);
             vehiclesMock.Setup(x => x.GetApplicableGLassesByProductType(vehicle, testProductType)).Returns(glasses);
 
-            var controller = new ProductsController(vehiclesMock.Object, null, null, null, null); // TODO
+            var controller = new ProductsController(vehiclesMock.Object, null, null, null, null);
             var result = controller.FindByVehicleInfo(request);
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<List<VehicleGlassShortResponseModel>>));

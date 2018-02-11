@@ -17,26 +17,36 @@
     public class ManageOrderedItemsControllerTests
     {
         BaseAutomapperConfig mapper = new BaseAutomapperConfig();
+        private readonly Mock<ILogsService> mockedLogger = new Mock<ILogsService>();
+        private readonly string controllerName = "ManageOrderedItemsController";
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void Get_ShouldThrowException_WhenOrdersServiceIsNull()
+        public ManageOrderedItemsControllerTests()
         {
-            var controller = new ManageOrderedItemsController(null, null, null); // TODO
-
-            controller.Get();
+            mockedLogger.Setup(x => x.LogError(It.IsAny<Exception>(), "", controllerName, It.IsAny<string>()));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void Update_ShouldThrowException_WhenOrdersServiceIsNull()
+        public void Get_ShouldReturnInternalServerErrorAndLogError_WhenOrdersServiceIsNull()
+        {
+            var controller = new ManageOrderedItemsController(null, null, mockedLogger.Object);
+
+            var result = controller.Get();
+
+            Assert.IsInstanceOfType(result, typeof(InternalServerErrorResult));
+            mockedLogger.Verify(x => x.LogError(It.IsAny<Exception>(), "", controllerName, "Get"));
+        }
+
+        [TestMethod]
+        public void Update_ShouldReturnInternalServerErrorAndLogError_WhenOrdersServiceIsNull()
         {
             var usersMock = new Mock<IUsersService>();
-
             OrderedItemRequestUpdateStatusModel request = new OrderedItemRequestUpdateStatusModel();
-            var controller = new ManageOrderedItemsController(null, null, null); // TODO
+            var controller = new ManageOrderedItemsController(null, null, mockedLogger.Object);
 
-            controller.Update(request);
+            var result = controller.Update(request);
+
+            Assert.IsInstanceOfType(result, typeof(InternalServerErrorResult));
+            mockedLogger.Verify(x => x.LogError(It.IsAny<Exception>(), "", controllerName, "Update"));
         }
 
         [TestMethod]
@@ -69,7 +79,7 @@
             var ordersMock = new Mock<IOrderedItemsService>();
             ordersMock.Setup(v => v.GetNewOrders()).Returns(orders);
 
-            var controller = new ManageOrderedItemsController(ordersMock.Object, null, null); // TODO
+            var controller = new ManageOrderedItemsController(ordersMock.Object, null, null);
 
             var result = controller.Get(pending: true);
 
@@ -109,7 +119,7 @@
             var ordersMock = new Mock<IOrderedItemsService>();
             ordersMock.Setup(v => v.GetOrderedProducts()).Returns(orders);
 
-            var controller = new ManageOrderedItemsController(ordersMock.Object, null, null); // TODO
+            var controller = new ManageOrderedItemsController(ordersMock.Object, null, null);
 
             var result = controller.Get(ordered: true);
 
@@ -149,7 +159,7 @@
             var ordersMock = new Mock<IOrderedItemsService>();
             ordersMock.Setup(v => v.GetDoneOrders()).Returns(orders);
 
-            var controller = new ManageOrderedItemsController(ordersMock.Object, null, null); // TODO
+            var controller = new ManageOrderedItemsController(ordersMock.Object, null, null);
 
             var result = controller.Get(done: true);
 
@@ -205,7 +215,7 @@
             var ordersMock = new Mock<IOrderedItemsService>();
             ordersMock.Setup(v => v.GetAll()).Returns(orders);
 
-            var controller = new ManageOrderedItemsController(ordersMock.Object, null, null); // TODO
+            var controller = new ManageOrderedItemsController(ordersMock.Object, null, null);
 
             var result = controller.Get();
 
@@ -253,7 +263,7 @@
             var ordersMock = new Mock<IOrderedItemsService>();
             ordersMock.Setup(v => v.GetNewOrders()).Returns(orders);
 
-            var controller = new ManageOrderedItemsController(ordersMock.Object, null, null); // TODO
+            var controller = new ManageOrderedItemsController(ordersMock.Object, null, null);
 
             var result = controller.Get(pending: true);
 
@@ -296,7 +306,7 @@
 
             OrderedItemRequestUpdateStatusModel request = new OrderedItemRequestUpdateStatusModel() { Id = 1, Status = DeliveryStatus.Done };
 
-            var controller = new ManageOrderedItemsController(ordersMock.Object, emailsMock.Object, null); // TODO
+            var controller = new ManageOrderedItemsController(ordersMock.Object, emailsMock.Object, null);
 
             var result = controller.Update(request);
 
@@ -335,7 +345,7 @@
 
             OrderedItemRequestUpdateStatusModel request = new OrderedItemRequestUpdateStatusModel() { Id = testId, Status = status };
 
-            var controller = new ManageOrderedItemsController(ordersMock.Object, emailsMock.Object, null); // TODO
+            var controller = new ManageOrderedItemsController(ordersMock.Object, emailsMock.Object, null);
 
             var result = controller.Update(request);
 
@@ -372,7 +382,7 @@
 
             OrderedItemRequestUpdateStatusModel request = new OrderedItemRequestUpdateStatusModel() { Id = testId, Status = DeliveryStatus.Done };
 
-            var controller = new ManageOrderedItemsController(ordersMock.Object, emailsMock.Object, null); // TODO
+            var controller = new ManageOrderedItemsController(ordersMock.Object, emailsMock.Object, null);
 
             var result = controller.Update(request);
 

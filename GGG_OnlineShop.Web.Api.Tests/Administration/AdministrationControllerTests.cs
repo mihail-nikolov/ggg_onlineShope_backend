@@ -14,14 +14,19 @@
     public class AdministrationControllerTests
     {
         BaseAutomapperConfig mapper = new BaseAutomapperConfig();
+        private readonly Mock<ILogsService> mockedLogger = new Mock<ILogsService>();
+        private readonly string controllerName = "AdministrationController";
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void DbInfoAdd_ShouldThrowException_WhenDbInfoFillerIsNull()
+        public void DbInfoAdd_ShouldReturnInternalServerErrorAndLogError_WhenDbInfoFillerIsNull()
         {
-            var controller = new AdministrationController(null, null); // TODO
+            mockedLogger.Setup(x => x.LogError(It.IsAny<Exception>(), "", controllerName, "DbInfoAdd"));
+            var controller = new AdministrationController(null, mockedLogger.Object);
 
-            controller.DbInfoAdd(null);
+            var result = controller.DbInfoAdd(null);
+
+            Assert.IsInstanceOfType(result, typeof(InternalServerErrorResult));
+            mockedLogger.VerifyAll();
         }
 
         [TestMethod]
@@ -29,8 +34,8 @@
         {
             var dbFillerMock = new Mock<IGlassesInfoDbFiller>();
             dbFillerMock.Setup(x => x.FillInfo(It.IsAny<GlassJsonInfoModel[]>(), ""));
-
-            var controller = new AdministrationController(dbFillerMock.Object, null); // TODO
+       
+            var controller = new AdministrationController(dbFillerMock.Object, null);
 
             var result = controller.DbInfoAdd(null);
 
@@ -42,13 +47,16 @@
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void DbInfoAddFromFile_ShouldThrowException_WhenDbInfoFillerIsNull()
+        public void DbInfoAddFromFile_ShouldReturnInternalServerErrorAndLogError_WhenDbInfoFillerIsNull()
         {
+            mockedLogger.Setup(x => x.LogError(It.IsAny<Exception>(), "", controllerName, "DbInfoAddFromFile"));
             HttpContext.Current = new HttpContext(new HttpRequest(null, "http://testUri.com", null), new HttpResponse(null));
+            var controller = new AdministrationController(null, mockedLogger.Object);
 
-            var controller = new AdministrationController(null, null); // TODO
             var result = controller.DbInfoAddFromFile();
+
+            Assert.IsInstanceOfType(result, typeof(InternalServerErrorResult));
+            mockedLogger.VerifyAll();
         }
 
         [TestMethod]
@@ -60,7 +68,7 @@
 
             HttpContext.Current = new HttpContext(new HttpRequest(testFile, "http://testUri.com", null), new HttpResponse(null));
 
-            var controller = new AdministrationController(dbFillerMock.Object, null); // TODO
+            var controller = new AdministrationController(dbFillerMock.Object, null);
 
             var result = controller.DbInfoAddFromFile();
 

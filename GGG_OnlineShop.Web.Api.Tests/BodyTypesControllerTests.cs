@@ -15,13 +15,19 @@
     public class BodyTypesControllerTests
     {
         BaseAutomapperConfig mapper = new BaseAutomapperConfig();
+        private readonly Mock<ILogsService> mockedLogger = new Mock<ILogsService>();
+        private readonly string controllerName = "BodyTypesController";
+
+        public BodyTypesControllerTests()
+        {
+            mockedLogger.Setup(x => x.LogError(It.IsAny<Exception>(), "", controllerName, It.IsAny<string>()));
+        }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void GetVehicleBodyTypeByMakeAndModelIds_ShouldThrowException_WhenVehiclesServiceisNull()
+        public void GetVehicleBodyTypeByMakeAndModelIds_ShouldReturnInternalServerErrorAndLogError_WhenVehiclesServiceisNull()
         {
             var bodyTypesMock = new Mock<IVehicleBodyTypesService>();
-            var controller = new BodyTypesController(bodyTypesMock.Object, null, null); // TODO
+            var controller = new BodyTypesController(bodyTypesMock.Object, null, mockedLogger.Object);
 
             var model = new VehicleBodyTypesRequestModel()
             {
@@ -30,6 +36,9 @@
             };
 
             var result = controller.GetVehicleBodyTypeByMakeAndModelIds(model);
+
+            Assert.IsInstanceOfType(result, typeof(InternalServerErrorResult));
+            mockedLogger.Verify(x => x.LogError(It.IsAny<Exception>(), "", controllerName, "GetVehicleBodyTypeByMakeAndModelIds"));
         }
 
         [TestMethod]
@@ -50,7 +59,7 @@
             VehicleBodyType bodyType2 = new VehicleBodyType() { Id = 2, Code = "H3", Description = "Hatcback 3dr" };
             bodyTypesMock.Setup(v => v.GetById(2)).Returns(bodyType2);
 
-            var controller = new BodyTypesController(bodyTypesMock.Object, vehiclesMock.Object, null); // TODO
+            var controller = new BodyTypesController(bodyTypesMock.Object, vehiclesMock.Object, null);
             var model = new VehicleBodyTypesRequestModel()
             {
                 MakeId = 1,

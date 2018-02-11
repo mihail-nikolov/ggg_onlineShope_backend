@@ -37,6 +37,13 @@
         public const int DeliveryTownMinLength = 2;
         public const int DeliveryAddressMaxLength = 200;
         public const int DeliveryAddressMinLength = 2;
+
+        public const int LogPlaceMaxLength = 70;
+        public const int LogPlaceMinLength = 5;
+        public const int LogTypeMaxLength = 15;
+        public const int LogTypeMinLength = 2;
+        public const int LogInfoMaxLength = 700;
+        
         public const double MinPercentageReduction = 0;
         public const double MaxPercentageReduction = 100;
         public const int PasswordMaxLength = 100;
