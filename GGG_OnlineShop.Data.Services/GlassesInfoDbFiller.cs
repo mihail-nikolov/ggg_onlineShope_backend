@@ -432,7 +432,7 @@
                 {
                     VehicleGlassImage newImage = this.Mapper.Map<VehicleGlassImage>(image);
                     this.Images.Add(newImage);
-                    imagesToadd.Add(this.Images.GetByOriginalId(newImage.OriginalId));
+                    imagesToadd.Add(newImage);
                 }
                 else
                 {
@@ -457,7 +457,7 @@
                     VehicleGlassCharacteristic newCharacteristic = new VehicleGlassCharacteristic() { Name = characteristicName };
 
                     this.Characteristics.Add(newCharacteristic);
-                    characteristicsToAdd.Add(this.Characteristics.GetByName(newCharacteristic.Name));
+                    characteristicsToAdd.Add(newCharacteristic);
                 }
                 else
                 {
@@ -513,7 +513,7 @@
                 VehicleMake newMake = new VehicleMake() { Name = makeName };
                 this.Makes.Add(newMake);
 
-                makeId = this.Makes.GetByName(newMake.Name).Id;
+                makeId = newMake.Id;
             }
             else
             {
@@ -534,7 +534,7 @@
                     VehicleModel newModel = new VehicleModel() { Name = modelName };
                     this.Models.Add(newModel);
 
-                    modelId = this.Models.GetByName(newModel.Name).Id;
+                    modelId = newModel.Id;
                 }
                 else
                 {
@@ -554,11 +554,11 @@
                 VehicleBodyType bodyType = this.Bodytypes.GetByCode(code);
                 if (bodyType == null)
                 {
-                    VehicleBodyType newbodyType = this.Mapper.Map<VehicleBodyType>(bodyTypeJsonModel);
-                    this.Bodytypes.Add(newbodyType);
+                    bodyType = this.Mapper.Map<VehicleBodyType>(bodyTypeJsonModel);
+                    this.Bodytypes.Add(bodyType);
                 }
 
-                int bodyTypeIdToAdd = this.Bodytypes.GetByCode(code).Id;
+                int bodyTypeIdToAdd = bodyType.Id;
                 if (!bodyTypeIds.Contains(bodyTypeIdToAdd))
                 {
                     bodyTypeIds.Add(bodyTypeIdToAdd);

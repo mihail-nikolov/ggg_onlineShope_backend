@@ -66,7 +66,6 @@
                 if (this.orders.IsValidOrder(order))
                 {
                     this.orders.Add(order);
-                    // TODO  Use everywhere the ID of just added entity!
 
                     string emailTo = !string.IsNullOrEmpty(order.AnonymousUserЕmail) ? order.AnonymousUserЕmail : order.User.Email;
                     emails.SendEmail(emailTo, string.Format(GlobalConstants.OrderMade, order.Id),

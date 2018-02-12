@@ -31,11 +31,11 @@
             {
                 var modelIds = this.vehicles.GetModelIdsByMakeId(vehicleMakeId);
                 List<VehicleModelResponseModel> models = new List<VehicleModelResponseModel>();
-                foreach (var modeId in modelIds)
+                foreach (var modelId in modelIds)
                 {
-                    if (modeId != null)
+                    if (modelId != null)
                     {
-                        var model = this.Mapper.Map<VehicleModelResponseModel>(this.models.GetById(modeId));
+                        var model = this.Mapper.Map<VehicleModelResponseModel>(this.models.GetById(modelId));
                         models.Add(model);
                     }
                 }

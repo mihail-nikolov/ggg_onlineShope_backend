@@ -45,7 +45,7 @@
             userFromDb.Name = user.Name;
             this.Save();
 
-            return this.GetById(userFromDb.Id);
+            return userFromDb;
         }
 
         public User UpdateContactInfo(User user)
@@ -57,7 +57,7 @@
             userFromDb.PhoneNumber = user.PhoneNumber;
             this.Save();
 
-            return this.GetById(userFromDb.Id);
+            return userFromDb;
         }
 
         // Probably to return string with the needed info

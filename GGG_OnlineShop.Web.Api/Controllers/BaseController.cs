@@ -34,30 +34,8 @@
             }
             catch (Exception e)
             {
+                // if no connection to Db - no sense to write info to file
             }
         }
-        // uncomment if needed
-        //protected void HandlExceptionLogging(Exception exc, string info, string controller, [CallerMemberName]string action = "")
-        //{
-        //    string errorMessage = exc.Message;
-        //    string innerErrorMessage = string.Empty;
-        //    string innerInnerErrorMessage = string.Empty;
-        //    if (exc.InnerException != null)
-        //    {
-        //        innerErrorMessage = exc.InnerException.Message;
-
-        //        if (exc.InnerException.InnerException != null)
-        //        {
-        //            innerInnerErrorMessage = exc.InnerException.InnerException.Message;
-        //        }
-        //    }
-
-        //    DbLogger.LogError(errorMessage, $"inner: {innerErrorMessage}------ innerInner: {innerInnerErrorMessage}", info, $"{controller}.{action}", DateTime.UtcNow);
-        //    // if no connection to Db - no sense to write info to file
-        //    //catch
-        //    //{
-        //    //    FileLogger.LogError($"{controller}.{action}:  exceptionMessage: {errorMessage}; innerExceptionMessage: {innerErrorMessage} ; innerInnerErrorMessage: {innerInnerErrorMessage}", controller);
-        //    //}
-        //}
     }
 }
