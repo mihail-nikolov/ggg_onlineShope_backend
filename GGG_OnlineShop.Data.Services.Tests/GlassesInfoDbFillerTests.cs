@@ -6,7 +6,6 @@
     using JsonParseModels;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Moq;
-    using System;
     using System.Collections.Generic;
     using System.Data.Entity.Validation;
     using System.Linq;
@@ -213,73 +212,20 @@
                                                                   superceeds.Object, accessories.Object, logger.Object, reader.Object, solution.Object);
             var glassesInfoList = GetFullGlassInfoModelsList();
 
-            makes.SetupSequence(x => x.GetByName(make))
-                .Returns(null)
-                .Returns(new VehicleMake { Id = 1, Name = make });
-            models.SetupSequence(x => x.GetByName(model))
-                .Returns(null)
-                .Returns(new VehicleModel { Id = 1, Name = model });
-            bodytypes.SetupSequence(x => x.GetByCode(code))
-                .Returns(null)
-                .Returns(new VehicleBodyType { Id = 1, Code = code });
-            vehicles.SetupSequence(x => x.GetVehicleByMakeModelAndBodyTypeIds(1, 1, 1))
-                .Returns(null)
-                .Returns(new Vehicle { Id = 1, MakeId = 1, ModelId = 1, BodyTypeId = 1 });
-            characteristics.SetupSequence(x => x.GetByName("A"))
-                .Returns(null)
-                .Returns(new VehicleGlassCharacteristic { Id = 1, Name = "A" });
-            characteristics.SetupSequence(x => x.GetByName("B"))
-                .Returns(null)
-                .Returns(new VehicleGlassCharacteristic { Id = 2, Name = "B" });
-            images.SetupSequence(x => x.GetByOriginalId(2))
-                .Returns(null)
-                .Returns(new VehicleGlassImage { Id = 1, OriginalId = 2, Caption = caption });
+            makes.SetupSequence(x => x.GetByName(make)).Returns(null)
+            .Returns(new VehicleMake { Id = 0, Name = make });
+            models.SetupSequence(x => x.GetByName(model)).Returns(null);
+            bodytypes.SetupSequence(x => x.GetByCode(code)).Returns(null);
+            vehicles.SetupSequence(x => x.GetVehicleByMakeModelAndBodyTypeIds(0, 0, 0)).Returns(null);
+            characteristics.SetupSequence(x => x.GetByName("A")).Returns(null);
+            characteristics.SetupSequence(x => x.GetByName("B")).Returns(null);
+            images.SetupSequence(x => x.GetByOriginalId(2)).Returns(null);
             interchangeableParts.SetupSequence(x => x.GetInterchangeablePart(interEuroCode, interMaterialNumber, interLocalCode, interScanCode, interNagsCode))
-               .Returns(null)
-               .Returns(new VehicleGlassInterchangeablePart
-               {
-                   Id = 1,
-                   EuroCode = interEuroCode,
-                   MaterialNumber = interMaterialNumber,
-                   LocalCode = interLocalCode,
-                   ScanCode = interScanCode,
-                   NagsCode = interNagsCode
-               });
+                                .Returns(null);
             interchangeableParts.SetupSequence(x => x.GetInterchangeablePart(interEuroCode, interMaterialNumber, interLocalCode, interScanCode, interNagsCode))
-               .Returns(null)
-               .Returns(new VehicleGlassInterchangeablePart
-               {
-                   Id = 1,
-                   EuroCode = interEuroCode,
-                   MaterialNumber = interMaterialNumber,
-                   LocalCode = interLocalCode,
-                   ScanCode = interScanCode,
-                   NagsCode = interNagsCode
-               });
-            accessories.SetupSequence(x => x.GetAccessory(accessoryIndustryCode, accessoryMaterialNumber))
-              .Returns(null)
-              .Returns(new VehicleGlassAccessory
-              {
-                  Id = 1,
-                  MaterialNumber = accessoryMaterialNumber,
-                  IndustryCode = accessoryIndustryCode
-              });
-            superceeds.SetupSequence(x => x.GetSuperceed(oldEuroCode, oldLocalCode, oldMaterialNumber))
-             .Returns(null)
-             .Returns(new VehicleGlassSuperceed
-             {
-                 Id = 1,
-                 OldEuroCode = oldEuroCode,
-                 OldMaterialNumber = oldMaterialNumber,
-                 OldLocalCode = oldLocalCode,
-                 OldOesCode = oldOesCode
-             });
-            glasses.Setup(x => x.GetGlass(euroCode, materialNumber, industryCode, localCode))
-                .Returns(new VehicleGlass
-                {
-                    Id = 1,
-                    EuroCode = euroCode
-                });
+                                .Returns(null);
+            accessories.SetupSequence(x => x.GetAccessory(accessoryIndustryCode, accessoryMaterialNumber)).Returns(null);
+            superceeds.SetupSequence(x => x.GetSuperceed(oldEuroCode, oldLocalCode, oldMaterialNumber)).Returns(null);
 
             // ACT
             service.FillInfo(glassesInfoList, testFile);
@@ -291,7 +237,7 @@
             models.VerifyAll();
             bodytypes.Verify(x => x.Add(It.Is<VehicleBodyType>(y => y.Code == code && y.Description == bodyTypeDescription)), Times.Once());
             bodytypes.VerifyAll();
-            vehicles.Verify(x => x.Add(It.Is<Vehicle>(y => y.MakeId == 1 && y.ModelId == 1 && y.BodyTypeId == 1)), Times.Once());
+            vehicles.Verify(x => x.Add(It.Is<Vehicle>(y => y.MakeId == 0 && y.ModelId == 0 && y.BodyTypeId == 0)), Times.Once());
             vehicles.VerifyAll();
             characteristics.Verify(x => x.Add(It.Is<VehicleGlassCharacteristic>(y => y.Name == "A")), Times.Once());
             characteristics.Verify(x => x.Add(It.Is<VehicleGlassCharacteristic>(y => y.Name == "B")), Times.Once());
@@ -417,12 +363,6 @@
                  OldLocalCode = oldLocalCode,
                  OldOesCode = oldOesCode
              });
-            glasses.Setup(x => x.GetGlass(euroCode, materialNumber, industryCode, localCode))
-                .Returns(new VehicleGlass
-                {
-                    Id = 1,
-                    EuroCode = euroCode
-                });
 
             // ACT
             service.FillInfo(glassesInfoList, testFile);
@@ -472,6 +412,8 @@
                                         )), Times.Once());
             glasses.VerifyAll();
             solution.VerifyAll();
+
+            logger.Verify(x => x.LogError(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
         }
 
         [TestMethod]

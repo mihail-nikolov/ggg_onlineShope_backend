@@ -73,7 +73,7 @@
             Assert.AreEqual(testId, response.Id);
             repositoryMock.VerifyAll();
             repositoryMock.Verify(x => x.Save(), Times.Exactly(1));
-            repositoryMock.Verify(x => x.GetById(testId), Times.Exactly(2));
+            repositoryMock.Verify(x => x.GetById(testId), Times.Once);
         }
 
         [TestMethod]
@@ -93,7 +93,7 @@
             Assert.AreEqual(testId, response.Id);
             repositoryMock.VerifyAll();
             repositoryMock.Verify(x => x.Save(), Times.Exactly(1));
-            repositoryMock.Verify(x => x.GetById(testId), Times.Exactly(2));
+            repositoryMock.Verify(x => x.GetById(testId), Times.Once);
         }
 
         [TestMethod]

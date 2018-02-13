@@ -291,11 +291,8 @@
                                                     List<VehicleGlassImage> images, List<VehicleGlassInterchangeablePart> interchaneableParts,
                                                     List<VehicleGlassSuperceed> superceeds, List<VehicleGlassAccessory> accessories)
         {
-            VehicleGlass newGlass = this.Mapper.Map<VehicleGlass>(glassInfoModel);
-            this.Glasses.Add(newGlass);
-
-            var glass = this.Glasses.GetGlass(newGlass.EuroCode, newGlass.MaterialNumber,
-                                              newGlass.IndustryCode, newGlass.LocalCode);
+            VehicleGlass glass = this.Mapper.Map<VehicleGlass>(glassInfoModel);
+            this.Glasses.Add(glass);
 
             // -------------- for optimization
             var uniqueCode = this.Glasses.GetCode(glass);
@@ -344,10 +341,7 @@
                     var newSuperceed = this.Mapper.Map<VehicleGlassSuperceed>(superceed);
 
                     this.Superceeds.Add(newSuperceed);
-                    var superceedToAdd = this.Superceeds.GetSuperceed(superceed.OldEuroCode,
-                                                                      superceed.OldLocalCode,
-                                                                      superceed.OldMaterialNumber);
-                    vehicleSupeceeds.Add(superceedToAdd);
+                    vehicleSupeceeds.Add(newSuperceed);
                 }
                 else
                 {
@@ -372,9 +366,7 @@
                     var newAccessory = this.Mapper.Map<VehicleGlassAccessory>(accessory);
 
                     this.Accessories.Add(newAccessory);
-
-                    var accessoryToAdd = this.Accessories.GetAccessory(accessory.IndustryCode, accessory.MaterialNumber);
-                    vehicleAccessories.Add(accessoryToAdd);
+                    vehicleAccessories.Add(newAccessory);
                 }
                 else
                 {
@@ -403,12 +395,7 @@
                     var newInterchangeablePart = this.Mapper.Map<VehicleGlassInterchangeablePart>(interchangeablePart);
 
                     this.InterchangeableParts.Add(newInterchangeablePart);
-                    var interchangeableGlassToAdd = this.InterchangeableParts.GetInterchangeablePart(interchangeablePart.EuroCode,
-                                                                                                     interchangeablePart.MaterialNumber,
-                                                                                                     interchangeablePart.LocalCode,
-                                                                                                     interchangeablePart.ScanCode,
-                                                                                                     interchangeablePart.NagsCode);
-                    vehicleInterchaneableParts.Add(interchangeableGlassToAdd);
+                    vehicleInterchaneableParts.Add(newInterchangeablePart);
                 }
                 else
                 {
@@ -494,10 +481,8 @@
             var vehicle = this.Vehicles.GetVehicleByMakeModelAndBodyTypeIds(makeId, modelId, bodyTypeId);
             if (vehicle == null)
             {
-                Vehicle newVehicle = new Vehicle() { MakeId = makeId, ModelId = modelId, BodyTypeId = bodyTypeId };
-                this.Vehicles.Add(newVehicle);
-
-                vehicle = this.Vehicles.GetVehicleByMakeModelAndBodyTypeIds(newVehicle.MakeId, newVehicle.ModelId, newVehicle.BodyTypeId);
+                vehicle = new Vehicle() { MakeId = makeId, ModelId = modelId, BodyTypeId = bodyTypeId };
+                this.Vehicles.Add(vehicle);
             }
 
             return vehicle;

@@ -24,11 +24,7 @@
         {
             StringBuilder sb = new StringBuilder();
             string allExceptionMessage = GetAllExceptionMessages(exc, sb);
-            if (exc is DbEntityValidationException)
-            {
-                var dbExc = (DbEntityValidationException)exc;
-                allExceptionMessage += GetEntityValidationErrors(dbExc);
-            }
+           
 
             Log newLog = new Log
             {
@@ -39,22 +35,6 @@
             };
 
             Add(newLog);
-
-            // TODO probably separate context for the logger, because cannot save, because of the validation errors
-        }
-
-        private string GetEntityValidationErrors(DbEntityValidationException dbEx)
-        {
-            StringBuilder sb = new StringBuilder();
-            foreach (var validationErrors in dbEx.EntityValidationErrors)
-            {
-                foreach (var validationError in validationErrors.ValidationErrors)
-                {
-                    sb.Append($"Property: {validationError.PropertyName} Error: {validationError.ErrorMessage}; ");
-                }
-            }
-
-            return sb.ToString();
         }
 
         private string GetAllExceptionMessages(Exception exc, StringBuilder sb)

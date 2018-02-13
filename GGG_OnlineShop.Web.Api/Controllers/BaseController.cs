@@ -4,6 +4,9 @@
     using Data.Services.Contracts;
     using Infrastructure;
     using System;
+    using System.Data.Entity.Validation;
+    using System.Net;
+    using System.Net.Http;
     using System.Runtime.CompilerServices;
     using System.Web.Http;
 
@@ -34,7 +37,10 @@
             }
             catch (Exception e)
             {
-                // if no connection to Db - no sense to write info to file
+                if (exc is DbEntityValidationException)
+                {
+                    throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, e.Message));
+                }
             }
         }
     }
