@@ -41,25 +41,25 @@
                 result = false;
             }
 
-            // if not enough money paid
-            if (result && (order.IsDepositNeeded && order.PaidPrice < neededPrice))
-            {
-                var user = order.User;
-                // and registered user
-                if (user != null)
-                {
-                    // deffered payment not allowed -> invalid
-                    if (!user.IsDeferredPaymentAllowed)
-                    {
-                        result = false;
-                    }
-                }
-                // not registered user => no way to have deffered payment -> invalid
-                else
-                {
-                    result = false;
-                }
-            }
+            // if not enough money paid - this will be done in frontend?
+            //if (result && (order.IsDepositNeeded && order.PaidPrice < neededPrice))
+            //{
+            //    var user = order.User;
+            //    // and registered user
+            //    if (user != null)
+            //    {
+            //        // deffered payment not allowed -> invalid
+            //        if (!user.IsDeferredPaymentAllowed)
+            //        {
+            //            result = false;
+            //        }
+            //    }
+            //    // not registered user => no way to have deffered payment -> invalid
+            //    else
+            //    {
+            //        result = false;
+            //    }
+            //}
 
             if (result && ((string.IsNullOrEmpty(order.AnonymousUserInfo) || string.IsNullOrEmpty(order.AnonymousUserЕmail))
                                                                  && order.User == null))

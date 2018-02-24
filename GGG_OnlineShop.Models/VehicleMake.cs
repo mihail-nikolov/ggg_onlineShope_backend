@@ -20,14 +20,8 @@
 
         public virtual ICollection<Vehicle> Vehicles
         {
-            get
-            {
-                return this.vehicles;
-            }
-            set
-            {
-                this.vehicles = value;
-            }
+            get => this.vehicles;
+            set => this.vehicles = value;
         }
     }
 }

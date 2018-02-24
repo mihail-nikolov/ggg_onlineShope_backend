@@ -38,12 +38,12 @@
         [Required]
         public bool IsInvoiceNeeded { get; set; }
 
-        [Required]
-        [Range(GlobalConstants.MinPrice, GlobalConstants.MaxPrice)]
-        public double PaidPrice { get; set; }
+        //[Required]
+        //[Range(GlobalConstants.MinPrice, GlobalConstants.MaxPrice)]
+        //public double PaidPrice { get; set; }
 
-        [Required]
-        public bool IsDepositNeeded { get; set; }
+        //[Required]
+        //public bool IsDepositNeeded { get; set; }
 
         [Required]
         [Range(GlobalConstants.MinPrice, GlobalConstants.MaxPrice)]

@@ -1,4 +1,6 @@
-﻿namespace GGG_OnlineShop.Web.Api.Tests
+﻿using System.Collections.Generic;
+
+namespace GGG_OnlineShop.Web.Api.Tests
 {
     using System;
     using Moq;
@@ -37,7 +39,7 @@
                 Manufacturer = "nordglass"
             };
 
-            var result = controller.Order(model);
+            var result = controller.Order(new List<OrderedItemRequestModel> { model });
 
             Assert.IsInstanceOfType(result, typeof(InternalServerErrorResult));
             mockedLogger.Verify(x => x.LogError(It.IsAny<Exception>(), "", controllerName, "Order"));
@@ -57,10 +59,10 @@
                 Status = DeliveryStatus.New,
                 FullAddress = null,
                 WithInstallation = false,
-                IsDepositNeeded = false,
+                //IsDepositNeeded = false,
                 DeliveryNotes = "DeliveryNotes",
                 Description = "Description",
-                PaidPrice = 0,
+                //PaidPrice = 0,
                 Price = 1,
                 AnonymousUserInfo = "AnonymousUserInfo",
                 AnonymousUserЕmail = "AnonymousUserЕmail",
@@ -92,7 +94,7 @@
                 AnonymousUserЕmail = "AnonymousUserЕmail",
             };
 
-            var result = controller.Order(model);
+            var result = controller.Order(new List<OrderedItemRequestModel> { model });
 
             Assert.IsInstanceOfType(result, typeof(OkResult));
             ordersMock.Verify(m => m.IsValidOrder(It.Is<OrderedItem>(x => AreObjectsEqual(x, modelToAdd))));
@@ -118,10 +120,10 @@
                 Status = DeliveryStatus.New,
                 FullAddress = "BG; SF; Liulin",
                 WithInstallation = false,
-                IsDepositNeeded = false,
+                //IsDepositNeeded = false,
                 DeliveryNotes = "DeliveryNotes",
                 Description = "Description",
-                PaidPrice = 0,
+                //PaidPrice = 0,
                 Price = 1,
                 CreatedOn = DateTime.MinValue,
                 DeletedOn = null,
@@ -155,7 +157,7 @@
                 Price = 1,
             };
 
-            var result = controller.Order(model);
+            var result = controller.Order(new List<OrderedItemRequestModel> { model });
 
             Assert.IsInstanceOfType(result, typeof(OkResult));
             ordersMock.Verify(m => m.IsValidOrder(It.Is<OrderedItem>(x => AreObjectsEqual(x, modelToAdd))));
@@ -181,10 +183,10 @@
                 Status = DeliveryStatus.New,
                 FullAddress = "AlternativeAddress",
                 WithInstallation = false,
-                IsDepositNeeded = false,
+                //IsDepositNeeded = false,
                 DeliveryNotes = "DeliveryNotes",
                 Description = "Description",
-                PaidPrice = 0,
+                //PaidPrice = 0,
                 Price = 1,
                 CreatedOn = DateTime.MinValue,
                 DeletedOn = null,
@@ -220,7 +222,7 @@
                 UseAlternativeAddress = true
             };
 
-            var result = controller.Order(model);
+            var result = controller.Order(new List<OrderedItemRequestModel> { model });
 
             Assert.IsInstanceOfType(result, typeof(OkResult));
             ordersMock.Verify(m => m.IsValidOrder(It.Is<OrderedItem>(x => AreObjectsEqual(x, modelToAdd))));
@@ -266,7 +268,7 @@
                 UseAlternativeAddress = true
             };
 
-            var result = controller.Order(model);
+            var result = controller.Order(new List<OrderedItemRequestModel> { model });
 
             Assert.IsInstanceOfType(result, typeof(OkResult));
             emailsMock.VerifyAll();
@@ -326,14 +328,14 @@
                 DeliveryNotes = deliveryNotes,
                 Description = description,
                 Price = price,
-                PaidPrice = paidPrice,
+                //PaidPrice = paidPrice,
                 UseAlternativeAddress = true,
                 IsInvoiceNeeded = isInvoiceNeeded,
                 WithInstallation = isInstallationNeeded,
                 AnonymousUserЕmail = anonymousEmail
             };
 
-            var result = controller.Order(model);
+            var result = controller.Order(new List<OrderedItemRequestModel> { model });
 
             Assert.IsInstanceOfType(result, typeof(OkResult));
             emailsMock.VerifyAll();
@@ -353,10 +355,10 @@
                 Status = DeliveryStatus.New,
                 FullAddress = null,
                 WithInstallation = false,
-                IsDepositNeeded = false,
+                //IsDepositNeeded = false,
                 DeliveryNotes = "DeliveryNotes",
                 Description = "Description",
-                PaidPrice = 0,
+                //PaidPrice = 0,
                 Price = 1,
                 AnonymousUserInfo = "AnonymousUserInfo",
                 AnonymousUserЕmail = "AnonymousUserЕmail",
@@ -386,7 +388,7 @@
                 AnonymousUserЕmail = "AnonymousUserЕmail",
             };
 
-            var result = controller.Order(model);
+            var result = controller.Order(new List<OrderedItemRequestModel> { model });
 
             Assert.IsInstanceOfType(result, typeof(BadRequestErrorMessageResult));
             string responseMessage = ((BadRequestErrorMessageResult)result).Message;

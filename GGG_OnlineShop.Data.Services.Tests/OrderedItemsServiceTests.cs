@@ -93,9 +93,9 @@
                 UserId = "test",
                 EuroCode = "test",
                 OtherCodes = "test",
-                IsDepositNeeded = true,
+                //IsDepositNeeded = true,
                 Price = 20,
-                PaidPrice = 20,
+                //PaidPrice = 20,
                 User = new User() { IsDeferredPaymentAllowed = true},
             };
 
@@ -116,9 +116,9 @@
                 UserId = "test",
                 EuroCode = "test",
                 OtherCodes = "test",
-                IsDepositNeeded = true,
+                //IsDepositNeeded = true,
                 Price = 20,
-                PaidPrice = 5,
+                //PaidPrice = 5,
                 User = new User() { IsDeferredPaymentAllowed = false },
             };
 
@@ -138,9 +138,9 @@
                 AnonymousUserЕmail = "test",
                 EuroCode = "test",
                 OtherCodes = "test",
-                IsDepositNeeded = true,
+                //IsDepositNeeded = true,
                 Price = 20,
-                PaidPrice = 5,
+                //PaidPrice = 5,
             };
 
             var service = new OrderedItemsService(null, null);
@@ -157,9 +157,9 @@
             {
                 EuroCode = "test",
                 OtherCodes = "test",
-                IsDepositNeeded = false,
+                //IsDepositNeeded = false,
                 Price = 20,
-                PaidPrice = 20
+                //PaidPrice = 20
             };
 
             var service = new OrderedItemsService(null, null);
@@ -177,9 +177,9 @@
                 AnonymousUserInfo = "test",
                 AnonymousUserЕmail = "test",
                 EuroCode = "test",
-                IsDepositNeeded = false,
+                //IsDepositNeeded = false,
                 Price = 20,
-                PaidPrice = 20,
+                //PaidPrice = 20,
             };
 
             var service = new OrderedItemsService(null, null);
@@ -197,9 +197,9 @@
                 AnonymousUserInfo = "test",
                 AnonymousUserЕmail = "test",
                 OtherCodes = "test",
-                IsDepositNeeded = false,
+                //IsDepositNeeded = false,
                 Price = 20,
-                PaidPrice = 20,
+                //PaidPrice = 20,
             };
 
             var service = new OrderedItemsService(null, null);
@@ -217,9 +217,9 @@
                 AnonymousUserInfo = "test",
                 AnonymousUserЕmail = "test",
                 OtherCodes = "test",
-                IsDepositNeeded = true,
+                //IsDepositNeeded = true,
                 Price = 20,
-                PaidPrice = 20,
+                //PaidPrice = 20,
             };
 
             var service = new OrderedItemsService(null, null);
@@ -237,9 +237,9 @@
                 UserId = "test",
                 User = new User() { IsDeferredPaymentAllowed = true, Id = "test" },
                 OtherCodes = "test",
-                IsDepositNeeded = true,
+                //IsDepositNeeded = true,
                 Price = 20,
-                PaidPrice = 4
+                //PaidPrice = 4
             };
 
             var service = new OrderedItemsService(null, null);

@@ -34,14 +34,13 @@
         [Required]
         public bool WithInstallation { get; set; }
 
-        [Required]
-        public bool IsDepositNeeded { get; set; }
+        // TODO  field for invoice
 
         [Required]
         public bool IsInvoiceNeeded { get; set; }
 
-        [Range(GlobalConstants.MinPrice, GlobalConstants.MaxPrice)]
-        public double PaidPrice { get; set; }
+        //[Range(GlobalConstants.MinPrice, GlobalConstants.MaxPrice)]
+        //public double PaidPrice { get; set; }
 
         [Required]
         [Range(GlobalConstants.MinPrice, GlobalConstants.MaxPrice)]
@@ -60,7 +59,6 @@
         public override string ToString()
         {
             string invoice = EnglishBulgarianDictionary.Namings[IsInvoiceNeeded.ToString()];
-            string deposit = EnglishBulgarianDictionary.Namings[IsDepositNeeded.ToString()];
             string installation = EnglishBulgarianDictionary.Namings[IsInvoiceNeeded.ToString()];
             string status = EnglishBulgarianDictionary.Namings[Status.ToString()];
 
@@ -73,10 +71,8 @@ EuroCode:            {EuroCode}
 Статус:              {status}
 Бележки за доставка: {DeliveryNotes}
 Необходим монтаж:    {installation}
-Необходим депозит:   {deposit}
 Необходима фактура:  {invoice}
 Цена:                {Price} лв
-Платено:             {PaidPrice} лв
 ";
             return info;
         }

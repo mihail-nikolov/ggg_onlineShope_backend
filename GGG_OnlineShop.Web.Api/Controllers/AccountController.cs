@@ -92,14 +92,7 @@
                     user.UserName = user.Email;
 
                     IdentityResult resultCreation = await UserManager.CreateAsync(user, model.Password);
-                    if (!resultCreation.Succeeded)
-                    {
-                        result = GetErrorResult(resultCreation);
-                    }
-                    else
-                    {
-                        result = this.Ok();
-                    }
+                    result = !resultCreation.Succeeded ? GetErrorResult(resultCreation) : this.Ok();
                 }
 
                 return result;
