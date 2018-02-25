@@ -290,7 +290,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
             string deliveryNotes = "DeliveryNotes";
             string description = "ALFA-ROMEO Windscreen";
             double price = 102;
-            double paidPrice = 70;
+            //double paidPrice = 70;
             DeliveryStatus status = DeliveryStatus.New;
 
             string isInstallationNeededBG = EnglishBulgarianDictionary.Namings[isInstallationNeeded.ToString()];
@@ -312,7 +312,8 @@ namespace GGG_OnlineShop.Web.Api.Tests
                                                      y.Contains(manufacturer) && y.Contains(isInvoiceNeededBG) &&
                                                      y.Contains(deliveryNotes) && y.Contains(description) &&
                                                      y.Contains(statusBG) && y.Contains(isInstallationNeededBG) &&
-                                                     y.Contains(price.ToString()) && y.Contains(paidPrice.ToString())),
+                                                     y.Contains(price.ToString())),
+                                  // TODO paidprice removed
                                   GlobalConstants.SMTPServer,
                                   GlobalConstants.EmalToSendFrom, GlobalConstants.EmalToSendFromPassword));
 

@@ -1,4 +1,7 @@
-﻿namespace GGG_OnlineShop.Web.Api.Tests
+﻿using System.Security.Claims;
+using System.Security.Principal;
+
+namespace GGG_OnlineShop.Web.Api.Tests
 {
     using Common;
     using Controllers;
@@ -434,37 +437,50 @@
             mapper.Execute();
             int testId = 1;
             string testCode = "2021AGGN";
+            string testUserId= "userId";
             VehicleGlass testProduct = new VehicleGlass() { EuroCode = testCode, OesCode = "test" };
 
             var glassesMock = new Mock<IVehicleGlassesService>();
             glassesMock.Setup(v => v.GetById(testId)).Returns(testProduct);
             glassesMock.Setup(v => v.GetCode(testProduct)).Returns(testCode);
 
-            var testUser = new User() { Bulstat = "12345" };
+            var testUser = new User() { Bulstat = "12345", Id = testUserId };
             var usersMock = new Mock<IUsersService>();
-            usersMock.Setup(v => v.GetByEmail(It.IsAny<string>())).Returns(() => testUser);
+            // TODO doubleckeck later
+            //usersMock.Setup(v => v.GetByEmail(It.IsAny<string>())).Returns(() => testUser);
 
             string nordglassGroup = "Nordglass";
             string yesglassGroup = "Yesglass";
 
             List<ProductInfoResponseModel> productQuantitiesAndPriceInfo = new List<ProductInfoResponseModel>()
             {
-                new ProductInfoResponseModel() { Group =  nordglassGroup},
+                new ProductInfoResponseModel() { Group = nordglassGroup},
                 new ProductInfoResponseModel() { Group = yesglassGroup}
             };
 
-            var productPriceAndQuantitiesMock = new Mock<IProductQuantitiesService>();
-            productPriceAndQuantitiesMock.Setup(x => x.GetPriceAndQuantitiesByCode(testCode, testUser)).Returns(productQuantitiesAndPriceInfo);
+            // moq the user
+            var claim = new Claim("test", testUserId);
+            var mockIdentity = Mock.Of<ClaimsIdentity>(ci => ci.FindFirst(It.IsAny<string>()) == claim);
 
-            var controller = new ProductsController(null, glassesMock.Object, productPriceAndQuantitiesMock.Object, usersMock.Object, null);
+            // moq identity and role
+            var mockPrincipal = new Mock<IPrincipal>();
+            mockPrincipal.Setup(x => x.Identity).Returns(mockIdentity);
+
+            var productPriceAndQuantitiesMock = new Mock<IProductQuantitiesService>();
+            productPriceAndQuantitiesMock.Setup(x => x.GetPriceAndQuantitiesByCode(testCode, It.IsAny<User>())).Returns(productQuantitiesAndPriceInfo);
+
+            var controller = new ProductsController(null, glassesMock.Object, productPriceAndQuantitiesMock.Object, usersMock.Object, null)
+            {
+                User = mockPrincipal.Object
+            };
             var result = controller.GetPriceAndQuantities(testId);
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<IEnumerable<ProductInfoResponseModel>>));
             var responseContent = ((OkNegotiatedContentResult<IEnumerable<ProductInfoResponseModel>>)result).Content;
 
-            Assert.AreEqual(responseContent.ToList().Count, 2);
-            Assert.AreEqual(responseContent.First().Group, nordglassGroup);
-            Assert.AreEqual(responseContent.Last().Group, yesglassGroup);
+            Assert.AreEqual(2, responseContent.ToList().Count);
+            Assert.AreEqual(nordglassGroup, responseContent.First().Group);
+            Assert.AreEqual(yesglassGroup, responseContent.Last().Group);
 
             glassesMock.VerifyAll();
             productPriceAndQuantitiesMock.VerifyAll();
