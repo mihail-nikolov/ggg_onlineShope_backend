@@ -14,7 +14,7 @@
 
         public VehicleGlass GetByEuroCode(string euroCode)
         {
-            var glass = this.Data.All().Where(g => g.EuroCode.ToLower() == euroCode.ToLower()).FirstOrDefault();
+            var glass = this.Data.All().FirstOrDefault(g => g.EuroCode.ToLower() == euroCode.ToLower());
             return glass;
         }
 
@@ -33,19 +33,19 @@
 
         public VehicleGlass GetByMaterialNumber(string materialNumber)
         {
-            var glass = this.Data.All().Where(g => g.MaterialNumber.ToLower() == materialNumber.ToLower()).FirstOrDefault();
+            var glass = this.Data.All().FirstOrDefault(g => g.MaterialNumber.ToLower() == materialNumber.ToLower());
             return glass;
         }
 
         public VehicleGlass GetByLocalCode(string localCode)
         {
-            var glass = this.Data.All().Where(g => g.LocalCode.ToLower() == localCode.ToLower()).FirstOrDefault();
+            var glass = this.Data.All().FirstOrDefault(g => g.LocalCode.ToLower() == localCode.ToLower());
             return glass;
         }
 
         public VehicleGlass GetByIndustryCode(string industryCode)
         {
-            var glass = this.Data.All().Where(g => g.IndustryCode.ToLower() == industryCode.ToLower()).FirstOrDefault();
+            var glass = this.Data.All().FirstOrDefault(g => g.IndustryCode.ToLower() == industryCode.ToLower());
             return glass;
         }
 

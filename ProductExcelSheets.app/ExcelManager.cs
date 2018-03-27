@@ -113,7 +113,7 @@
                                         {
                                             // match - same glass shape
                                             fileLogger.LogInfo($"Eurocode: {targetEurocodeString}", infofilePathToWrite);
-                                            
+
                                             if (IsCellEmpty(excelTargetSheet.Cells[j, liulinTargetColumn].Value)
                                                 && !IsCellEmpty(excelSourceSheet.Cells[i, liulinSourceColumn].Value))
                                             {
@@ -192,6 +192,73 @@
 
                                             fileLogger.LogInfo(targetEurocodeString, infofilePathToWrite);
                                             fileLogger.LogInfo($"   {excelTargetSheet.Cells[i, targetColumn].Value } -->", infofilePathToWrite);
+                                            fileLogger.LogInfo($"   {neededInfo}", infofilePathToWrite);
+                                            fileLogger.LogInfo("", infofilePathToWrite);
+
+                                            excelTargetSheet.Cells[i, targetColumn].Value = neededInfo;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    excelPackage.Save();
+                }
+            }
+        }
+
+        public void ReplaceGivenColumnWithSourceOne(string sourceSheet, string targetSheet, string columnToReplace, string matchColumn, bool onlyIfEmpty)
+        {
+            var fileinfo = new FileInfo(filePath);
+            if (fileinfo.Exists)
+            {
+                using (ExcelPackage excelPackage = new ExcelPackage(fileinfo))
+                {
+                    ExcelWorkbook excelWorkBook = excelPackage.Workbook;
+
+                    ExcelWorksheet excelSourceSheet = excelWorkBook.Worksheets.Where(s => s.Name == sourceSheet).FirstOrDefault();
+                    var matchSourceColumn = excelSourceSheet.Cells["1:1"].First(c => c.Value.ToString() == matchColumn).Start.Column;
+                    var sourceColumn = excelSourceSheet.Cells["1:1"].First(c => c.Value.ToString() == columnToReplace).Start.Column;
+
+                    ExcelWorksheet excelTargetSheet = excelWorkBook.Worksheets.Where(s => s.Name == targetSheet).FirstOrDefault();
+                    var matchTargetColumn = excelTargetSheet.Cells["1:1"].First(c => c.Value.ToString() == matchColumn).Start.Column;
+                    var targetColumn = excelTargetSheet.Cells["1:1"].First(c => c.Value.ToString() == columnToReplace).Start.Column;
+
+                    int targetRangeMaxRows = excelTargetSheet.Dimension.End.Row;
+                    int sourceRangeMaxRows = excelSourceSheet.Dimension.End.Row;
+                    fileLogger.LogInfo($"-------------------------- {columnToReplace.ToUpper()} REPLACEMENT: {targetSheet} --------------------------", infofilePathToWrite);
+
+                    for (int i = 2; i <= targetRangeMaxRows; i++)
+                    {
+                        var targetColumnValue = excelTargetSheet.Cells[i, targetColumn].Value;
+
+                        if (onlyIfEmpty && (targetColumnValue != null || !string.IsNullOrEmpty(targetColumnValue?.ToString())))
+                        {
+                            continue;
+                        }
+
+                        if (!IsCellEmpty(excelTargetSheet.Cells[i, matchTargetColumn].Value))
+                        {
+                            string targetMatchColumnString = excelTargetSheet.Cells[i, matchTargetColumn].Value.ToString();
+
+                            excelTargetSheet.Cells[i, matchTargetColumn].Value = targetMatchColumnString;
+
+                            for (int j = 2; j <= sourceRangeMaxRows; j++)
+                            {
+                                if (!IsCellEmpty(excelSourceSheet.Cells[j, matchSourceColumn].Value))
+                                {
+                                    string sourceMatchString = excelSourceSheet.Cells[j, matchSourceColumn].Value.ToString();
+                                    if (targetMatchColumnString == sourceMatchString)
+                                    {
+                                        // match - same glass
+                                        if (!IsCellEmpty(excelSourceSheet.Cells[j, sourceColumn].Value))
+                                        {
+                                            string neededInfo = excelSourceSheet.Cells[j, sourceColumn].Value.ToString();
+
+                                            fileLogger.LogInfo(targetMatchColumnString, infofilePathToWrite);
+                                            fileLogger.LogInfo($"   {targetColumnValue} -->", infofilePathToWrite);
                                             fileLogger.LogInfo($"   {neededInfo}", infofilePathToWrite);
                                             fileLogger.LogInfo("", infofilePathToWrite);
 

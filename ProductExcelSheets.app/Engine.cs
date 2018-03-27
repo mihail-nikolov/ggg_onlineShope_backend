@@ -24,7 +24,7 @@
 
         public ILogger FileLogger { get; set; }
 
-        public IReader ConsoleReader{ get; set; }
+        public IReader ConsoleReader { get; set; }
 
         public IExcelManager ExcelManager { get; set; }
 
@@ -48,6 +48,9 @@
                         case 4: AddInterchangeables(); break;
                         case 5: AddOESCode(); break;
                         case 6: AddAndAdaptPlaces(); break;
+                        case 7:
+                            ReplaceGivenColumnWithSourceOneByGivenColumnMatch(); break;
+
                         default: Help(); break;
                     }
                     ConsoleWriter.LogInfo("Enter command number:");
@@ -58,7 +61,7 @@
         public void ReplaceDescription()
         {
             string baseSheetName = "";
-            string[] targetSheets = new string[] { };
+            string[] targetSheets = { };
             try
             {
                 ConsoleWriter.LogInfo("Enter baseSheet name. Should be 1 word, no spaces");
@@ -179,7 +182,7 @@
         {
             ConsoleWriter.LogInfo("Enter baseSheet(source) name. Should be 1 word, no spaces");
             string baseSheetName = "";
-            string[] targetSheets = new string[] { };
+            string[] targetSheets = { };
             try
             {
                 baseSheetName = ConsoleReader.Read();
@@ -206,12 +209,52 @@
             }
         }
 
+        public void ReplaceGivenColumnWithSourceOneByGivenColumnMatch()
+        {
+
+            string baseSheetName = "";
+            string matchColumn = "";
+            string columnToReplace = "";
+            string[] targetSheets = { };
+            try
+            {
+                ConsoleWriter.LogInfo("Enter baseSheet(source) name. Should be 1 word, no spaces");
+                baseSheetName = ConsoleReader.Read();
+
+                ConsoleWriter.LogInfo("Enter matchColumn(column on which will look for match) name. Should be 1 word, no spaces");
+                matchColumn = ConsoleReader.Read();
+
+                ConsoleWriter.LogInfo("Enter columnToReplace name. Should be 1 word, no spaces");
+                columnToReplace = ConsoleReader.Read();
+
+                ConsoleWriter.LogInfo($"Enter sheets you want to replace {columnToReplace} column with baseSheet's one; names separated by spaces. No empty spaces in sheet names!");
+                targetSheets = ConsoleReader.Read().Split(' ');
+            }
+            catch (Exception)
+            {
+                ConsoleWriter.LogError("input not entered correctly");
+            }
+
+            foreach (var targetSheetName in targetSheets)
+            {
+                try
+                {
+                    ExcelManager.ReplaceGivenColumnWithSourceOne(baseSheetName, targetSheetName, columnToReplace, matchColumn, true);
+                }
+                catch (Exception e)
+                {
+                    FileLogger.LogError($"-------------------------- {columnToReplace} replace: {targetSheetName} --------------------------", errorsfilePathToWrite);
+                    FileLogger.LogError(e.Message, errorsfilePathToWrite);
+                }
+            }
+        }
+
         public void AddAndAdaptPlaces()
         {
             ConsoleWriter.LogInfo("Enter quantitiesSheet name. Should be 1 word, no spaces");
             string quantitiesSheetName = "";
             string interchangeablesSheet = "";
-            string[] sheetsToAddQuantities = new string[] { };
+            string[] sheetsToAddQuantities = { };
             try
             {
                 quantitiesSheetName = ConsoleReader.Read();
@@ -251,6 +294,7 @@
 4.Add interchangeable parts
 5.Add OESCode
 6.Adapt products place
+7.ReplaceGivenColumnWithSourceOneByGivenColumnMatch
 ";
             ConsoleWriter.LogInfo(info);
         }
