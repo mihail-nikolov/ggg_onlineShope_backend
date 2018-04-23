@@ -38,9 +38,9 @@
             VehicleGlassResponseModel glass = null;
             if (!string.IsNullOrEmpty(eurocode))
             {
-                 glass = this.Mapper.Map<VehicleGlassResponseModel>(this._glasses.GetByEuroCode(eurocode));
+                glass = this.Mapper.Map<VehicleGlassResponseModel>(this._glasses.GetByEuroCode(eurocode));
             }
-             
+
             if (glass == null && !string.IsNullOrEmpty(materialNumber))
             {
                 glass = this.Mapper.Map<VehicleGlassResponseModel>(this._glasses.GetByMaterialNumber(materialNumber));
@@ -131,8 +131,8 @@
             }
             catch (Exception e)
             {
-               HandlExceptionLogging(e, "", _controllerName);
-               return InternalServerError(); 
+                HandlExceptionLogging(e, "", _controllerName);
+                return InternalServerError();
             }
         }
 
@@ -157,8 +157,8 @@
             }
             catch (Exception e)
             {
-               HandlExceptionLogging(e, "", _controllerName);
-               return InternalServerError(); 
+                HandlExceptionLogging(e, "", _controllerName);
+                return InternalServerError();
             }
         }
 
@@ -178,8 +178,8 @@
             }
             catch (Exception e)
             {
-               HandlExceptionLogging(e, "", _controllerName);
-               return InternalServerError(); 
+                HandlExceptionLogging(e, "", _controllerName);
+                return InternalServerError();
             }
         }
 
@@ -200,26 +200,35 @@
             }
             catch (Exception e)
             {
-               HandlExceptionLogging(e, "", _controllerName);
-               return InternalServerError(); 
+                HandlExceptionLogging(e, "", _controllerName);
+                return InternalServerError();
             }
         }
 
         private IQueryable<VehicleGlassShortResponseModel> FindGlassesByVehicleInfo(VehicleGlassRequestModel requestModel)
         {
             var vehicle = this._vehicles.GetVehicleByMakeModelAndBodyTypeIds(requestModel.MakeId, requestModel.ModelId, requestModel.BodyTypeId);
-            IQueryable<VehicleGlassShortResponseModel> glasses;
+            IQueryable<VehicleGlassShortResponseModel> glasses = new List<VehicleGlassShortResponseModel>().AsQueryable();
 
             if (!string.IsNullOrEmpty(requestModel.ProductType))
             {
-                glasses = this._vehicles.GetApplicableGLassesByProductType(vehicle, requestModel.ProductType)
-                                                                         .To<VehicleGlassShortResponseModel>()
-                                                                         .OrderBy(x => x.Description);
+                var applicableGlasses =
+                    this._vehicles.GetApplicableGLassesByProductType(vehicle, requestModel.ProductType);
+
+                if (applicableGlasses != null)
+                {
+                    glasses = applicableGlasses?.To<VehicleGlassShortResponseModel>().OrderBy(x => x.Description);
+                }
             }
             else
             {
-                glasses = this._vehicles.GetApplicableGLasses(vehicle).To<VehicleGlassShortResponseModel>()
-                                                                     .OrderBy(x => x.Description);
+                var applicableGlasses =
+                    this._vehicles.GetApplicableGLassesByProductType(vehicle, requestModel.ProductType);
+
+                if (applicableGlasses != null)
+                {
+                    glasses = applicableGlasses?.To<VehicleGlassShortResponseModel>().OrderBy(x => x.Description);
+                }
             }
 
             return glasses;

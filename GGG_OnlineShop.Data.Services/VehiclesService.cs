@@ -29,10 +29,9 @@
 
         public Vehicle GetVehicleByMakeModelAndBodyTypeIds(int makeId, int? modelId, int? bodyTypeId)
         {
-            var vehicle = this.Data.All().Where(v =>
-                                              ((v.MakeId == makeId) &&
+            var vehicle = this.Data.All().FirstOrDefault(v => ((v.MakeId == makeId) &&
                                                (v.ModelId == modelId) &&
-                                               (v.BodyTypeId == bodyTypeId))).FirstOrDefault();
+                                               (v.BodyTypeId == bodyTypeId)));
             return vehicle;
         }
 
@@ -50,13 +49,13 @@
 
         public IQueryable<VehicleGlass> GetApplicableGLasses(Vehicle vehicle)
         {
-            var glasses = vehicle.VehicleGlasses.AsQueryable();
+            var glasses = vehicle?.VehicleGlasses.AsQueryable();
             return glasses;
         }
 
         public IQueryable<VehicleGlass> GetApplicableGLassesByProductType(Vehicle vehicle, string productType)
         {
-            var glasses = vehicle.VehicleGlasses.AsQueryable().Where(g => g.ProductType == productType);
+            var glasses = vehicle?.VehicleGlasses.AsQueryable().Where(g => g.ProductType == productType);
             return glasses;
         }
     }
