@@ -39,6 +39,7 @@
 4.Add interchangeable parts
 5.Add OESCode
 6.Adapt products place
+7.ReplaceGivenColumnWithSourceOneByGivenColumnMatch
 ";
             mockedConsoleWriter.Verify(x => x.LogInfo(info, ""), Times.Exactly(2));
         }

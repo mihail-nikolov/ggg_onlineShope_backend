@@ -553,6 +553,39 @@ namespace GGG_OnlineShop.Web.Api.Tests
             Assert.AreEqual(responseContent[2].Id, 3);
 
             vehiclesMock.VerifyAll();
+            vehiclesMock.Verify(x => x.GetApplicableGLasses(It.IsAny<Vehicle>()), Times.Never);
+        }
+
+        public void FindByVehicleInfo_ShouldReturnCorrectProducts_WhenProductTypeEmpty()
+        {
+            mapper.Execute();
+
+            VehicleGlassRequestModel request = new VehicleGlassRequestModel() { MakeId = 1 };
+            Vehicle vehicle = new Vehicle() { MakeId = 1 };
+            var glasses = new List<VehicleGlass>()
+            {
+                new VehicleGlass() {Id = 1 },
+                new VehicleGlass() {Id = 2 },
+                new VehicleGlass() {Id = 3 }
+            }.AsQueryable();
+
+            var vehiclesMock = new Mock<IVehiclesService>();
+            vehiclesMock.Setup(x => x.GetVehicleByMakeModelAndBodyTypeIds(request.MakeId, null, null)).Returns(vehicle);
+            vehiclesMock.Setup(x => x.GetApplicableGLasses(vehicle)).Returns(glasses);
+
+            var controller = new ProductsController(vehiclesMock.Object, null, null, null, null);
+            var result = controller.FindByVehicleInfo(request);
+
+            Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<List<VehicleGlassShortResponseModel>>));
+            var responseContent = ((OkNegotiatedContentResult<List<VehicleGlassShortResponseModel>>)result).Content;
+
+            Assert.AreEqual(responseContent.ToList().Count, 3);
+            Assert.AreEqual(responseContent[0].Id, 1);
+            Assert.AreEqual(responseContent[1].Id, 2);
+            Assert.AreEqual(responseContent[2].Id, 3);
+
+            vehiclesMock.VerifyAll();
+            vehiclesMock.Verify(x => x.GetApplicableGLassesByProductType(It.IsAny<Vehicle>(), It.IsAny<string>()), Times.Never);
         }
     }
 }

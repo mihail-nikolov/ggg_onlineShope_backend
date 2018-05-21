@@ -223,7 +223,7 @@
             else
             {
                 var applicableGlasses =
-                    this._vehicles.GetApplicableGLassesByProductType(vehicle, requestModel.ProductType);
+                    this._vehicles.GetApplicableGLasses(vehicle);
 
                 if (applicableGlasses != null)
                 {
