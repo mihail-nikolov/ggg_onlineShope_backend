@@ -31,99 +31,100 @@
         }
 
         [HttpGet]
-        [Route("GetItemByFullCode")]
-        public IHttpActionResult GetItemByFullCode(string eurocode = "", string materialNumber = "", string industryCode = "", string localCode = "")
-        {
-            IHttpActionResult result = null;
-            VehicleGlassResponseModel glass = null;
-            if (!string.IsNullOrEmpty(eurocode))
-            {
-                glass = this.Mapper.Map<VehicleGlassResponseModel>(this._glasses.GetByEuroCode(eurocode));
-            }
-
-            if (glass == null && !string.IsNullOrEmpty(materialNumber))
-            {
-                glass = this.Mapper.Map<VehicleGlassResponseModel>(this._glasses.GetByMaterialNumber(materialNumber));
-            }
-
-            if (glass == null && !string.IsNullOrEmpty(industryCode))
-            {
-                glass = this.Mapper.Map<VehicleGlassResponseModel>(this._glasses.GetByIndustryCode(industryCode));
-            }
-
-            if (glass == null && !string.IsNullOrEmpty(localCode))
-            {
-                glass = this.Mapper.Map<VehicleGlassResponseModel>(this._glasses.GetByLocalCode(localCode));
-            }
-
-            result = Ok(glass);
-
-            if (glass == null)
-            {
-                result = BadRequest("No code passed");
-            }
-
-            return result;
-        }
-
-        [HttpGet]
-        public IHttpActionResult Get(int? id, string eurocode = "", string oescode = "", string code = "")
+        [Route("GetDetailedInfo")]
+        public IHttpActionResult GetDetailedInfo(int? id, string eurocode = "", string materialNumber = "", string industryCode = "", string localCode = "")
         {
             try
             {
-                IHttpActionResult result;
-                if (id == null && string.IsNullOrEmpty(eurocode) && string.IsNullOrEmpty(oescode) && string.IsNullOrEmpty(code))
+                if (id == null && string.IsNullOrWhiteSpace(eurocode) && string.IsNullOrWhiteSpace(materialNumber) &&
+                    string.IsNullOrWhiteSpace(industryCode) && string.IsNullOrWhiteSpace(localCode))
                 {
-                    result = this.BadRequest(GlobalConstants.NeededCodesErrorMessage);
+                    return BadRequest("No code passed");
                 }
-                else
+
+                VehicleGlassResponseModel glass = null;
+                if (id != null)
                 {
-                    if (id != null)
+                    glass = this.Mapper.Map<VehicleGlassResponseModel>(this._glasses.GetById(id));
+                }
+
+                if (!string.IsNullOrEmpty(eurocode))
+                {
+                    glass = this.Mapper.Map<VehicleGlassResponseModel>(this._glasses.GetByEuroCode(eurocode));
+                }
+
+                if (glass == null && !string.IsNullOrEmpty(materialNumber))
+                {
+                    glass = this.Mapper.Map<VehicleGlassResponseModel>(
+                        this._glasses.GetByMaterialNumber(materialNumber));
+                }
+
+                if (glass == null && !string.IsNullOrEmpty(industryCode))
+                {
+                    glass = this.Mapper.Map<VehicleGlassResponseModel>(this._glasses.GetByIndustryCode(industryCode));
+                }
+
+                if (glass == null && !string.IsNullOrEmpty(localCode))
+                {
+                    glass = this.Mapper.Map<VehicleGlassResponseModel>(this._glasses.GetByLocalCode(localCode));
+                }
+
+                return Ok(glass);
+            }
+            catch (Exception e)
+            {
+                HandlExceptionLogging(e, "", _controllerName);
+                return InternalServerError();
+            }
+        }
+
+        [HttpGet]
+        public IHttpActionResult Get(string eurocode = "", string oescode = "", string code = "")
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(eurocode) && string.IsNullOrWhiteSpace(oescode) && string.IsNullOrWhiteSpace(code))
+                {
+                    return BadRequest(GlobalConstants.NeededCodesErrorMessage);
+                }
+
+                IHttpActionResult result;
+
+                if (!string.IsNullOrEmpty(eurocode))
+                {
+                    if (eurocode.Length < GlobalConstants.CodeMinLength)
                     {
-                        var glass = this.Mapper.Map<VehicleGlassResponseModel>(this._glasses.GetById(id));
-                        return this.Ok(glass);
+                        result = this.BadRequest(GlobalConstants.CodeMinLengthErrorMessage);
                     }
                     else
                     {
-                        List<VehicleGlassShortResponseModel> glassesList;
-
-                        if (!string.IsNullOrEmpty(eurocode))
-                        {
-                            if (eurocode.Length < GlobalConstants.CodeMinLength)
-                            {
-                                result = this.BadRequest(GlobalConstants.CodeMinLengthErrorMessage);
-                            }
-                            else
-                            {
-                                glassesList = this._glasses.GetGlassesByEuroCode(eurocode).To<VehicleGlassShortResponseModel>().ToList();
-                                result = this.Ok(glassesList);
-                            }
-                        }
-                        else if (!string.IsNullOrEmpty(oescode))
-                        {
-                            if (oescode.Length < GlobalConstants.CodeMinLength)
-                            {
-                                result = this.BadRequest(GlobalConstants.CodeMinLengthErrorMessage);
-                            }
-                            else
-                            {
-                                glassesList = this._glasses.GetByOesCode(oescode).To<VehicleGlassShortResponseModel>().ToList();
-                                result = this.Ok(glassesList);
-                            }
-                        }
-                        else
-                        {
-                            if (code.Length < GlobalConstants.CodeMinLength)
-                            {
-                                result = this.BadRequest(GlobalConstants.CodeMinLengthErrorMessage);
-                            }
-                            else
-                            {
-                                glassesList = this._glasses.GetByRandomCode(code).To<VehicleGlassShortResponseModel>()
-                                                                                       .ToList();
-                                result = this.Ok(glassesList);
-                            }
-                        }
+                        List<VehicleGlassShortResponseModel> glassesList = this._glasses.GetGlassesByEuroCode(eurocode).To<VehicleGlassShortResponseModel>().ToList();
+                        result = this.Ok(glassesList);
+                    }
+                }
+                else if (!string.IsNullOrEmpty(oescode))
+                {
+                    if (oescode.Length < GlobalConstants.CodeMinLength)
+                    {
+                        result = this.BadRequest(GlobalConstants.CodeMinLengthErrorMessage);
+                    }
+                    else
+                    {
+                        List<VehicleGlassShortResponseModel> glassesList = this._glasses.GetByOesCode(oescode).To<VehicleGlassShortResponseModel>().ToList();
+                        result = this.Ok(glassesList);
+                    }
+                }
+                else
+                {
+                    if (code.Length < GlobalConstants.CodeMinLength)
+                    {
+                        result = this.BadRequest(GlobalConstants.CodeMinLengthErrorMessage);
+                    }
+                    else
+                    {
+                        List<VehicleGlassShortResponseModel> glassesList = this._glasses.GetByRandomCode(code).To<VehicleGlassShortResponseModel>()
+                                                                               .ToList();
+                        result = this.Ok(glassesList);
                     }
                 }
 

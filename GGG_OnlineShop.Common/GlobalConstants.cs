@@ -74,7 +74,7 @@
         public const int MakeNameMinLength = 1;
         public const int ModelNameMaxLength = 100;
         public const int ModelNameMinLength = 1;
-        public const string NeededCodesErrorMessage = "At least one of (glassId, eurocode, oescode, code) should be passed";
+        public const string NeededCodesErrorMessage = "No argument passed";
 
         public const string CodeMinLengthErrorMessage = "Enter at least 4 symbols";
         public const int CodeMinLength = 4;

@@ -31,10 +31,10 @@ namespace GGG_OnlineShop.Web.Api.Tests
         [TestMethod]
         public void Get_ShouldReturnInternalServerErrorAndLogError_WhenVehicleGlassesServiceIsNull()
         {
-           
+
             var controller = new ProductsController(null, null, null, null, mockedLogger.Object);
 
-            var result = controller.Get(2);
+            var result = controller.Get("1234");
 
             Assert.IsInstanceOfType(result, typeof(InternalServerErrorResult));
             mockedLogger.Verify(x => x.LogError(It.IsAny<Exception>(), "", controllerName, "Get"));
@@ -119,7 +119,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
             string testEurocode = "445";
             var controller = new ProductsController(null, null, null, null, null);
 
-            var result = controller.Get(null, null, null, testEurocode);
+            var result = controller.Get(null, null, testEurocode);
 
             Assert.IsInstanceOfType(result, typeof(BadRequestErrorMessageResult));
             var responseContent = ((BadRequestErrorMessageResult)result).Message;
@@ -128,7 +128,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
         }
 
         [TestMethod]
-        public void Get_ShouldReturnGlass_WhenIdPassed()
+        public void GetDetailedInfo_ShouldReturnGlass_WhenIdPassed()
         {
             mapper.Execute();
 
@@ -153,7 +153,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
             glassesMock.Setup(v => v.GetById(1)).Returns(() => glass);
 
             var controller = new ProductsController(null, glassesMock.Object, null, null, null);
-            var result = controller.Get(1);
+            var result = controller.GetDetailedInfo(1);
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<VehicleGlassResponseModel>));
             var responseContent = ((OkNegotiatedContentResult<VehicleGlassResponseModel>)result).Content;
@@ -166,7 +166,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
         }
 
         [TestMethod]
-        public void Get_ShouldReturnGlassAndMapInterchangeablePartCorrectly()
+        public void GetDetailedInfo_ShouldReturnGlassAndMapInterchangeablePartCorrectly()
         {
             mapper.Execute();
 
@@ -191,7 +191,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
             glassesMock.Setup(v => v.GetById(1)).Returns(() => glass);
 
             var controller = new ProductsController(null, glassesMock.Object, null, null, null);
-            var result = controller.Get(1);
+            var result = controller.GetDetailedInfo(1);
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<VehicleGlassResponseModel>));
             var responseContent = ((OkNegotiatedContentResult<VehicleGlassResponseModel>)result).Content;
@@ -217,7 +217,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
             glassesMock.Setup(v => v.GetGlassesByEuroCode(testEurocode)).Returns(() => glassesList);
 
             var controller = new ProductsController(null, glassesMock.Object, null, null, null);
-            var result = controller.Get(null, testEurocode);
+            var result = controller.Get(testEurocode);
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<List<VehicleGlassShortResponseModel>>));
             var responseContent = ((OkNegotiatedContentResult<List<VehicleGlassShortResponseModel>>)result).Content;
@@ -245,7 +245,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
             glassesMock.Setup(v => v.GetByOesCode(testOesCode)).Returns(() => glassesList);
 
             var controller = new ProductsController(null, glassesMock.Object, null, null, null);
-            var result = controller.Get(null, null, testOesCode);
+            var result = controller.Get(null, testOesCode);
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<List<VehicleGlassShortResponseModel>>));
             var responseContent = ((OkNegotiatedContentResult<List<VehicleGlassShortResponseModel>>)result).Content;
@@ -272,7 +272,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
             glassesMock.Setup(v => v.GetByRandomCode(testCode)).Returns(() => glassesList);
 
             var controller = new ProductsController(null, glassesMock.Object, null, null, null);
-            var result = controller.Get(null, null, null, testCode);
+            var result = controller.Get(null, null, testCode);
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<List<VehicleGlassShortResponseModel>>));
             var responseContent = ((OkNegotiatedContentResult<List<VehicleGlassShortResponseModel>>)result).Content;
@@ -285,7 +285,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
         }
 
         [TestMethod]
-        public void GetItemByFullCode_ShouldReturnGlass_WhenEurocodePassed()
+        public void GetDetailedInfo_ShouldReturnGlass_WhenEurocodePassed()
         {
             mapper.Execute();
 
@@ -296,7 +296,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
             glassesMock.Setup(v => v.GetByEuroCode(testCode)).Returns(() => glass);
 
             var controller = new ProductsController(null, glassesMock.Object, null, null, null);
-            var result = controller.GetItemByFullCode(testCode);
+            var result = controller.GetDetailedInfo(null, testCode);
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<VehicleGlassResponseModel>));
             var responseContent = ((OkNegotiatedContentResult<VehicleGlassResponseModel>)result).Content;
@@ -309,7 +309,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
         }
 
         [TestMethod]
-        public void GetItemByFullCode_ShouldReturnGlass_WhenMaterialNumberPassed()
+        public void GetDetailedInfo_ShouldReturnGlass_WhenMaterialNumberPassed()
         {
             mapper.Execute();
 
@@ -320,7 +320,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
             glassesMock.Setup(v => v.GetByMaterialNumber(testCode)).Returns(() => glass);
 
             var controller = new ProductsController(null, glassesMock.Object, null, null, null);
-            var result = controller.GetItemByFullCode(null, testCode);
+            var result = controller.GetDetailedInfo(null, "", testCode);
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<VehicleGlassResponseModel>));
             var responseContent = ((OkNegotiatedContentResult<VehicleGlassResponseModel>)result).Content;
@@ -333,7 +333,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
         }
 
         [TestMethod]
-        public void GetItemByFullCode_ShouldReturnGlass_WhenLocalCodePassed()
+        public void GetDetailedInfo_ShouldReturnGlass_WhenLocalCodePassed()
         {
             mapper.Execute();
 
@@ -345,7 +345,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
             glassesMock.Setup(v => v.GetByLocalCode(testCode)).Returns(() => glass);
 
             var controller = new ProductsController(null, glassesMock.Object, null, null, null);
-            var result = controller.GetItemByFullCode(null, null, null, testCode);
+            var result = controller.GetDetailedInfo(null, null, null, null, testCode);
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<VehicleGlassResponseModel>));
             var responseContent = ((OkNegotiatedContentResult<VehicleGlassResponseModel>)result).Content;
@@ -357,9 +357,33 @@ namespace GGG_OnlineShop.Web.Api.Tests
             glassesMock.Verify(x => x.GetByMaterialNumber(It.IsAny<string>()), Times.Exactly(0));
         }
 
+        [TestMethod]
+        public void GetDetailedInfo_ShouldReturnGlass_WhenIndustrycodePassed()
+        {
+            mapper.Execute();
+
+            var glassesMock = new Mock<IVehicleGlassesService>();
+
+            var glass = new VehicleGlass() { Id = 2 };
+            string testCode = "testCode";
+
+            glassesMock.Setup(v => v.GetByIndustryCode(testCode)).Returns(() => glass);
+
+            var controller = new ProductsController(null, glassesMock.Object, null, null, null);
+            var result = controller.GetDetailedInfo(null, null, null, testCode);
+
+            Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<VehicleGlassResponseModel>));
+            var responseContent = ((OkNegotiatedContentResult<VehicleGlassResponseModel>)result).Content;
+
+            Assert.AreEqual(responseContent.Id, 2);
+            glassesMock.VerifyAll();
+            glassesMock.Verify(x => x.GetByLocalCode(It.IsAny<string>()), Times.Exactly(0));
+            glassesMock.Verify(x => x.GetByEuroCode(It.IsAny<string>()), Times.Exactly(0));
+            glassesMock.Verify(x => x.GetByMaterialNumber(It.IsAny<string>()), Times.Exactly(0));
+        }
 
         [TestMethod]
-        public void GetItemByFullCode_ShouldReturnGlassByLocalCode_WhenByEuroCodeNotFoundAndLocalCodePassed()
+        public void GetDetailedInfo_ShouldReturnGlassByLocalCode_WhenByEuroCodeNotFoundAndLocalCodePassed()
         {
             mapper.Execute();
 
@@ -367,13 +391,13 @@ namespace GGG_OnlineShop.Web.Api.Tests
 
             string testCode = "testCode";
             string testLocalCode = "testLocalCode";
-            var glass = new VehicleGlass() { Id = 2, LocalCode = testLocalCode};
+            var glass = new VehicleGlass() { Id = 2, LocalCode = testLocalCode };
 
             glassesMock.Setup(v => v.GetByEuroCode(testCode)).Returns(() => null);
             glassesMock.Setup(v => v.GetByLocalCode(testLocalCode)).Returns(() => glass);
 
             var controller = new ProductsController(null, glassesMock.Object, null, null, null);
-            var result = controller.GetItemByFullCode(testCode, null, null, testLocalCode);
+            var result = controller.GetDetailedInfo(null, testCode, null, null, testLocalCode);
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<VehicleGlassResponseModel>));
             var responseContent = ((OkNegotiatedContentResult<VehicleGlassResponseModel>)result).Content;
@@ -386,14 +410,14 @@ namespace GGG_OnlineShop.Web.Api.Tests
         }
 
         [TestMethod]
-        public void GetItemByFullCode_ShouldReturnBadRequest_WhenNoCodeSend()
+        public void GetDetailedInfo_ShouldReturnBadRequest_WhenNoCodeSend()
         {
             mapper.Execute();
 
             var glassesMock = new Mock<IVehicleGlassesService>();
 
             var controller = new ProductsController(null, glassesMock.Object, null, null, null);
-            var result = controller.GetItemByFullCode();
+            var result = controller.GetDetailedInfo(null);
 
             Assert.IsInstanceOfType(result, typeof(BadRequestErrorMessageResult));
             var responseContent = ((BadRequestErrorMessageResult)result).Message;
@@ -407,37 +431,12 @@ namespace GGG_OnlineShop.Web.Api.Tests
         }
 
         [TestMethod]
-        public void GetItemByFullCode_ShouldReturnGlass_WhenIndustrycodePassed()
-        {
-            mapper.Execute();
-
-            var glassesMock = new Mock<IVehicleGlassesService>();
-
-            var glass = new VehicleGlass() { Id = 2 };
-            string testCode = "testCode";
-
-            glassesMock.Setup(v => v.GetByIndustryCode(testCode)).Returns(() => glass);
-
-            var controller = new ProductsController(null, glassesMock.Object, null, null, null);
-            var result = controller.GetItemByFullCode(null, null, testCode);
-
-            Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<VehicleGlassResponseModel>));
-            var responseContent = ((OkNegotiatedContentResult<VehicleGlassResponseModel>)result).Content;
-
-            Assert.AreEqual(responseContent.Id, 2);
-            glassesMock.VerifyAll();
-            glassesMock.Verify(x => x.GetByLocalCode(It.IsAny<string>()), Times.Exactly(0));
-            glassesMock.Verify(x => x.GetByEuroCode(It.IsAny<string>()), Times.Exactly(0));
-            glassesMock.Verify(x => x.GetByMaterialNumber(It.IsAny<string>()), Times.Exactly(0));
-        }
-
-        [TestMethod]
         public void GetPriceAndQuantities_ShouldReturnProductsQuantitiesAndPriceInfo_WhenIdPassed()
         {
             mapper.Execute();
             int testId = 1;
             string testCode = "2021AGGN";
-            string testUserId= "userId";
+            string testUserId = "userId";
             VehicleGlass testProduct = new VehicleGlass() { EuroCode = testCode, OesCode = "test" };
 
             var glassesMock = new Mock<IVehicleGlassesService>();
