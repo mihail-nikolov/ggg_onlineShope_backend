@@ -20,6 +20,8 @@
 
         VehicleGlass GetGlass(string euroCode, string materialNumber, string industryCode, string localCode);
 
+        void CreateGlassesPostions();
+
         IQueryable<VehicleGlassAccessory> GetAccessories(int glassId);
 
         IQueryable<VehicleGlass> GetByRandomCode(string code);

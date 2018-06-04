@@ -45,6 +45,8 @@
 
         public string ProductType { get; set; }
 
+        public string Position { get; set; }
+
         [StringLength(GlobalConstants.ModificationMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
         public string Modification { get; set; }
 
@@ -65,50 +67,26 @@
 
         public virtual ICollection<VehicleGlassCharacteristic> VehicleGlassCharacteristics
         {
-            get
-            {
-                return this.vehicleGlassCharacteristics;
-            }
-            set
-            {
-                this.vehicleGlassCharacteristics = value;
-            }
+            get => vehicleGlassCharacteristics;
+            set => vehicleGlassCharacteristics = value;
         }
 
         public virtual ICollection<VehicleGlassAccessory> VehicleGlassAccessories
         {
-            get
-            {
-                return this.vehicleGlassAccessories;
-            }
-            set
-            {
-                this.vehicleGlassAccessories = value;
-            }
+            get => vehicleGlassAccessories;
+            set => vehicleGlassAccessories = value;
         }
 
         public virtual ICollection<VehicleGlassSuperceed> VehicleGlassSuperceeds
         {
-            get
-            {
-                return this.vehicleGlassSuperceed;
-            }
-            set
-            {
-                this.vehicleGlassSuperceed = value;
-            }
+            get => vehicleGlassSuperceed;
+            set => vehicleGlassSuperceed = value;
         }
 
         public virtual ICollection<VehicleGlassImage> VehicleGlassImages
         {
-            get
-            {
-                return this.vehicleGlassImages;
-            }
-            set
-            {
-                this.vehicleGlassImages = value;
-            }
+            get => vehicleGlassImages;
+            set => vehicleGlassImages = value;
         }
 
         public bool HasFittingMethod { get; set; }
@@ -131,26 +109,14 @@
 
         public virtual ICollection<VehicleGlassInterchangeablePart> VehicleGlassInterchangeableParts
         {
-            get
-            {
-                return this.vehicleGlassInterchangeableParts;
-            }
-            set
-            {
-                this.vehicleGlassInterchangeableParts = value;
-            }
+            get => vehicleGlassInterchangeableParts;
+            set => vehicleGlassInterchangeableParts = value;
         }
 
         public virtual ICollection<Vehicle> Vehicles
         {
-            get
-            {
-                return this.vehicles;
-            }
-            set
-            {
-                this.vehicles = value;
-            }
+            get => vehicles;
+            set => vehicles = value;
         }
     }
 }

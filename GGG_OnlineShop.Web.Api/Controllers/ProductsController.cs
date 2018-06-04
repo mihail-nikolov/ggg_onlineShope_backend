@@ -79,6 +79,23 @@
         }
 
         [HttpGet]
+        [Route("GenerateGlassesPositions")]
+        public IHttpActionResult GenerateGlassesPositions()
+        {
+            try
+            {
+                this._glasses.CreateGlassesPostions();
+
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                HandlExceptionLogging(e, "", _controllerName);
+                return InternalServerError();
+            }
+        }
+
+        [HttpGet]
         public IHttpActionResult Get(string eurocode = "", string oescode = "", string code = "")
         {
             try
@@ -164,8 +181,8 @@
         }
 
         [HttpPost]
-        [Route("GetProductTypes")]
-        public IHttpActionResult GetProductTypes(VehicleGlassRequestModel model)
+        [Route("GetPositions")]
+        public IHttpActionResult GetPositions(VehicleGlassRequestModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -174,8 +191,8 @@
 
             try
             {
-                var productTypes = this.FindGlassesByVehicleInfo(model).Select(x => x.ProductType).Distinct().ToList();
-                return this.Ok(productTypes);
+                var positions = this.FindGlassesByVehicleInfo(model).Select(x => x.Position).Distinct().ToList();
+                return this.Ok(positions);
             }
             catch (Exception e)
             {

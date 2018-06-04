@@ -75,6 +75,51 @@
             return glass;
         }
 
+        public void CreateGlassesPostions()
+        {
+            string[] windScreens = { "Windscreen", "Alternative Windscreen", "Bus & Coach WS" };
+            string[] backlights = { "Backlight", "Bus & Coach BL" };
+            string[] roofs = { "Glass Roof" };
+            string[] tools = { "Tools", "Urethane" };
+            var glases = Data.All();
+            // TODO if found position not in car picture positions -> check last - 1 array; if not match again - skip
+            foreach (var glass in glases)
+            {
+                if (!string.IsNullOrWhiteSpace(glass.Position))
+                {
+                    continue;
+                }
+
+                if (windScreens.Contains(glass.ProductType))
+                {
+                    glass.Position = "WS";
+                }
+                else if (backlights.Contains(glass.ProductType))
+                {
+                    glass.Position = "BL";
+                }
+                else if (roofs.Contains(glass.ProductType))
+                {
+                    glass.Position = "Roof";
+                }
+                else if (tools.Contains(glass.ProductType))
+                {
+                    glass.Position = "Tools";
+                }
+                else
+                {
+                    var descriptionParts = glass.Description.Split(';');
+                    if (descriptionParts.Length > 1)
+                    {
+                        var positionTypePart = descriptionParts[descriptionParts.Length - 1].Split(' ');
+                        glass.Position = positionTypePart[0];
+                    }
+                }
+            }
+
+            Data.Save();
+        }
+
         public IQueryable<VehicleGlass> GetByRandomCode(string code)
         {
             var glasses = this.Data.All().Where(g => g.EuroCode.ToLower().Contains(code.ToLower()))

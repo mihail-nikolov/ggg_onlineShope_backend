@@ -56,10 +56,10 @@ namespace GGG_OnlineShop.Web.Api.Tests
         {
             var controller = new ProductsController(null, null, null, null, mockedLogger.Object);
 
-            var result = controller.GetProductTypes(null);
+            var result = controller.GetPositions(null);
 
             Assert.IsInstanceOfType(result, typeof(InternalServerErrorResult));
-            mockedLogger.Verify(x => x.LogError(It.IsAny<Exception>(), "", controllerName, "GetProductTypes"));
+            mockedLogger.Verify(x => x.LogError(It.IsAny<Exception>(), "", controllerName, "GetPositions"));
         }
 
         [TestMethod]
@@ -495,12 +495,12 @@ namespace GGG_OnlineShop.Web.Api.Tests
             Vehicle vehicle = new Vehicle() { MakeId = 1 };
             var glasses = new List<VehicleGlass>()
             {
-                new VehicleGlass() {ProductType = "windscreen" },
-                new VehicleGlass() {ProductType = "windscreen" },
-                new VehicleGlass() {ProductType = "windscreen" },
-                new VehicleGlass() {ProductType = "test1" },
-                new VehicleGlass() {ProductType = "test2" },
-                new VehicleGlass() {ProductType = "test1" }
+                new VehicleGlass() {Position = "WS" },
+                new VehicleGlass() {Position = "WS" },
+                new VehicleGlass() {Position = "WS" },
+                new VehicleGlass() {Position = "BL" },
+                new VehicleGlass() {Position = "BL" },
+                new VehicleGlass() {Position = "LQF" }
             }.AsQueryable();
 
             var vehiclesMock = new Mock<IVehiclesService>();
@@ -508,15 +508,15 @@ namespace GGG_OnlineShop.Web.Api.Tests
             vehiclesMock.Setup(x => x.GetApplicableGLasses(vehicle)).Returns(glasses);
 
             var controller = new ProductsController(vehiclesMock.Object, null, null, null, null);
-            var result = controller.GetProductTypes(request);
+            var result = controller.GetPositions(request);
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<List<string>>));
             var responseContent = ((OkNegotiatedContentResult<List<string>>)result).Content;
 
             Assert.AreEqual(responseContent.ToList().Count, 3);
-            Assert.AreEqual(responseContent[0], "windscreen");
-            Assert.AreEqual(responseContent[1], "test1");
-            Assert.AreEqual(responseContent[2], "test2");
+            Assert.AreEqual(responseContent[0], "WS");
+            Assert.AreEqual(responseContent[1], "BL");
+            Assert.AreEqual(responseContent[2], "LQF");
 
             vehiclesMock.VerifyAll();
         }

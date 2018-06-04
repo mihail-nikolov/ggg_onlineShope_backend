@@ -24,6 +24,8 @@
 
         public string ProductType { get; set; }
 
+        public string Position { get; set; }
+
         public List<int> Images { get; set; }
 
         public virtual void CreateMappings(IConfiguration configuration)
