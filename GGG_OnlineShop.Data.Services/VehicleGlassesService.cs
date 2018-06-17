@@ -1,4 +1,6 @@
-﻿namespace GGG_OnlineShop.Data.Services
+﻿using GGG_OnlineShop.Common;
+
+namespace GGG_OnlineShop.Data.Services
 {
     using Contracts;
     using InternalApiDB.Models;
@@ -82,7 +84,8 @@
             string[] roofs = { "Glass Roof" };
             string[] tools = { "Tools", "Urethane" };
             var glases = Data.All();
-            // TODO if found position not in car picture positions -> check last - 1 array; if not match again - skip
+
+            // if found position not in car picture positions -> check last - 1 array; if not match again - skip
             foreach (var glass in glases)
             {
                 if (!string.IsNullOrWhiteSpace(glass.Position))
@@ -108,11 +111,35 @@
                 }
                 else
                 {
-                    var descriptionParts = glass.Description.Split(';');
+                    var descriptionParts = glass.Description.Split(';').Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
                     if (descriptionParts.Length > 1)
                     {
-                        var positionTypePart = descriptionParts[descriptionParts.Length - 1].Split(' ');
-                        glass.Position = positionTypePart[0];
+                        var positionTypePart = descriptionParts[descriptionParts.Length - 1].Split(' ').Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
+                        string position = positionTypePart[0];
+                        if (!GlobalConstants.GlassPositions.Contains(position))
+                        {
+                            if (positionTypePart.Length > 1)
+                            {
+                                position = positionTypePart[0] + positionTypePart[1]; // L RQ
+                            }
+
+                            if (!GlobalConstants.GlassPositions.Contains(position)) // check the position before
+                            {
+                                positionTypePart = descriptionParts[descriptionParts.Length - 2].Split(' ').Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
+                                position = positionTypePart[0];
+
+                                if (!GlobalConstants.GlassPositions.Contains(position)) // check the position before
+                                {
+                                    position = GlobalConstants.NoGlassPosition; // position N/A
+                                }
+                            }
+                        }
+
+                        glass.Position = position;
+                    }
+                    else
+                    {
+                        glass.Position = GlobalConstants.NoGlassPosition; // position N/A
                     }
                 }
             }

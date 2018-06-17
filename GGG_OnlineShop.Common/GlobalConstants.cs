@@ -1,4 +1,7 @@
-﻿namespace GGG_OnlineShop.Common
+﻿using System.Collections.Generic;
+using System.Dynamic;
+
+namespace GGG_OnlineShop.Common
 {
     public class GlobalConstants
     {
@@ -121,5 +124,15 @@
         public const string SaintGobainGroup = "Saint-Gobain";
         public const string SharedGroup = "Общи";
         public const string YesglassGroup = "Yesglass";
+
+        public const string NoGlassPosition = "NA";
+        public static HashSet<string> GlassPositions = new HashSet<string>
+        {
+            "LFQ", "LFV", "LFD", "LMQ", "LRD", "LRV", "LRQ",
+            "L FQ", "L FV", "L FD", "L MQ", "L RD", "L RV", "L RQ",
+            "WS", "ROOF", "BL",
+            "RFQ", "RFV", "RFD", "RMQ", "RRD", "RRV", "RRQ",
+            "R FQ", "R FV", "R FD", "R MQ", "R RD", "R RV", "R RQ",
+        };
     }
 }
