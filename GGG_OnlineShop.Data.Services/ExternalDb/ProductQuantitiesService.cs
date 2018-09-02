@@ -41,7 +41,11 @@
                 return productQuantities;
             }
 
-            HashSet<string> forbiddenGroups = GetForbiddenGroups(user);
+            bool onlyHighCostAllowed = false;
+            if (user != null)
+            {
+                onlyHighCostAllowed = user.OnlyHighCostVisible;
+            }
 
             var goodGroupIds = goods.Select(x => x.GroupID).ToList();
             var goodGroups = this.GoodGroups.GetGoodGroupsByIds(goodGroupIds);
@@ -67,7 +71,7 @@
                 }
 
                 var groupName = groupIdNameDictionary[good.GroupID];
-                if (forbiddenGroups.Contains(groupName))
+                if (onlyHighCostAllowed && !GlobalConstants.HighCostGroups.Contains(groupName))
                 {
                     continue;
                 }
@@ -136,56 +140,6 @@
             }
 
             return groupFromGoodName;
-        }
-
-        private HashSet<string> GetForbiddenGroups(InternalApiDB.Models.User user)
-        {
-            HashSet<string> forbiddenGroups = new HashSet<string>();
-
-            if (user != null)
-            {
-                if (!user.IsAGCVisible)
-                {
-                    forbiddenGroups.Add(GlobalConstants.AGCGroup);
-                }
-
-                if (!user.IsFuyaoVisible)
-                {
-                    forbiddenGroups.Add(GlobalConstants.FuyaoGroup);
-                }
-
-                if (!user.IsLamexVisible)
-                {
-                    forbiddenGroups.Add(GlobalConstants.LamexGroup);
-                }
-
-                if (!user.IsNordglassVisible)
-                {
-                    forbiddenGroups.Add(GlobalConstants.NordglassGroup);
-                }
-
-                if (!user.IsPilkingtonVisible)
-                {
-                    forbiddenGroups.Add(GlobalConstants.PilkingtonGroup);
-                }
-
-                if (!user.IsSaintGobainVisible)
-                {
-                    forbiddenGroups.Add(GlobalConstants.SaintGobainGroup);
-                }
-
-                if (!user.IsSharedVisible)
-                {
-                    forbiddenGroups.Add(GlobalConstants.SharedGroup);
-                }
-
-                if (!user.IsYesglassVisible)
-                {
-                    forbiddenGroups.Add(GlobalConstants.YesglassGroup);
-                }
-            }
-
-            return forbiddenGroups;
         }
     }
 }

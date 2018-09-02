@@ -87,9 +87,9 @@
 
             var users = new Mock<IUsersService>();
             users.Setup(x => x.IsValidUser(It.IsAny<User>())).Returns(() => true);
-            users.Setup(x => x.Update(It.IsAny<User>())).Returns(() => new User() { Id = testId, IsPilkingtonVisible = true });
+            users.Setup(x => x.Update(It.IsAny<User>())).Returns(() => new User() { Id = testId});
 
-            UserUpdateModel request = new UserUpdateModel() { Id = testId, IsPilkingtonVisible = true };
+            UserUpdateModel request = new UserUpdateModel() { Id = testId};
             var controller = new ManageUsersController(users.Object, null, null);
 
             var result = controller.UpdateUserInfo(request);
@@ -97,7 +97,6 @@
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<UserResponseModel>));
             var responseContent = ((OkNegotiatedContentResult<UserResponseModel>)result).Content;
             Assert.AreEqual(responseContent.Id, testId);
-            Assert.AreEqual(responseContent.IsPilkingtonVisible, true);
             users.VerifyAll();
         }
 

@@ -64,8 +64,8 @@ namespace GGG_OnlineShop.Web.Api.Tests
                 Description = "Description",
                 //PaidPrice = 0,
                 Price = 1,
-                AnonymousUserInfo = "AnonymousUserInfo",
-                AnonymousUserЕmail = "AnonymousUserЕmail",
+                UserInfo = "AnonymousUserInfo",
+                UserЕmail = "AnonymousUserЕmail",
                 CreatedOn = DateTime.MinValue,
                 DeletedOn = null,
                 Id = 0,
@@ -90,8 +90,8 @@ namespace GGG_OnlineShop.Web.Api.Tests
                 DeliveryNotes = "DeliveryNotes",
                 Description = "Description",
                 Price = 1,
-                AnonymousUserInfo = "AnonymousUserInfo",
-                AnonymousUserЕmail = "AnonymousUserЕmail",
+                UserInfo = "AnonymousUserInfo",
+                UserЕmail = "AnonymousUserЕmail",
             };
 
             var result = controller.Order(new List<OrderedItemRequestModel> { model });
@@ -114,8 +114,8 @@ namespace GGG_OnlineShop.Web.Api.Tests
             var ordersMock = new Mock<IOrderedItemsService>();
             OrderedItem modelToAdd = new OrderedItem()
             {
-                AnonymousUserInfo = null,
-                AnonymousUserЕmail = null,
+                UserInfo = null,
+                UserЕmail = null,
                 Manufacturer = "nordglass",
                 Status = DeliveryStatus.New,
                 FullAddress = "BG; SF; Liulin",
@@ -177,8 +177,8 @@ namespace GGG_OnlineShop.Web.Api.Tests
             var ordersMock = new Mock<IOrderedItemsService>();
             OrderedItem modelToAdd = new OrderedItem()
             {
-                AnonymousUserInfo = null,
-                AnonymousUserЕmail = null,
+                UserInfo = null,
+                UserЕmail = null,
                 Manufacturer = "nordglass",
                 Status = DeliveryStatus.New,
                 FullAddress = "AlternativeAddress",
@@ -219,7 +219,6 @@ namespace GGG_OnlineShop.Web.Api.Tests
                 DeliveryNotes = "DeliveryNotes",
                 Description = "Description",
                 Price = 1,
-                UseAlternativeAddress = true
             };
 
             var result = controller.Order(new List<OrderedItemRequestModel> { model });
@@ -265,7 +264,6 @@ namespace GGG_OnlineShop.Web.Api.Tests
                 DeliveryNotes = "DeliveryNotes",
                 Description = "Description",
                 Price = 1,
-                UseAlternativeAddress = true
             };
 
             var result = controller.Order(new List<OrderedItemRequestModel> { model });
@@ -330,10 +328,9 @@ namespace GGG_OnlineShop.Web.Api.Tests
                 Description = description,
                 Price = price,
                 //PaidPrice = paidPrice,
-                UseAlternativeAddress = true,
                 IsInvoiceNeeded = isInvoiceNeeded,
                 WithInstallation = isInstallationNeeded,
-                AnonymousUserЕmail = anonymousEmail
+                UserЕmail = anonymousEmail
             };
 
             var result = controller.Order(new List<OrderedItemRequestModel> { model });
@@ -361,8 +358,8 @@ namespace GGG_OnlineShop.Web.Api.Tests
                 Description = "Description",
                 //PaidPrice = 0,
                 Price = 1,
-                AnonymousUserInfo = "AnonymousUserInfo",
-                AnonymousUserЕmail = "AnonymousUserЕmail",
+                UserInfo = "AnonymousUserInfo",
+                UserЕmail = "AnonymousUserЕmail",
                 CreatedOn = DateTime.MinValue,
                 DeletedOn = null,
                 Id = 0,
@@ -385,8 +382,8 @@ namespace GGG_OnlineShop.Web.Api.Tests
                 DeliveryNotes = "DeliveryNotes",
                 Description = "Description",
                 Price = 1,
-                AnonymousUserInfo = "AnonymousUserInfo",
-                AnonymousUserЕmail = "AnonymousUserЕmail",
+                UserInfo = "AnonymousUserInfo",
+                UserЕmail = "AnonymousUserЕmail",
             };
 
             var result = controller.Order(new List<OrderedItemRequestModel> { model });

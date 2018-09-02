@@ -88,8 +88,8 @@
         {
             var order = new OrderedItem()
             {
-                AnonymousUserInfo = "test",
-                AnonymousUserЕmail = "test",
+                UserInfo = "test",
+                UserЕmail = "test",
                 UserId = "test",
                 EuroCode = "test",
                 OtherCodes = "test",
@@ -176,8 +176,8 @@
         {
             var order = new OrderedItem()
             {
-                AnonymousUserInfo = "test",
-                AnonymousUserЕmail = "test",
+                UserInfo = "test",
+                UserЕmail = "test",
                 EuroCode = "test",
                 //IsDepositNeeded = false,
                 Price = 20,
@@ -196,8 +196,8 @@
         {
             var order = new OrderedItem()
             {
-                AnonymousUserInfo = "test",
-                AnonymousUserЕmail = "test",
+                UserInfo = "test",
+                UserЕmail = "test",
                 OtherCodes = "test",
                 //IsDepositNeeded = false,
                 Price = 20,
@@ -216,8 +216,8 @@
         {
             var order = new OrderedItem()
             {
-                AnonymousUserInfo = "test",
-                AnonymousUserЕmail = "test",
+                UserInfo = "test",
+                UserЕmail = "test",
                 OtherCodes = "test",
                 //IsDepositNeeded = true,
                 Price = 20,

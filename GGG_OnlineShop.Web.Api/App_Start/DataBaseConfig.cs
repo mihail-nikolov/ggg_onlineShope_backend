@@ -8,8 +8,8 @@
     {
         public static void Initialize()
         {
-            //Database.SetInitializer(new MigrateDatabaseToLatestVersion<InternalApiDbContext, Configuration>());
-            //InternalApiDbContext.Create().Database.Initialize(false);
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<InternalApiDbContext, Configuration>());
+            InternalApiDbContext.Create().Database.Initialize(true);
         }
     }
 }

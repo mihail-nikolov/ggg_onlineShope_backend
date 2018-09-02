@@ -19,8 +19,8 @@
 
             foreach (var order in orders)
             {
-                order.AnonymousUserInfo = string.Format(GlobalConstants.DeletedUserInfo, user.PhoneNumber);
-                order.AnonymousUserЕmail = user.Email;
+                order.UserInfo = string.Format(GlobalConstants.DeletedUserInfo, user.PhoneNumber);
+                order.UserЕmail = user.Email;
                 order.UserId = null;
             }
 

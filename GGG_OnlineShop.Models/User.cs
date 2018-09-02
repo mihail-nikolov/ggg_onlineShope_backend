@@ -52,21 +52,7 @@
 
         public bool IsDeferredPaymentAllowed { get; set; }
 
-        public bool IsSaintGobainVisible { get; set; }
-
-        public bool IsPilkingtonVisible { get; set; }
-
-        public bool IsYesglassVisible { get; set; }
-
-        public bool IsNordglassVisible { get; set; }
-
-        public bool IsLamexVisible { get; set; }
-
-        public bool IsAGCVisible { get; set; }
-
-        public bool IsFuyaoVisible { get; set; }
-
-        public bool IsSharedVisible { get; set; }
+        public bool OnlyHighCostVisible { get; set; }
 
         public DateTime CreatedOn { get; set; }
 
@@ -78,14 +64,8 @@
 
         public virtual ICollection<OrderedItem> OrderedItems
         {
-            get
-            {
-                return this.orderedItems;
-            }
-            set
-            {
-                this.orderedItems = value;
-            }
+            get => this.orderedItems;
+            set => this.orderedItems = value;
         }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<User> manager, string authenticationType)

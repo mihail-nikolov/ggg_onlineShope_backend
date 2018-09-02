@@ -122,11 +122,11 @@
             service.CleanUserInfoFromOrders(user);
 
             Assert.AreEqual(user.OrderedItems.ToList()[0].UserId, null);
-            Assert.AreEqual(user.OrderedItems.ToList()[0].AnonymousUserInfo, string.Format(GlobalConstants.DeletedUserInfo, user.PhoneNumber));
-            Assert.AreEqual(user.OrderedItems.ToList()[0].AnonymousUserЕmail, user.Email);
+            Assert.AreEqual(user.OrderedItems.ToList()[0].UserInfo, string.Format(GlobalConstants.DeletedUserInfo, user.PhoneNumber));
+            Assert.AreEqual(user.OrderedItems.ToList()[0].UserЕmail, user.Email);
             Assert.AreEqual(user.OrderedItems.ToList()[1].UserId, null);
-            Assert.AreEqual(user.OrderedItems.ToList()[1].AnonymousUserInfo, string.Format(GlobalConstants.DeletedUserInfo, user.PhoneNumber));
-            Assert.AreEqual(user.OrderedItems.ToList()[1].AnonymousUserЕmail, user.Email);
+            Assert.AreEqual(user.OrderedItems.ToList()[1].UserInfo, string.Format(GlobalConstants.DeletedUserInfo, user.PhoneNumber));
+            Assert.AreEqual(user.OrderedItems.ToList()[1].UserЕmail, user.Email);
             repositoryMock.VerifyAll();
             repositoryMock.Verify(x => x.Save(), Times.Exactly(1));
         }

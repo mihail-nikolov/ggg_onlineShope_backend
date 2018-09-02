@@ -177,14 +177,7 @@
             string testCode = "2233AGN";
             InternalApiDB.Models.User user = new InternalApiDB.Models.User()
             {
-                IsAGCVisible = false,
-                IsFuyaoVisible = false,
-                IsLamexVisible = false,
-                IsNordglassVisible = false,
-                IsPilkingtonVisible = false,
-                IsSaintGobainVisible = false,
-                IsSharedVisible = false,
-                IsYesglassVisible = false
+                OnlyHighCostVisible = false,
             };
 
             var goods = new List<Good>()
@@ -237,14 +230,7 @@
             string testCode = "2233AGN";
             InternalApiDB.Models.User user = new InternalApiDB.Models.User()
             {
-                IsAGCVisible = true,
-                IsFuyaoVisible = true,
-                IsLamexVisible = true,
-                IsNordglassVisible = true,
-                IsPilkingtonVisible = true,
-                IsSaintGobainVisible = true,
-                IsSharedVisible = true,
-                IsYesglassVisible = true
+                OnlyHighCostVisible = true,
             };
 
             string descriptionName1 = "test1";

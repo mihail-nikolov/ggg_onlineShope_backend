@@ -26,8 +26,8 @@ namespace GGG_OnlineShop.Common
         public const int ManufacturerMaxLength = 30;
         public const int OtherCodesMaxLength = 200;
 
-        public const int AnonymousUserЕmailMaxLength = 40;
-        public const int AnonymousUserInfoMaxLength = 200;
+        public const int UserЕmailMaxLength = 40;
+        public const int UserInfoMaxLength = 200;
         public const int BulstatMaxLength = 50;
         public const int BulstatMinLength = 2;
         public const int NameMaxLength = 60;
@@ -133,6 +133,11 @@ namespace GGG_OnlineShop.Common
             "WS", "ROOF", "BL",
             "RFQ", "RFV", "RFD", "RMQ", "RRD", "RRV", "RRQ",
             "R FQ", "R FV", "R FD", "R MQ", "R RD", "R RV", "R RQ",
+        };
+
+        public static HashSet<string> HighCostGroups = new HashSet<string>
+        {
+            "Pilkington", "Saint-Gobain"
         };
     }
 }

@@ -46,7 +46,6 @@ namespace GGG_OnlineShop.Web.Api.Controllers
                     user = this.users.GetById(userId);
                 }
 
-                string anonymousUserEmail = items[0].AnonymousUserЕmail;
                 StringBuilder orderItemIds = new StringBuilder();
                 // info
                 // if registered user - default: in fullAddress will write down the user company deliveryAddress
@@ -54,14 +53,6 @@ namespace GGG_OnlineShop.Web.Api.Controllers
                 // if nonRegisteredUser -> fullAddress (required)
                 foreach (var item in items)
                 {
-                    if (user != null)
-                    {
-                        if (!item.UseAlternativeAddress) // else - will use the passed address
-                        {
-                            item.FullAddress = $"{user.DeliveryCountry}; {user.DeliveryTown}; {user.DeliveryAddress}";
-                        }
-                    }
-
                     OrderedItem order = new OrderedItem();
 
                     item.Status = DeliveryStatus.New;
@@ -92,7 +83,7 @@ namespace GGG_OnlineShop.Web.Api.Controllers
                 if (result is OkResult)
                 {
                     string body = $"направена поръчка: {string.Join("\n\n", items)}";
-                    string emailTo = !string.IsNullOrEmpty(anonymousUserEmail) ? anonymousUserEmail : user?.Email;
+                    string emailTo = items[0].UserЕmail;
                     emails.SendEmail(emailTo, string.Format(GlobalConstants.OrderMade, orderItemIds.ToString().TrimEnd(',', ' ')),
                         body, GlobalConstants.SMTPServer,
                         GlobalConstants.EmalToSendFrom, GlobalConstants.EmalToSendFromPassword);

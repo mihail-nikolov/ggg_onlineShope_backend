@@ -61,12 +61,6 @@
             //    }
             //}
 
-            if (result && ((string.IsNullOrEmpty(order.AnonymousUserInfo) || string.IsNullOrEmpty(order.AnonymousUserЕmail))
-                                                                 && order.User == null))
-            {
-                result = false;
-            }
-
             return result;
         }
     }

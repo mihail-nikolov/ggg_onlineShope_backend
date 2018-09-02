@@ -255,8 +255,8 @@
                 {
                     Status = DeliveryStatus.New,
                     Id = 3,
-                    AnonymousUserInfo = "AnonymousUserInfo",
-                    AnonymousUserЕmail = "AnonymousUserЕmail"
+                    UserInfo = "AnonymousUserInfo",
+                    UserЕmail = "AnonymousUserЕmail"
                 },
             }.AsQueryable();
 
@@ -271,16 +271,16 @@
             var responseContent = ((OkNegotiatedContentResult<List<OrderedItemResponseModelWIthUserInfo>>)result).Content;
 
             Assert.AreEqual(responseContent[0].UserInfo, "Bulstat; CompanyName; testEmail; 0088");
-            Assert.AreEqual(responseContent[0].AnonymousUserInfo, null);
-            Assert.AreEqual(responseContent[0].AnonymousUserЕmail, null);
+            Assert.AreEqual(responseContent[0].UserInfo, null);
+            Assert.AreEqual(responseContent[0].UserЕmail, null);
 
             Assert.AreEqual(responseContent[1].UserInfo, "UserName; testEmail1; 0099");
-            Assert.AreEqual(responseContent[1].AnonymousUserInfo, null);
-            Assert.AreEqual(responseContent[1].AnonymousUserЕmail, null);
+            Assert.AreEqual(responseContent[1].UserInfo, null);
+            Assert.AreEqual(responseContent[1].UserЕmail, null);
 
             Assert.AreEqual(responseContent[2].UserInfo, string.Empty);
-            Assert.AreEqual(responseContent[2].AnonymousUserInfo, "AnonymousUserInfo");
-            Assert.AreEqual(responseContent[2].AnonymousUserЕmail, "AnonymousUserЕmail");
+            Assert.AreEqual(responseContent[2].UserInfo, "AnonymousUserInfo");
+            Assert.AreEqual(responseContent[2].UserЕmail, "AnonymousUserЕmail");
 
             ordersMock.VerifyAll();
         }
@@ -295,7 +295,7 @@
             {
                 Status = DeliveryStatus.New,
                 Id = testId,
-                AnonymousUserЕmail = "testEmail"
+                UserЕmail = "testEmail"
             };
 
             var ordersMock = new Mock<IOrderedItemsService>();
@@ -330,7 +330,7 @@
             {
                 Status = DeliveryStatus.New,
                 Id = testId,
-                AnonymousUserЕmail = "testEmail"
+                UserЕmail = "testEmail"
             };
 
             var ordersMock = new Mock<IOrderedItemsService>();
@@ -338,7 +338,7 @@
 
             var emailsMock = new Mock<IEmailsService>();
             emailsMock.Setup(x => x.SendEmail(
-                                              order.AnonymousUserЕmail, string.Format(GlobalConstants.OrderUpdated, order.Id),
+                                              order.UserЕmail, string.Format(GlobalConstants.OrderUpdated, order.Id),
                                               It.Is<string>(y => y.Contains("Нов статус на поръчка") && y.Contains(testId.ToString()) && y.Contains(statusBG)),
                                               GlobalConstants.SMTPServer,
                                               GlobalConstants.EmalToSendFrom, GlobalConstants.EmalToSendFromPassword));

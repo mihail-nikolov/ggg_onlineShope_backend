@@ -89,8 +89,7 @@
                 this.orders.Save();
 
                 var updatedOrder = this.Mapper.Map<OrderedItemResponseModelWIthUserInfo>(product);
-                string emailTo = !string.IsNullOrEmpty(product.AnonymousUserЕmail) ? product.AnonymousUserЕmail : product.User.Email;
-                emails.SendEmail(emailTo, string.Format(GlobalConstants.OrderUpdated, product.Id),
+                emails.SendEmail(product.UserЕmail, string.Format(GlobalConstants.OrderUpdated, product.Id),
                                  $"Нов статус на поръчка {model.ToString()}", GlobalConstants.SMTPServer,
                                  GlobalConstants.EmalToSendFrom, GlobalConstants.EmalToSendFromPassword);
 

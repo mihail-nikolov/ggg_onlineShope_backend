@@ -49,12 +49,14 @@
         [Range(GlobalConstants.MinPrice, GlobalConstants.MaxPrice)]
         public double Price { get; set; }
 
-        [StringLength(GlobalConstants.AnonymousUserЕmailMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
-        public string AnonymousUserЕmail { get; set; }
+        [Required]
+        [StringLength(GlobalConstants.UserЕmailMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
+        public string UserЕmail { get; set; }
 
         // e.g. Name, Phone, address
-        [StringLength(GlobalConstants.AnonymousUserInfoMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
-        public string AnonymousUserInfo { get; set; }
+        [Required]
+        [StringLength(GlobalConstants.UserInfoMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
+        public string UserInfo { get; set; }
 
         [ForeignKey("User")]
         public string UserId { get; set; }

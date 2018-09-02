@@ -35,7 +35,7 @@
 
         public double Price { get; set; }
 
-        public bool IsDepositNeeded { get; set; }
+        //public bool IsDepositNeeded { get; set; }
 
         public double PaidPrice { get; set; }
     }
