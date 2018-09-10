@@ -144,7 +144,7 @@
             var objectsServiceMock = new Mock<IObjectsService>();
             var objects = new List<ObjectSkladPro>()
             {
-                new ObjectSkladPro() { ID = 1, Name = "Люлин" },
+                new ObjectSkladPro() { ID = 1, Name = "Русе" },
                 new ObjectSkladPro() { ID = 2, Name = "Слатина" },
             }.AsQueryable();
             objectsServiceMock.Setup(x => x.GetAll()).Returns(() => objects);
@@ -272,12 +272,11 @@
             };
             goodGroupsServiceMock.Setup(x => x.GetGoodGroupsByIds(goodGroupIds)).Returns(() => goodGroups);
 
-            string objectLiulin = "Люлин";
             string objectSLatina = "Слатина";
             var objectsServiceMock = new Mock<IObjectsService>();
             var objects = new List<ObjectSkladPro>()
             {
-                new ObjectSkladPro { ID = 1, Name = objectLiulin },
+                new ObjectSkladPro { ID = 1, Name = "random" },
                 new ObjectSkladPro { ID = 2, Name = objectSLatina }
             }.AsQueryable();
             objectsServiceMock.Setup(x => x.GetAll()).Returns(() => objects);
@@ -338,7 +337,6 @@
             Assert.AreEqual(response[0].GroupFromItemName, string.Empty);
             Assert.AreEqual(response[0].Price, 1);
             Assert.AreEqual(response[0].StoreQUantities.Count, 2);
-            Assert.AreEqual(response[0].StoreQUantities[objectLiulin], 2);
             Assert.AreEqual(response[0].StoreQUantities[objectSLatina], 1);
 
             Assert.AreEqual(response[1].GoodId, 2);
@@ -348,7 +346,6 @@
             Assert.AreEqual(response[1].GroupFromItemName, string.Empty);
             Assert.AreEqual(response[1].Price, 2);
             Assert.AreEqual(response[1].StoreQUantities.Count, 1);
-            Assert.AreEqual(response[1].StoreQUantities[objectLiulin], 1);
 
             Assert.AreEqual(response[2].GoodId, 3);
             Assert.AreEqual(response[2].Group, GlobalConstants.LamexGroup);
@@ -366,7 +363,6 @@
             Assert.AreEqual(response[3].GroupFromItemName, string.Empty);
             Assert.AreEqual(response[3].Price, 4);
             Assert.AreEqual(response[3].StoreQUantities.Count, 1);
-            Assert.AreEqual(response[3].StoreQUantities[objectLiulin], 1);
 
             Assert.AreEqual(response[4].GoodId, 5);
             Assert.AreEqual(response[4].Group, GlobalConstants.PilkingtonGroup);
@@ -393,7 +389,6 @@
             Assert.AreEqual(response[6].GroupFromItemName, "ABCman");
             Assert.AreEqual(response[6].Price, 7);
             Assert.AreEqual(response[6].StoreQUantities.Count, 1);
-            Assert.AreEqual(response[6].StoreQUantities[objectLiulin], 2);
 
             Assert.AreEqual(response[7].GoodId, 8);
             Assert.AreEqual(response[7].Group, GlobalConstants.YesglassGroup);
@@ -402,7 +397,6 @@
             Assert.AreEqual(response[7].GroupFromItemName, string.Empty);
             Assert.AreEqual(response[7].Price, 8);
             Assert.AreEqual(response[7].StoreQUantities.Count, 2);
-            Assert.AreEqual(response[7].StoreQUantities[objectLiulin], 2);
             Assert.AreEqual(response[7].StoreQUantities[objectSLatina], 1);
 
             goodsServiceMock.VerifyAll();
@@ -455,12 +449,11 @@
             };
             goodGroupsServiceMock.Setup(x => x.GetGoodGroupsByIds(goodGroupIds)).Returns(() => goodGroups);
 
-            string objectLiulin = "Люлин";
             string objectSLatina = "Слатина";
             var objectsServiceMock = new Mock<IObjectsService>();
             var objects = new List<ObjectSkladPro>()
             {
-                new ObjectSkladPro { ID = 1, Name = objectLiulin },
+                new ObjectSkladPro { ID = 1, Name = "random" },
                 new ObjectSkladPro { ID = 2, Name = objectSLatina }
             }.AsQueryable();
             objectsServiceMock.Setup(x => x.GetAll()).Returns(() => objects);
@@ -521,7 +514,6 @@
             Assert.AreEqual(response[0].GroupFromItemName, string.Empty);
             Assert.AreEqual(response[0].Price, 1);
             Assert.AreEqual(response[0].StoreQUantities.Count, 2);
-            Assert.AreEqual(response[0].StoreQUantities[objectLiulin], 2);
             Assert.AreEqual(response[0].StoreQUantities[objectSLatina], 1);
 
             Assert.AreEqual(response[1].GoodId, 2);
@@ -531,7 +523,6 @@
             Assert.AreEqual(response[1].GroupFromItemName, string.Empty);
             Assert.AreEqual(response[1].Price, 2);
             Assert.AreEqual(response[1].StoreQUantities.Count, 1);
-            Assert.AreEqual(response[1].StoreQUantities[objectLiulin], 1);
 
             Assert.AreEqual(response[2].GoodId, 3);
             Assert.AreEqual(response[2].Group, GlobalConstants.LamexGroup);
@@ -549,7 +540,6 @@
             Assert.AreEqual(response[3].GroupFromItemName, string.Empty);
             Assert.AreEqual(response[3].Price, 4);
             Assert.AreEqual(response[3].StoreQUantities.Count, 1);
-            Assert.AreEqual(response[3].StoreQUantities[objectLiulin], 1);
 
             Assert.AreEqual(response[4].GoodId, 5);
             Assert.AreEqual(response[4].Group, GlobalConstants.PilkingtonGroup);
@@ -576,7 +566,6 @@
             Assert.AreEqual(response[6].GroupFromItemName, "ABCman");
             Assert.AreEqual(response[6].Price, 7);
             Assert.AreEqual(response[6].StoreQUantities.Count, 1);
-            Assert.AreEqual(response[6].StoreQUantities[objectLiulin], 2);
 
             Assert.AreEqual(response[7].GoodId, 8);
             Assert.AreEqual(response[7].Group, GlobalConstants.YesglassGroup);
@@ -585,7 +574,6 @@
             Assert.AreEqual(response[7].GroupFromItemName, string.Empty);
             Assert.AreEqual(response[7].Price, 8);
             Assert.AreEqual(response[7].StoreQUantities.Count, 2);
-            Assert.AreEqual(response[7].StoreQUantities[objectLiulin], 2);
             Assert.AreEqual(response[7].StoreQUantities[objectSLatina], 1);
 
             goodsServiceMock.VerifyAll();
