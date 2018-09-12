@@ -41,6 +41,8 @@
         {
             var userFromDb = this.GetById(user.Id);
             userFromDb.PercentageReduction = user.PercentageReduction;
+            userFromDb.OnlyHighCostVisible = user.OnlyHighCostVisible;
+            userFromDb.IsDeferredPaymentAllowed = user.IsDeferredPaymentAllowed;
             userFromDb.Bulstat = user.Bulstat;
             userFromDb.Name = user.Name;
             this.Save();

@@ -15,6 +15,8 @@
 
         public bool IsCompany { get; set; }
 
+        public bool EmailConfirmed { get; set; }
+
         public bool OnlyHighCostVisible { get; set; }
     }
 }
