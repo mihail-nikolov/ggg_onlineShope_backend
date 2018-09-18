@@ -179,13 +179,14 @@ namespace GGG_OnlineShop.Data.Services
                   + eik.Length + "!= 9 or 13");
             }
             // eik.length= eikLength
-            char[] charDigits = eik.toCharArray();
+            char[] charDigits = eik.ToCharArray();
             int[] digits = new int[charDigits.Length];
             for (int i = 0; i < digits.Length; i++)
             {
                 if (Char.IsDigit(charDigits[i]))
                 {
-                    digits[i] = Char.digit(charDigits[i], 10);
+                    // TODO fix!!!
+                    //digits[i] = Char.digit(charDigits[i], 10);
                 }
                 else
                 {
