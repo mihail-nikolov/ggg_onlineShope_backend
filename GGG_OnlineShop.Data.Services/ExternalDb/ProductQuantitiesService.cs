@@ -59,7 +59,13 @@
             Dictionary<int?, string> objectKeyName = new Dictionary<int?, string>();
             foreach (var obj in objects)
             {
-                objectKeyName.Add(obj.ID, obj.Name);
+                if (obj.Name == "Люлин")
+                {
+                   continue;
+                }
+
+                string name = obj.Name == "Слатина" ? "София" : obj.Name;
+                objectKeyName.Add(obj.ID, name);
             }
 
             foreach (var good in goods)
@@ -96,7 +102,7 @@
 
                     string storeName = objectKeyName[item.ObjectID];
 
-                    ProductInfoResponseModel currentGoodResponse = productQuantities.Where(x => x.GoodId == good.ID).FirstOrDefault();
+                    ProductInfoResponseModel currentGoodResponse = productQuantities.FirstOrDefault(x => x.GoodId == good.ID);
                     if (currentGoodResponse != null)
                     {
                         int index = productQuantities.IndexOf(currentGoodResponse);

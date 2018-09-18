@@ -28,13 +28,9 @@
 
         public bool IsCalibration { get; set; }
 
-        public bool IsAccessory { get; set; }
-
         public List<string> Characteristics { get; set; }
 
         public bool HasFittingMethod { get; set; }
-
-        public int FeaturedImageId { get; set; }
 
         public bool IsYesGlass { get; set; }
 

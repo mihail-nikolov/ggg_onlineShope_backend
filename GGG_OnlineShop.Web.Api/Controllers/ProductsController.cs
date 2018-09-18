@@ -191,7 +191,7 @@
 
             try
             {
-                var positions = this.FindGlassesByVehicleInfo(model).Select(x => x.Position).Distinct().ToList();
+                var positions = this.FindProductsByVehicleInfo(model).Select(x => x.Position).Distinct().ToList();
                 return this.Ok(positions);
             }
             catch (Exception e)
@@ -212,7 +212,7 @@
 
             try
             {
-                var glasses = this.FindGlassesByVehicleInfo(requestModel);
+                var glasses = this.FindProductsByVehicleInfo(requestModel);
 
                 return this.Ok(glasses.ToList());
             }
@@ -223,7 +223,7 @@
             }
         }
 
-        private IQueryable<VehicleGlassShortResponseModel> FindGlassesByVehicleInfo(VehicleGlassRequestModel requestModel)
+        private IQueryable<VehicleGlassShortResponseModel> FindProductsByVehicleInfo(VehicleGlassRequestModel requestModel)
         {
             var vehicle = this._vehicles.GetVehicleByMakeModelAndBodyTypeIds(requestModel.MakeId, requestModel.ModelId, requestModel.BodyTypeId);
             IQueryable<VehicleGlassShortResponseModel> glasses = new List<VehicleGlassShortResponseModel>().AsQueryable();

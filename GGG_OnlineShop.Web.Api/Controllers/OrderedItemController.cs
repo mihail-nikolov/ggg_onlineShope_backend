@@ -69,7 +69,6 @@ namespace GGG_OnlineShop.Web.Api.Controllers
                     if (this.orders.IsValidOrder(order))
                     {
                         this.orders.Add(order);
-                        // TODO Probably best approach is to have Orders table -> OrderedItems
 
                         orderItemIds.Append($"{order.Id}, ");
                     }

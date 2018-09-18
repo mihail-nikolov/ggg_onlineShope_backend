@@ -91,7 +91,7 @@
 
         public bool HasFittingMethod { get; set; }
 
-        public int FeaturedImageId { get; set; }
+        public int? FeaturedImageId { get; set; }
 
         public bool IsAcoustic { get; set; }
 

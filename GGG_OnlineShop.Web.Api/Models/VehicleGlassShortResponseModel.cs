@@ -26,6 +26,10 @@
 
         public string Position { get; set; }
 
+        public bool IsAccessory { get; set; }
+
+        public int? FeaturedImageId { get; set; }
+
         public List<int> Images { get; set; }
 
         public virtual void CreateMappings(IConfiguration configuration)
