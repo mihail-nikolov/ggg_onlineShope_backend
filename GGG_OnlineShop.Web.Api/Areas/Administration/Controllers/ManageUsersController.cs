@@ -85,7 +85,7 @@
             {
                 var user = this.Mapper.Map<User>(model);
 
-                if (!this.users.IsValidUser(user))
+                if (!this.users.IsCompanyAndBulstatCompatibiltyValid(user))
                 {
                     return BadRequest(GlobalConstants.InvalidCompanyBulstatCombination);
                 }

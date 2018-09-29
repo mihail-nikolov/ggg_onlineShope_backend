@@ -92,7 +92,7 @@
             mapper.Execute();
 
             var usersMock = new Mock<IUsersService>();
-            usersMock.Setup(x => x.IsValidUser(It.IsAny<User>())).Returns(false);
+            usersMock.Setup(x => x.IsCompanyAndBulstatCompatibiltyValid(It.IsAny<User>())).Returns(false);
 
             AccountRegisterBindingModel request = new AccountRegisterBindingModel()
             {
@@ -110,7 +110,7 @@
             Assert.IsTrue(responseMessage.Contains(GlobalConstants.InvalidCompanyBulstatCombination));
 
             usersMock.VerifyAll();
-            usersMock.Verify(m => m.IsValidUser(It.Is<User>(x => x.Bulstat == "1234")));
+            usersMock.Verify(m => m.IsCompanyAndBulstatCompatibiltyValid(It.Is<User>(x => x.Bulstat == "1234")));
         }
 
         [TestMethod]
@@ -121,7 +121,7 @@
             string testBulstat = "1234";
 
             var usersMock = new Mock<IUsersService>();
-            usersMock.Setup(x => x.IsValidUser(It.IsAny<User>())).Returns(true);
+            usersMock.Setup(x => x.IsCompanyAndBulstatCompatibiltyValid(It.IsAny<User>())).Returns(true);
 
             string[] errors = new string[] { "testError1", "testError2" };
 
@@ -144,7 +144,7 @@
             Assert.IsInstanceOfType(result, typeof(InvalidModelStateResult));
             userManagerMock.VerifyAll();
             usersMock.VerifyAll();
-            usersMock.Verify(m => m.IsValidUser(It.Is<User>(x => x.Bulstat == testBulstat)));
+            usersMock.Verify(m => m.IsCompanyAndBulstatCompatibiltyValid(It.Is<User>(x => x.Bulstat == testBulstat)));
         }
 
         [TestMethod]
@@ -155,7 +155,7 @@
             string testBulstat = "1234";
 
             var usersMock = new Mock<IUsersService>();
-            usersMock.Setup(x => x.IsValidUser(It.IsAny<User>())).Returns(true);
+            usersMock.Setup(x => x.IsCompanyAndBulstatCompatibiltyValid(It.IsAny<User>())).Returns(true);
 
             var userStore = new Mock<IUserStore<User>>();
             var userManagerMock = new Mock<ApplicationUserManager>(userStore.Object);
@@ -176,7 +176,7 @@
             Assert.IsInstanceOfType(result, typeof(OkResult));
             userManagerMock.VerifyAll();
             usersMock.VerifyAll();
-            usersMock.Verify(m => m.IsValidUser(It.Is<User>(x => x.Bulstat == testBulstat)));
+            usersMock.Verify(m => m.IsCompanyAndBulstatCompatibiltyValid(It.Is<User>(x => x.Bulstat == testBulstat)));
         }
 
         [TestMethod]

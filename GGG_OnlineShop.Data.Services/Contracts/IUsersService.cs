@@ -15,6 +15,8 @@
 
         void CleanUserInfoFromOrders(User user);
 
-        bool IsValidUser(User user);
+        bool IsCompanyAndBulstatCompatibiltyValid(User user);
+
+        bool IsBulstatValid(string eik);
     }
 }

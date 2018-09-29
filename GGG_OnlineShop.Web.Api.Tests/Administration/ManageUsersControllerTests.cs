@@ -67,7 +67,7 @@
             mapper.Execute();
 
             var users = new Mock<IUsersService>();
-            users.Setup(x => x.IsValidUser(It.IsAny<User>())).Returns(() => false);
+            users.Setup(x => x.IsCompanyAndBulstatCompatibiltyValid(It.IsAny<User>())).Returns(() => false);
 
             var controller = new ManageUsersController(users.Object, null, null);
 
@@ -86,7 +86,7 @@
             string testId = "testId";
 
             var users = new Mock<IUsersService>();
-            users.Setup(x => x.IsValidUser(It.IsAny<User>())).Returns(() => true);
+            users.Setup(x => x.IsCompanyAndBulstatCompatibiltyValid(It.IsAny<User>())).Returns(() => true);
             users.Setup(x => x.Update(It.IsAny<User>())).Returns(() => new User() { Id = testId});
 
             UserUpdateModel request = new UserUpdateModel() { Id = testId};

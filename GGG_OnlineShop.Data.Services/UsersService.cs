@@ -36,7 +36,7 @@ namespace GGG_OnlineShop.Data.Services
 
         public User GetByEmail(string email)
         {
-            return this.GetAll().Where(u => u.Email == email).FirstOrDefault();
+            return this.GetAll().FirstOrDefault(u => u.Email == email);
         }
 
         public User Update(User user)
@@ -65,7 +65,7 @@ namespace GGG_OnlineShop.Data.Services
         }
 
         // Probably to return string with the needed info
-        public bool IsValidUser(User user)
+        public bool IsCompanyAndBulstatCompatibiltyValid(User user)
         {
             bool result = true;
 
@@ -91,42 +91,63 @@ namespace GGG_OnlineShop.Data.Services
         }
 
         // ------------------------- bulstat validator
-        private static int[] FIRST_SUM_9DIGIT_WEIGHTS = { 1, 2, 3, 4, 5, 6, 7, 8 };
-        private static int[] SECOND_SUM_9DIGIT_WEIGHTS = { 3, 4, 5, 6, 7, 8, 9, 10 };
-        private static int[] FIRST_SUM_13DIGIT_WEIGHTS = { 2, 7, 3, 5 };
-        private static int[] SECOND_SUM_13DIGIT_WEIGHTS = { 4, 9, 5, 7 };
+        private readonly int[] _firstSum9DigitWeights = { 1, 2, 3, 4, 5, 6, 7, 8 };
+        private readonly int[] _secondSum9DigitWeights = { 3, 4, 5, 6, 7, 8, 9, 10 };
+        private readonly int[] _firstSum13DigitWeights = { 2, 7, 3, 5 };
+        private readonly int[] _secondSum13DigitWeights = { 4, 9, 5, 7 };
 
-        public static bool calculateChecksumForNineDigitsEIK(string eik)
+        public bool IsBulstatValid(string eik)
         {
-            int[] digits = checkInput(eik, 9);
-            int ninthDigit = calculateNinthDigitInEIK(digits);
+            bool result = false;
+            if (IsAllDigits(eik))
+            {
+                int[] digits = eik.Select(c => c - '0').ToArray();
+                if (eik.Length == 9 && IsNineDigitsEikValid(digits))
+                {
+                    result = true;
+                }
+                else if (eik.Length == 13 && IsThirteenDigitsEikValid(digits))
+                {
+                    result = true;
+                }
+            }
+            
+            return result;
+        }
+
+        private bool IsNineDigitsEikValid(int[] digits)
+        {
+            int ninthDigit = CalculateNinthDigitInEik(digits);
+
             return ninthDigit == digits[8];
         }
 
-        public static bool calculateChecksumForThirteenDigitsEIK(string eik)
+        private bool IsThirteenDigitsEikValid(int[] digits)
         {
-            int[] digits = checkInput(eik, 13);
-            int thirteenDigit = calculateThirteenthDigitInEIK(digits);
+            int thirteenDigit = CalculateThirteenthDigitInEik(digits);
+
             return thirteenDigit == digits[12];
         }
 
-        private static int calculateNinthDigitInEIK(int[] digits)
+        private int CalculateNinthDigitInEik(int[] digits)
         {
             int sum = 0;
             for (int i = 0; i < 8; i++)
             {
-                sum = sum + (digits[i] * FIRST_SUM_9DIGIT_WEIGHTS[i]);
+                sum = sum + (digits[i] * _firstSum9DigitWeights[i]);
             }
+
             int remainder = sum % 11;
             if (remainder != 10)
             {
                 return remainder;
             }
+
             // remainder= 10
             int secondSum = 0;
             for (int i = 0; i < 8; i++)
             {
-                secondSum = secondSum + (digits[i] * SECOND_SUM_9DIGIT_WEIGHTS[i]);
+                secondSum = secondSum + (digits[i] * _secondSum9DigitWeights[i]);
             }
 
             int secondRem = secondSum % 11;
@@ -134,67 +155,52 @@ namespace GGG_OnlineShop.Data.Services
             {
                 return secondRem;
             }
+
             // secondRemainder= 10
             return 0;
         }
 
-        private static int calculateThirteenthDigitInEIK(int[] digits)
+        private int CalculateThirteenthDigitInEik(int[] digits)
         {
-            int ninthDigit = calculateNinthDigitInEIK(digits);
+            int ninthDigit = CalculateNinthDigitInEik(digits);
             if (ninthDigit != digits[8])
             {
                 throw new Exception("Incorrect 9th digit in EIK-13.");
             }
-            // 9thDigit is a correct checkSum. Continue with 13thDigit
+
+            // 9th Digit is a correct checkSum. Continue with 13thDigit
             int sum = 0;
             for (int i = 8, j = 0; j < 4; i++, j++)
             {
-                sum = sum + (digits[i] * FIRST_SUM_13DIGIT_WEIGHTS[j]);
+                sum = sum + (digits[i] * _firstSum13DigitWeights[j]);
             }
+
             int remainder = sum % 11;
             if (remainder != 10)
             {
                 return remainder;
             }
+
             // remainder= 10
             int secondSum = 0;
             for (int i = 8, j = 0; j < 4; i++, j++)
             {
-                secondSum = secondSum + (digits[i] * SECOND_SUM_13DIGIT_WEIGHTS[j]);
+                secondSum = secondSum + (digits[i] * _secondSum13DigitWeights[j]);
             }
+
             int secondRem = secondSum % 11;
             if (secondRem != 10)
             {
                 return secondRem;
             }
+
             // secondRemainder= 10
             return 0;
         }
 
-        private static int[] checkInput(string eik, int eikLength)
+        private bool IsAllDigits(string eikInput)
         {
-            if (eik != null && eik.ToString().Length != eikLength)
-            {
-                throw new Exception("Incorrect count of digits in EIK: "
-                  + eik.Length + "!= 9 or 13");
-            }
-            // eik.length= eikLength
-            char[] charDigits = eik.ToCharArray();
-            int[] digits = new int[charDigits.Length];
-            for (int i = 0; i < digits.Length; i++)
-            {
-                if (Char.IsDigit(charDigits[i]))
-                {
-                    // TODO fix!!!
-                    //digits[i] = Char.digit(charDigits[i], 10);
-                }
-                else
-                {
-                    throw new Exception(
-                      "Incorrect input character. Only digits are allowed.");
-                }
-            }
-            return digits;
+            return eikInput.All(char.IsDigit);
         }
     }
 }

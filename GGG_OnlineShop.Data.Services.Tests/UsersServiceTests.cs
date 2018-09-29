@@ -138,7 +138,7 @@
 
             var service = new UsersService(null);
 
-            var response = service.IsValidUser(user);
+            var response = service.IsCompanyAndBulstatCompatibiltyValid(user);
             Assert.IsFalse(response);
         }
 
@@ -157,7 +157,7 @@
 
             var service = new UsersService(repositoryMock.Object);
 
-            var response = service.IsValidUser(user);
+            var response = service.IsCompanyAndBulstatCompatibiltyValid(user);
 
             Assert.IsFalse(response);
             repositoryMock.VerifyAll();
@@ -169,7 +169,7 @@
             var user = new User() { Bulstat = "123", IsCompany = false };
             var service = new UsersService(null);
 
-            var response = service.IsValidUser(user);
+            var response = service.IsCompanyAndBulstatCompatibiltyValid(user);
 
             Assert.IsFalse(response);
         }
@@ -187,7 +187,7 @@
 
             var service = new UsersService(repositoryMock.Object);
 
-            var response = service.IsValidUser(user);
+            var response = service.IsCompanyAndBulstatCompatibiltyValid(user);
 
             Assert.IsTrue(response);
         }
@@ -198,7 +198,7 @@
             var user = new User() { Bulstat = null, IsCompany = false };
             var service = new UsersService(null);
 
-            var response = service.IsValidUser(user);
+            var response = service.IsCompanyAndBulstatCompatibiltyValid(user);
 
             Assert.IsTrue(response);
         }

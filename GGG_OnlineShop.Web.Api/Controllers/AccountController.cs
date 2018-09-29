@@ -83,9 +83,13 @@
             {
                 IHttpActionResult result;
                 var user = this.Mapper.Map<User>(model);
-                if (!users.IsValidUser(user))
+                if (!users.IsCompanyAndBulstatCompatibiltyValid(user))
                 {
                     result = BadRequest(GlobalConstants.InvalidCompanyBulstatCombination);
+                }
+                else if (!string.IsNullOrEmpty(user.Bulstat) && !users.IsBulstatValid(user.Bulstat))
+                {
+                    result = BadRequest(GlobalConstants.InvalidBulstat);
                 }
                 else
                 {

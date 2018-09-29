@@ -54,6 +54,7 @@ namespace GGG_OnlineShop.Common
         public const int PhoneNumberMaxLength = 30;
         public const int PhoneNumberMinLength = 3;
 
+        public const string InvalidBulstat = "Невалиден Булстат";
         public const string InvalidCompanyBulstatCombination = "valid compinations: company + bulstat; not company without bulstat";
         public const string NoSuchAUserErroMessage = "No such a user";
         public const string SMTPServer = "smtp.gmail.com";
