@@ -341,7 +341,7 @@
                                               order.UserЕmail, string.Format(GlobalConstants.OrderUpdated, order.Id),
                                               It.Is<string>(y => y.Contains("Нов статус на поръчка") && y.Contains(testId.ToString()) && y.Contains(statusBG)),
                                               GlobalConstants.SMTPServer,
-                                              GlobalConstants.EmalToSendFrom, GlobalConstants.EmalToSendFromPassword));
+                                              GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword));
 
             OrderedItemRequestUpdateStatusModel request = new OrderedItemRequestUpdateStatusModel() { Id = testId, Status = status };
 
@@ -378,7 +378,7 @@
                                               testUser.Email, string.Format(GlobalConstants.OrderUpdated, order.Id),
                                               It.Is<string>(y => y.Contains("Нов статус на поръчка") && y.Contains(testId.ToString()) && y.Contains("Завършена")),
                                               GlobalConstants.SMTPServer,
-                                              GlobalConstants.EmalToSendFrom, GlobalConstants.EmalToSendFromPassword));
+                                              GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword));
 
             OrderedItemRequestUpdateStatusModel request = new OrderedItemRequestUpdateStatusModel() { Id = testId, Status = DeliveryStatus.Done };
 

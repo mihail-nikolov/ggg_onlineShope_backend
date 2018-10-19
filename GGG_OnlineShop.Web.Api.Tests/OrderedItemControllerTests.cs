@@ -246,7 +246,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
             var emailsMock = new Mock<IEmailsService>();
             emailsMock.Setup(x => x.SendEmail(testUser.Email, string.Format(GlobalConstants.OrderMade, It.IsAny<string>()),
                                   It.IsAny<string>(), GlobalConstants.SMTPServer,
-                                  GlobalConstants.EmalToSendFrom, GlobalConstants.EmalToSendFromPassword));
+                                  GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword));
 
             // moq the user
             var claim = new Claim("test", testId);
@@ -313,7 +313,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
                                                      y.Contains(price.ToString())),
                                   // TODO paidprice removed
                                   GlobalConstants.SMTPServer,
-                                  GlobalConstants.EmalToSendFrom, GlobalConstants.EmalToSendFromPassword));
+                                  GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword));
 
             var controller = new OrderedItemController(ordersMock.Object, usersMock.Object, emailsMock.Object, null);
 

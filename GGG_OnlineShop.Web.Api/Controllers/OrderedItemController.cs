@@ -85,7 +85,7 @@ namespace GGG_OnlineShop.Web.Api.Controllers
                     string emailTo = items[0].UserЕmail;
                     emails.SendEmail(emailTo, string.Format(GlobalConstants.OrderMade, orderItemIds.ToString().TrimEnd(',', ' ')),
                         body, GlobalConstants.SMTPServer,
-                        GlobalConstants.EmalToSendFrom, GlobalConstants.EmalToSendFromPassword);
+                        GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
                 }
 
                 return result;

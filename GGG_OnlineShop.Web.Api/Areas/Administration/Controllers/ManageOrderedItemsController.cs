@@ -91,7 +91,7 @@
                 var updatedOrder = this.Mapper.Map<OrderedItemResponseModelWIthUserInfo>(product);
                 emails.SendEmail(product.UserЕmail, string.Format(GlobalConstants.OrderUpdated, product.Id),
                                  $"Нов статус на поръчка {model.ToString()}", GlobalConstants.SMTPServer,
-                                 GlobalConstants.EmalToSendFrom, GlobalConstants.EmalToSendFromPassword);
+                                 GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
 
                 return this.Ok(updatedOrder);
             }

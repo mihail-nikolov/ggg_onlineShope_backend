@@ -115,7 +115,7 @@
 
                 this.emails.SendEmail(user.Email, GlobalConstants.ConfirmEmailSubject,
                                       string.Format(GlobalConstants.ConfirmEmailBody, fullCallbackUrl), GlobalConstants.SMTPServer,
-                                      GlobalConstants.EmalToSendFrom, GlobalConstants.EmalToSendFromPassword);
+                                      GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
 
                 return Ok(fullCallbackUrl);
                 // TODO fullCallbackUrl will not be shown
