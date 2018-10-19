@@ -255,7 +255,7 @@
         }
 
         [HttpPost]
-        public IHttpActionResult Enquire(EnquiryRequestModel enquiry)
+        public IHttpActionResult CheckAvailability(EnquiryRequestModel enquiry)
         {
             try
             {
