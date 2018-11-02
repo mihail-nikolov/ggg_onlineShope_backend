@@ -80,7 +80,6 @@ namespace GGG_OnlineShop.Data.Services
                 {
                     result = false;
                 }
-
             }
             else if (!user.IsCompany && !string.IsNullOrEmpty(user.Bulstat))
             {
@@ -96,9 +95,10 @@ namespace GGG_OnlineShop.Data.Services
         private readonly int[] _firstSum13DigitWeights = { 2, 7, 3, 5 };
         private readonly int[] _secondSum13DigitWeights = { 4, 9, 5, 7 };
 
-        public bool IsBulstatValid(string eik)
+        public bool IsBulstatValid(string bulstat)
         {
             bool result = false;
+            string eik = bulstat.Substring(2, bulstat.Length - 1); // get the EIK (BG175309086)
             if (IsAllDigits(eik))
             {
                 int[] digits = eik.Select(c => c - '0').ToArray();

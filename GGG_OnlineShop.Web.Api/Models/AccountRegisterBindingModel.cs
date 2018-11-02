@@ -18,8 +18,7 @@
         [Required]
         [Range(GlobalConstants.MinPercentageReduction, GlobalConstants.MaxPercentageReduction)]
         public double PercentageReduction { get; set; }
-
-        [StringLength(GlobalConstants.BulstatMaxLength, ErrorMessage = GlobalConstants.MinAndMaxLengthErrorMessage, MinimumLength = GlobalConstants.BulstatMinLength)]
+        
         public string Bulstat { get; set; }
 
         // will be used for company names and first + last names for normal users

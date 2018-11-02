@@ -17,6 +17,6 @@
 
         bool IsCompanyAndBulstatCompatibiltyValid(User user);
 
-        bool IsBulstatValid(string eik);
+        bool IsBulstatValid(string bulstat);
     }
 }

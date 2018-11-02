@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Text;
-using System.Web.Http.Results;
-
-namespace GGG_OnlineShop.Web.Api.Controllers
+﻿namespace GGG_OnlineShop.Web.Api.Controllers
 {
     using Common;
     using Data.Services.Contracts;
@@ -13,6 +9,9 @@ namespace GGG_OnlineShop.Web.Api.Controllers
     using System;
     using System.Reflection;
     using System.Web.Http;
+    using System.Collections.Generic;
+    using System.Text;
+    using System.Web.Http.Results;
 
     [RoutePrefix("api/OrderedItems")]
     public class OrderedItemController : BaseController
