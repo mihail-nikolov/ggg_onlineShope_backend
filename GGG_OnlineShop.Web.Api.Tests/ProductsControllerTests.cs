@@ -32,7 +32,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
         public void Get_ShouldReturnInternalServerErrorAndLogError_WhenVehicleGlassesServiceIsNull()
         {
 
-            var controller = new ProductsController(null, null, null, null, mockedLogger.Object);
+            var controller = new ProductsController(null, null, null, null, null, mockedLogger.Object);
 
             var result = controller.Get("1234");
 
@@ -43,7 +43,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
         [TestMethod]
         public void GetPriceAndQuantities_ShouldReturnInternalServerErrorAndLogError_WhenVehicleGlassesServiceIsNull()
         {
-            var controller = new ProductsController(null, null, null, null, mockedLogger.Object);
+            var controller = new ProductsController(null, null, null, null, null, mockedLogger.Object);
 
             var result = controller.GetPriceAndQuantities(2);
 
@@ -54,7 +54,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
         [TestMethod]
         public void GetProductTypes_ShouldReturnInternalServerErrorAndLogError_WhenVehiclesServiceIsNull()
         {
-            var controller = new ProductsController(null, null, null, null, mockedLogger.Object);
+            var controller = new ProductsController(null, null, null, null, null, mockedLogger.Object);
 
             var result = controller.GetPositions(null);
 
@@ -65,7 +65,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
         [TestMethod]
         public void FindByVehicleInfo_ShouldReturnInternalServerErrorAndLogError_WhenVehiclesServiceIsNull()
         {
-            var controller = new ProductsController(null, null, null, null, mockedLogger.Object);
+            var controller = new ProductsController(null, null, null, null, null, mockedLogger.Object);
 
             var result = controller.FindByVehicleInfo(null);
 
@@ -76,7 +76,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
         [TestMethod]
         public void Get_ShouldReturnBadRequest_WhenNoArgumentsPassed()
         {
-            var controller = new ProductsController(null, null, null, null, null);
+            var controller = new ProductsController(null, null, null, null, null, null);
             var result = controller.Get(null);
 
             Assert.IsInstanceOfType(result, typeof(BadRequestErrorMessageResult));
@@ -90,7 +90,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
         {
             string testEurocode = "445";
 
-            var controller = new ProductsController(null, null, null, null, null);
+            var controller = new ProductsController(null, null, null, null, null, null);
             var result = controller.Get(null, testEurocode);
 
             Assert.IsInstanceOfType(result, typeof(BadRequestErrorMessageResult));
@@ -104,7 +104,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
         {
             string testCode = "445";
 
-            var controller = new ProductsController(null, null, null, null, null);
+            var controller = new ProductsController(null, null, null, null, null, null);
             var result = controller.Get(null, null, testCode);
 
             Assert.IsInstanceOfType(result, typeof(BadRequestErrorMessageResult));
@@ -117,7 +117,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
         public void Get_ShouldReturnBadRequest_WhenCodeLessThan4Symbols()
         {
             string testEurocode = "445";
-            var controller = new ProductsController(null, null, null, null, null);
+            var controller = new ProductsController(null, null, null, null, null, null);
 
             var result = controller.Get(null, null, testEurocode);
 
@@ -152,7 +152,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
 
             glassesMock.Setup(v => v.GetById(1)).Returns(() => glass);
 
-            var controller = new ProductsController(null, glassesMock.Object, null, null, null);
+            var controller = new ProductsController(null, null, glassesMock.Object, null, null, null);
             var result = controller.GetDetailedInfo(1);
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<VehicleGlassResponseModel>));
@@ -190,7 +190,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
 
             glassesMock.Setup(v => v.GetById(1)).Returns(() => glass);
 
-            var controller = new ProductsController(null, glassesMock.Object, null, null, null);
+            var controller = new ProductsController(null, null, glassesMock.Object, null, null, null);
             var result = controller.GetDetailedInfo(1);
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<VehicleGlassResponseModel>));
@@ -216,7 +216,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
 
             glassesMock.Setup(v => v.GetGlassesByEuroCode(testEurocode)).Returns(() => glassesList);
 
-            var controller = new ProductsController(null, glassesMock.Object, null, null, null);
+            var controller = new ProductsController(null, null, glassesMock.Object, null, null, null);
             var result = controller.Get(testEurocode);
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<List<VehicleGlassShortResponseModel>>));
@@ -244,7 +244,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
 
             glassesMock.Setup(v => v.GetByOesCode(testOesCode)).Returns(() => glassesList);
 
-            var controller = new ProductsController(null, glassesMock.Object, null, null, null);
+            var controller = new ProductsController(null, null, glassesMock.Object, null, null, null);
             var result = controller.Get(null, testOesCode);
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<List<VehicleGlassShortResponseModel>>));
@@ -271,7 +271,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
             string testCode = "testCode";
             glassesMock.Setup(v => v.GetByRandomCode(testCode)).Returns(() => glassesList);
 
-            var controller = new ProductsController(null, glassesMock.Object, null, null, null);
+            var controller = new ProductsController(null, null, glassesMock.Object, null, null, null);
             var result = controller.Get(null, null, testCode);
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<List<VehicleGlassShortResponseModel>>));
@@ -295,7 +295,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
             string testCode = "testCode";
             glassesMock.Setup(v => v.GetByEuroCode(testCode)).Returns(() => glass);
 
-            var controller = new ProductsController(null, glassesMock.Object, null, null, null);
+            var controller = new ProductsController(null, null, glassesMock.Object, null, null, null);
             var result = controller.GetDetailedInfo(null, testCode);
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<VehicleGlassResponseModel>));
@@ -319,7 +319,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
             string testCode = "testCode";
             glassesMock.Setup(v => v.GetByMaterialNumber(testCode)).Returns(() => glass);
 
-            var controller = new ProductsController(null, glassesMock.Object, null, null, null);
+            var controller = new ProductsController(null, null, glassesMock.Object, null, null, null);
             var result = controller.GetDetailedInfo(null, "", testCode);
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<VehicleGlassResponseModel>));
@@ -344,7 +344,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
 
             glassesMock.Setup(v => v.GetByLocalCode(testCode)).Returns(() => glass);
 
-            var controller = new ProductsController(null, glassesMock.Object, null, null, null);
+            var controller = new ProductsController(null, null, glassesMock.Object, null, null, null);
             var result = controller.GetDetailedInfo(null, null, null, null, testCode);
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<VehicleGlassResponseModel>));
@@ -369,7 +369,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
 
             glassesMock.Setup(v => v.GetByIndustryCode(testCode)).Returns(() => glass);
 
-            var controller = new ProductsController(null, glassesMock.Object, null, null, null);
+            var controller = new ProductsController(null, null, glassesMock.Object, null, null, null);
             var result = controller.GetDetailedInfo(null, null, null, testCode);
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<VehicleGlassResponseModel>));
@@ -396,7 +396,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
             glassesMock.Setup(v => v.GetByEuroCode(testCode)).Returns(() => null);
             glassesMock.Setup(v => v.GetByLocalCode(testLocalCode)).Returns(() => glass);
 
-            var controller = new ProductsController(null, glassesMock.Object, null, null, null);
+            var controller = new ProductsController(null, null, glassesMock.Object, null, null, null);
             var result = controller.GetDetailedInfo(null, testCode, null, null, testLocalCode);
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<VehicleGlassResponseModel>));
@@ -416,7 +416,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
 
             var glassesMock = new Mock<IVehicleGlassesService>();
 
-            var controller = new ProductsController(null, glassesMock.Object, null, null, null);
+            var controller = new ProductsController(null, null, glassesMock.Object, null, null, null);
             var result = controller.GetDetailedInfo(null);
 
             Assert.IsInstanceOfType(result, typeof(BadRequestErrorMessageResult));
@@ -468,7 +468,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
             var productPriceAndQuantitiesMock = new Mock<IProductQuantitiesService>();
             productPriceAndQuantitiesMock.Setup(x => x.GetPriceAndQuantitiesByCode(testCode, It.IsAny<User>())).Returns(productQuantitiesAndPriceInfo);
 
-            var controller = new ProductsController(null, glassesMock.Object, productPriceAndQuantitiesMock.Object, usersMock.Object, null)
+            var controller = new ProductsController(null, null, glassesMock.Object, productPriceAndQuantitiesMock.Object, usersMock.Object, null)
             {
                 User = mockPrincipal.Object
             };
@@ -507,7 +507,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
             vehiclesMock.Setup(x => x.GetVehicleByMakeModelAndBodyTypeIds(request.MakeId, null, null)).Returns(vehicle);
             vehiclesMock.Setup(x => x.GetApplicableGLasses(vehicle)).Returns(glasses);
 
-            var controller = new ProductsController(vehiclesMock.Object, null, null, null, null);
+            var controller = new ProductsController(null, vehiclesMock.Object, null, null, null, null);
             var result = controller.GetPositions(request);
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<List<string>>));
@@ -540,7 +540,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
             vehiclesMock.Setup(x => x.GetVehicleByMakeModelAndBodyTypeIds(request.MakeId, null, null)).Returns(vehicle);
             vehiclesMock.Setup(x => x.GetApplicableGLassesByProductType(vehicle, testProductType)).Returns(glasses);
 
-            var controller = new ProductsController(vehiclesMock.Object, null, null, null, null);
+            var controller = new ProductsController(null, vehiclesMock.Object, null, null, null, null);
             var result = controller.FindByVehicleInfo(request);
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<List<VehicleGlassShortResponseModel>>));
@@ -572,7 +572,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
             vehiclesMock.Setup(x => x.GetVehicleByMakeModelAndBodyTypeIds(request.MakeId, null, null)).Returns(vehicle);
             vehiclesMock.Setup(x => x.GetApplicableGLasses(vehicle)).Returns(glasses);
 
-            var controller = new ProductsController(vehiclesMock.Object, null, null, null, null);
+            var controller = new ProductsController(null, vehiclesMock.Object, null, null, null, null);
             var result = controller.FindByVehicleInfo(request);
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<List<VehicleGlassShortResponseModel>>));

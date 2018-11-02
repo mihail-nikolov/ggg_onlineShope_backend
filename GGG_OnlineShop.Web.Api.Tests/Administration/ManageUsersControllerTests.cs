@@ -155,7 +155,7 @@
             var emailsMock = new Mock<IEmailsService>();
             emailsMock.Setup(x => x.SendEmail(testEmail, GlobalConstants.ConfirmEmailSubject,
                                               string.Format(GlobalConstants.ConfirmEmailBody, fullCallbackUrl), GlobalConstants.SMTPServer,
-                                              GlobalConstants.EmalToSendFrom, GlobalConstants.EmalToSendFromPassword));
+                                              GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword));
 
             var urlMock = new Mock<UrlHelper>();
             urlMock.Setup(m => m.Route(It.IsAny<string>(), It.IsAny<object>())).Returns(testRoute);

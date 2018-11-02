@@ -59,8 +59,12 @@ namespace GGG_OnlineShop.Common
         public const string NoSuchAUserErroMessage = "No such a user";
         public const string SMTPServer = "smtp.gmail.com";
         public const string FindingUserError = "Error while finding user";
-        public const string EmalToSendFrom = "testggg9@gmail.com";
-        public const string EmalToSendFromPassword = "ggg12345";
+
+        public const string EmailRuse = "glassgoldgroup_ruse@abv.bg";
+        public const string EmailSofia = "glassgoldgroup_slatina@abv.bg";
+        public const string EmailPrimary = "testggg9@gmail.com"; // glassgoldgroup@gmail.com
+        public const string EmailPrimaryPassword = "ggg12345";
+
         public const string ResetPasswordSubject = "Забравена парола";
         public const string ResetPasswordBody = "Моля, обновете паролата си, използвайки следния код: {0}";
         public const string ConfirmEmailSubject = "Потвърждаване на акаунт";

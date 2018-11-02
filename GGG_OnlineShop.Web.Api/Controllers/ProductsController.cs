@@ -14,20 +14,22 @@
     [RoutePrefix("api/Products")]
     public class ProductsController : BaseController
     {
+        private readonly IEmailsService _emails;
         private readonly IVehiclesService _vehicles;
         private readonly IVehicleGlassesService _glasses;
         private readonly IProductQuantitiesService _productQuantities;
         private readonly IUsersService _users;
         private readonly string _controllerName = MethodBase.GetCurrentMethod().DeclaringType?.Name;
 
-        public ProductsController(IVehiclesService vehicles, IVehicleGlassesService glasses,
+        public ProductsController(IEmailsService emails, IVehiclesService vehicles, IVehicleGlassesService glasses,
                                   IProductQuantitiesService productQuantities, IUsersService users, ILogsService dbLogger)
             : base(dbLogger)
         {
-            this._vehicles = vehicles;
-            this._glasses = glasses;
-            this._productQuantities = productQuantities;
-            this._users = users;
+            _vehicles = vehicles;
+            _glasses = glasses;
+            _productQuantities = productQuantities;
+            _users = users;
+            _emails = emails;
         }
 
         [HttpGet]
@@ -250,6 +252,50 @@
             }
 
             return glasses;
+        }
+
+        [HttpPost]
+        public IHttpActionResult CheckAvailability(EnquiryRequestModel enquiry)
+        {
+            try
+            {
+                IHttpActionResult result = Ok();
+
+                string enquiryText = $@"
+Мара:                    {enquiry.Make}
+Модел:                   {enquiry.Model}
+Година:                  {enquiry.ModelYear}
+Каросерия и бр. врати:   {enquiry.Body}
+Тип Продукт:             {enquiry.ProductType}
+Номер на Рама:           {enquiry.VIN}
+Допълнителна информация: {enquiry.Description}
+Име:                     {enquiry.Name}
+Email:                   {enquiry.Email}
+Телефон:                 {enquiry.Phone}
+";
+
+                if (enquiry.EnquireToRuse)
+                {
+                    _emails.SendEmail(GlobalConstants.EmailRuse, "Запитване за продукт", enquiryText, GlobalConstants.SMTPServer,
+                        GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
+                }
+
+                if (enquiry.EnquireToSofia)
+                {
+                    _emails.SendEmail(GlobalConstants.EmailSofia, "Запитване за продукт", enquiryText, GlobalConstants.SMTPServer,
+                        GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
+                }
+
+                _emails.SendEmail(enquiry.Email, "Запитване за продукт", enquiryText, GlobalConstants.SMTPServer,
+                    GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
+
+                return result;
+            }
+            catch (Exception e)
+            {
+                HandlExceptionLogging(e, "", _controllerName);
+                return InternalServerError();
+            }
         }
 
 

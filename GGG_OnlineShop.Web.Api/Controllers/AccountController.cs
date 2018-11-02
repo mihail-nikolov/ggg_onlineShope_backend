@@ -212,7 +212,7 @@
                     string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
                     this.emails.SendEmail(user.Email, GlobalConstants.ResetPasswordSubject,
                                             string.Format(GlobalConstants.ResetPasswordBody, code), GlobalConstants.SMTPServer,
-                                            GlobalConstants.EmalToSendFrom, GlobalConstants.EmalToSendFromPassword);
+                                            GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
 
                     // TODO will return only OK (without code)
                     return Ok(code);
