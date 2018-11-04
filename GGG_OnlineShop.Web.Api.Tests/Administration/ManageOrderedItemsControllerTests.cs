@@ -270,13 +270,13 @@
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<List<OrderedItemResponseModelWIthUserInfo>>));
             var responseContent = ((OkNegotiatedContentResult<List<OrderedItemResponseModelWIthUserInfo>>)result).Content;
 
-            Assert.AreEqual(responseContent[0].UserInfo, "Bulstat; CompanyName; testEmail; 0088");
-            Assert.AreEqual(responseContent[0].UserInfo, null);
-            Assert.AreEqual(responseContent[0].UserЕmail, null);
+            Assert.AreEqual("Bulstat; CompanyName; testEmail; 0088", responseContent[0].UserInfo);
+            Assert.IsNull(responseContent[0].UserInfo);
+            Assert.IsNull(responseContent[0].UserЕmail);
 
             Assert.AreEqual(responseContent[1].UserInfo, "UserName; testEmail1; 0099");
-            Assert.AreEqual(responseContent[1].UserInfo, null);
-            Assert.AreEqual(responseContent[1].UserЕmail, null);
+            Assert.IsNull(responseContent[1].UserInfo);
+            Assert.IsNull(responseContent[1].UserЕmail);
 
             Assert.AreEqual(responseContent[2].UserInfo, string.Empty);
             Assert.AreEqual(responseContent[2].UserInfo, "AnonymousUserInfo");

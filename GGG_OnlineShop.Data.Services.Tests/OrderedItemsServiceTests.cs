@@ -93,9 +93,8 @@
                 UserId = "test",
                 EuroCode = "test",
                 OtherCodes = "test",
-                //IsDepositNeeded = true,
                 Price = 20,
-                //PaidPrice = 20,
+                PaidPrice = 20,
                 User = new User() { IsDeferredPaymentAllowed = true},
             };
 
@@ -106,82 +105,16 @@
             Assert.IsTrue(result);
         }
 
-        // TODO check later if needed
-        //[TestMethod]
-        //public void IsValidOrder_SouldReturnFalse_WhenNeededPriceNotEnoughAndUserAndNoDeferredPayment()
-        //{
-        //    var order = new OrderedItem()
-        //    {
-        //        AnonymousUserInfo = "test",
-        //        AnonymousUserЕmail = "test",
-        //        UserId = "test",
-        //        EuroCode = "test",
-        //        OtherCodes = "test",
-        //        //IsDepositNeeded = true,
-        //        Price = 20,
-        //        //PaidPrice = 5,
-        //        User = new User() { IsDeferredPaymentAllowed = false },
-        //    };
-
-        //    var service = new OrderedItemsService(null, null);
-
-        //    var result = service.IsValidOrder(order);
-
-        //    Assert.IsFalse(result);
-        //}
-
-        // TODO check later if needed
-        //[TestMethod]
-        //public void IsValidOrder_SouldReturnFalse_WhenNeededPriceAndNoUser()
-        //{
-        //    var order = new OrderedItem()
-        //    {
-        //        AnonymousUserInfo = "test",
-        //        AnonymousUserЕmail = "test",
-        //        EuroCode = "test",
-        //        OtherCodes = "test",
-        //        //IsDepositNeeded = true,
-        //        Price = 20,
-        //        //PaidPrice = 5,
-        //    };
-
-        //    var service = new OrderedItemsService(null, null);
-
-        //    var result = service.IsValidOrder(order);
-
-        //    Assert.IsFalse(result);
-        //}
-
         [TestMethod]
-        public void IsValidOrder_SouldReturnFalse_WhenNoDepositNeededAndNoAnonymousUserInfoAndNoUserInfo()
-        {
-            var order = new OrderedItem()
-            {
-                EuroCode = "test",
-                OtherCodes = "test",
-                //IsDepositNeeded = false,
-                Price = 20,
-                //PaidPrice = 20
-            };
-
-            var service = new OrderedItemsService(null, null);
-
-            var result = service.IsValidOrder(order);
-
-            Assert.IsFalse(result);
-        }
-
-        [TestMethod]
-        public void IsValidOrder_SouldReturnTrue_WhenOnlyEuroCodeSendNoDepositeNeededAndAnonymousInfoSend()
+        public void IsValidOrder_SouldReturnTrue_WhenOnlyEuroCodeSendNoAnonymousInfoSend()
         {
             var order = new OrderedItem()
             {
                 UserInfo = "test",
                 UserЕmail = "test",
                 EuroCode = "test",
-                //IsDepositNeeded = false,
                 Price = 20,
-                //PaidPrice = 20,
+                PaidPrice = 20,
             };
 
             var service = new OrderedItemsService(null, null);
@@ -192,16 +125,15 @@
         }
 
         [TestMethod]
-        public void IsValidOrder_SouldReturnTrue_WhenOnlyOtherCodesSendNoDepositeNeededAndAnonymousInfoSend()
+        public void IsValidOrder_SouldReturnTrue_WhenOnlyOtherCodesSendNoAnonymousInfoSend()
         {
             var order = new OrderedItem()
             {
                 UserInfo = "test",
                 UserЕmail = "test",
                 OtherCodes = "test",
-                //IsDepositNeeded = false,
                 Price = 20,
-                //PaidPrice = 20,
+                PaidPrice = 20,
             };
 
             var service = new OrderedItemsService(null, null);
@@ -212,36 +144,15 @@
         }
 
         [TestMethod]
-        public void IsValidOrder_SouldReturnTrue_WhenDepositNeededAndPaidPriceEnough()
-        {
-            var order = new OrderedItem()
-            {
-                UserInfo = "test",
-                UserЕmail = "test",
-                OtherCodes = "test",
-                //IsDepositNeeded = true,
-                Price = 20,
-                //PaidPrice = 20,
-            };
-
-            var service = new OrderedItemsService(null, null);
-
-            var result = service.IsValidOrder(order);
-
-            Assert.IsTrue(result);
-        }
-
-        [TestMethod]
-        public void IsValidOrder_SouldReturnTrue_WhenDepositNeededAndPaidPriceNotEnoughButDeferredPaymentAllowed()
+        public void IsValidOrder_SouldReturnTrue_WhenPaidPriceNotEnoughButDeferredPaymentAllowed()
         {
             var order = new OrderedItem()
             {
                 UserId = "test",
                 User = new User() { IsDeferredPaymentAllowed = true, Id = "test" },
                 OtherCodes = "test",
-                //IsDepositNeeded = true,
                 Price = 20,
-                //PaidPrice = 4
+                PaidPrice = 0
             };
 
             var service = new OrderedItemsService(null, null);

@@ -59,10 +59,9 @@ namespace GGG_OnlineShop.Web.Api.Tests
                 Status = DeliveryStatus.New,
                 FullAddress = null,
                 WithInstallation = false,
-                //IsDepositNeeded = false,
                 DeliveryNotes = "DeliveryNotes",
                 Description = "Description",
-                //PaidPrice = 0,
+                PaidPrice = 1,
                 Price = 1,
                 UserInfo = "AnonymousUserInfo",
                 UserЕmail = "AnonymousUserЕmail",
@@ -90,6 +89,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
                 DeliveryNotes = "DeliveryNotes",
                 Description = "Description",
                 Price = 1,
+                PaidPrice = 1,
                 UserInfo = "AnonymousUserInfo",
                 UserЕmail = "AnonymousUserЕmail",
             };
@@ -115,15 +115,14 @@ namespace GGG_OnlineShop.Web.Api.Tests
             OrderedItem modelToAdd = new OrderedItem()
             {
                 UserInfo = null,
-                UserЕmail = null,
+                UserЕmail = "testEmail",
                 Manufacturer = "nordglass",
                 Status = DeliveryStatus.New,
                 FullAddress = "BG; SF; Liulin",
                 WithInstallation = false,
-                //IsDepositNeeded = false,
                 DeliveryNotes = "DeliveryNotes",
                 Description = "Description",
-                //PaidPrice = 0,
+                PaidPrice = 1,
                 Price = 1,
                 CreatedOn = DateTime.MinValue,
                 DeletedOn = null,
@@ -133,7 +132,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
                 ModifiedOn = null,
                 OtherCodes = null,
                 User = testUser,
-                UserId = testId
+                UserId = testId,
             };
 
             ordersMock.Setup(v => v.Add(It.IsAny<OrderedItem>()));
@@ -155,6 +154,10 @@ namespace GGG_OnlineShop.Web.Api.Tests
                 DeliveryNotes = "DeliveryNotes",
                 Description = "Description",
                 Price = 1,
+                PaidPrice = 1,
+                UserЕmail = "testEmail",
+                UserId = testId,
+                FullAddress = "BG; SF; Liulin",
             };
 
             var result = controller.Order(new List<OrderedItemRequestModel> { model });
@@ -183,10 +186,9 @@ namespace GGG_OnlineShop.Web.Api.Tests
                 Status = DeliveryStatus.New,
                 FullAddress = "AlternativeAddress",
                 WithInstallation = false,
-                //IsDepositNeeded = false,
                 DeliveryNotes = "DeliveryNotes",
                 Description = "Description",
-                //PaidPrice = 0,
+                PaidPrice = 1,
                 Price = 1,
                 CreatedOn = DateTime.MinValue,
                 DeletedOn = null,
@@ -219,6 +221,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
                 DeliveryNotes = "DeliveryNotes",
                 Description = "Description",
                 Price = 1,
+                PaidPrice = 1,
             };
 
             var result = controller.Order(new List<OrderedItemRequestModel> { model });
@@ -264,6 +267,9 @@ namespace GGG_OnlineShop.Web.Api.Tests
                 DeliveryNotes = "DeliveryNotes",
                 Description = "Description",
                 Price = 1,
+                PaidPrice = 1,
+                UserId = testId,
+                UserЕmail = "testEmail"
             };
 
             var result = controller.Order(new List<OrderedItemRequestModel> { model });
@@ -288,7 +294,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
             string deliveryNotes = "DeliveryNotes";
             string description = "ALFA-ROMEO Windscreen";
             double price = 102;
-            //double paidPrice = 70;
+            double paidPrice = 99;
             DeliveryStatus status = DeliveryStatus.New;
 
             string isInstallationNeededBG = EnglishBulgarianDictionary.Namings[isInstallationNeeded.ToString()];
@@ -310,8 +316,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
                                                      y.Contains(manufacturer) && y.Contains(isInvoiceNeededBG) &&
                                                      y.Contains(deliveryNotes) && y.Contains(description) &&
                                                      y.Contains(statusBG) && y.Contains(isInstallationNeededBG) &&
-                                                     y.Contains(price.ToString())),
-                                  // TODO paidprice removed
+                                                     y.Contains(price.ToString()) && y.Contains(paidPrice.ToString())), 
                                   GlobalConstants.SMTPServer,
                                   GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword));
 
@@ -327,7 +332,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
                 DeliveryNotes = deliveryNotes,
                 Description = description,
                 Price = price,
-                //PaidPrice = paidPrice,
+                PaidPrice = paidPrice,
                 IsInvoiceNeeded = isInvoiceNeeded,
                 WithInstallation = isInstallationNeeded,
                 UserЕmail = anonymousEmail
@@ -353,10 +358,9 @@ namespace GGG_OnlineShop.Web.Api.Tests
                 Status = DeliveryStatus.New,
                 FullAddress = null,
                 WithInstallation = false,
-                //IsDepositNeeded = false,
                 DeliveryNotes = "DeliveryNotes",
                 Description = "Description",
-                //PaidPrice = 0,
+                PaidPrice = 1,
                 Price = 1,
                 UserInfo = "AnonymousUserInfo",
                 UserЕmail = "AnonymousUserЕmail",
@@ -382,6 +386,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
                 DeliveryNotes = "DeliveryNotes",
                 Description = "Description",
                 Price = 1,
+                PaidPrice = 1,
                 UserInfo = "AnonymousUserInfo",
                 UserЕmail = "AnonymousUserЕmail",
             };

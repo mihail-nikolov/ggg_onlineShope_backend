@@ -443,10 +443,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
             glassesMock.Setup(v => v.GetById(testId)).Returns(testProduct);
             glassesMock.Setup(v => v.GetCode(testProduct)).Returns(testCode);
 
-            var testUser = new User() { Bulstat = "12345", Id = testUserId };
             var usersMock = new Mock<IUsersService>();
-            // TODO doubleckeck later
-            //usersMock.Setup(v => v.GetByEmail(It.IsAny<string>())).Returns(() => testUser);
 
             string nordglassGroup = "Nordglass";
             string yesglassGroup = "Yesglass";

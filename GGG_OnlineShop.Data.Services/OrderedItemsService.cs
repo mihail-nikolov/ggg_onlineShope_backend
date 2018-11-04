@@ -33,7 +33,6 @@
         public bool IsValidOrder(OrderedItem order)
         {
             bool result = true;
-            var neededPrice = order.Price * GlobalConstants.MinPercentPaidPrice;
 
             // should have some codes passed
             if (result && (string.IsNullOrEmpty(order.OtherCodes) && string.IsNullOrEmpty(order.EuroCode)))
@@ -41,25 +40,12 @@
                 result = false;
             }
 
-            // if not enough money paid - this will be done in frontend?
-            //if (result && (order.IsDepositNeeded && order.PaidPrice < neededPrice))
-            //{
-            //    var user = order.User;
-            //    // and registered user
-            //    if (user != null)
-            //    {
-            //        // deffered payment not allowed -> invalid
-            //        if (!user.IsDeferredPaymentAllowed)
-            //        {
-            //            result = false;
-            //        }
-            //    }
-            //    // not registered user => no way to have deffered payment -> invalid
-            //    else
-            //    {
-            //        result = false;
-            //    }
-            //}
+            var user = order.User;
+            // when not paid and deffered payment not allowed
+            if (result && order.PaidPrice <= GlobalConstants.MinPrice && (user != null && !user.IsDeferredPaymentAllowed))
+            {
+                result = false;
+            }
 
             return result;
         }
