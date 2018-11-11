@@ -28,7 +28,7 @@ namespace GGG_OnlineShop.Common
         public const int UserЕmailMaxLength = 40;
         public const int UserInfoMaxLength = 200;
         public const int BulstatMaxLength = 20;
-        public const int BulstatMinLength = 2;
+        public const int BulstatMinLength = 5;
         public const int NameMaxLength = 60;
         public const int NameMinLength = 2;
         public const string DeletedUserInfo = "Deleted user; {0}";

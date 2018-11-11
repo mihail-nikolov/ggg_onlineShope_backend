@@ -1,4 +1,6 @@
-﻿namespace GGG_OnlineShop.Data.Services.Tests
+﻿using System;
+
+namespace GGG_OnlineShop.Data.Services.Tests
 {
     using Common;
     using GGG_OnlineShop.Common;
@@ -201,6 +203,36 @@
             var response = service.IsCompanyAndBulstatCompatibiltyValid(user);
 
             Assert.IsTrue(response);
+        }
+
+        [TestMethod]
+        public void IsBulstatValid_ShouldThrow_WhenEikLenghtNot9Or13()
+        {
+            var service = new UsersService(null);
+
+            var result = service.IsBulstatValid("BG17530908123124");
+
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void IsBulstatValid_ShouldReturnTrueWhenOk9()
+        {
+            var service = new UsersService(null);
+
+            var result = service.IsBulstatValid("BG175309086");
+
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void IsBulstatValid_ShouldReturnFalseWhen9AndNotValid()
+        {
+            var service = new UsersService(null);
+
+            var result = service.IsBulstatValid("BG175309085");
+
+            Assert.IsFalse(result);
         }
     }
 }

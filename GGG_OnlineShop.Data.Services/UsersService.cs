@@ -98,8 +98,8 @@ namespace GGG_OnlineShop.Data.Services
         public bool IsBulstatValid(string bulstat)
         {
             bool result = false;
-            string eik = bulstat.Substring(2, bulstat.Length - 1); // get the EIK (BG175309086)
-            if (IsAllDigits(eik))
+            string eik = bulstat.Substring(2); // get the EIK (BG175309086)
+            if (eik.All(char.IsDigit))
             {
                 int[] digits = eik.Select(c => c - '0').ToArray();
                 if (eik.Length == 9 && IsNineDigitsEikValid(digits))
@@ -120,13 +120,6 @@ namespace GGG_OnlineShop.Data.Services
             int ninthDigit = CalculateNinthDigitInEik(digits);
 
             return ninthDigit == digits[8];
-        }
-
-        private bool IsThirteenDigitsEikValid(int[] digits)
-        {
-            int thirteenDigit = CalculateThirteenthDigitInEik(digits);
-
-            return thirteenDigit == digits[12];
         }
 
         private int CalculateNinthDigitInEik(int[] digits)
@@ -158,6 +151,13 @@ namespace GGG_OnlineShop.Data.Services
 
             // secondRemainder= 10
             return 0;
+        }
+
+        private bool IsThirteenDigitsEikValid(int[] digits)
+        {
+            int thirteenDigit = CalculateThirteenthDigitInEik(digits);
+
+            return thirteenDigit == digits[12];
         }
 
         private int CalculateThirteenthDigitInEik(int[] digits)
@@ -196,11 +196,6 @@ namespace GGG_OnlineShop.Data.Services
 
             // secondRemainder= 10
             return 0;
-        }
-
-        private bool IsAllDigits(string eikInput)
-        {
-            return eikInput.All(char.IsDigit);
         }
     }
 }
