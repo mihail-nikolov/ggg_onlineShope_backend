@@ -61,8 +61,9 @@ namespace GGG_OnlineShop.Common
 
         public const string EmailRuse = "glassgoldgroup_ruse@abv.bg";
         public const string EmailSofia = "glassgoldgroup_slatina@abv.bg";
-        public const string EmailPrimary = "testggg9@gmail.com"; // glassgoldgroup@gmail.com
+        public const string EmailPrimary = "testggg9@gmail.com";
         public const string EmailPrimaryPassword = "ggg12345";
+        public const string EmailPrimaryProduction = "glassgoldgroup@gmail.com";
 
         public const string ResetPasswordSubject = "Забравена парола";
         public const string ResetPasswordBody = "Моля, обновете паролата си, използвайки следния код: {0}";
@@ -141,7 +142,7 @@ namespace GGG_OnlineShop.Common
 
         public static HashSet<string> HighCostGroups = new HashSet<string>
         {
-            "Pilkington", "Saint-Gobain"
+            PilkingtonGroup, SaintGobainGroup, YesglassGroup
         };
     }
 }

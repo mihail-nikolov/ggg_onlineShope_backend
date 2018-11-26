@@ -21,7 +21,7 @@
         [Required]
         [StringLength(GlobalConstants.DescriptionMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
         public string Description { get; set; }
-        
+
         [StringLength(GlobalConstants.FullAddressMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
         public string FullAddress { get; set; }
 
@@ -34,6 +34,7 @@
         [Required]
         public bool WithInstallation { get; set; }
 
+        public bool OrderFromRuse { get; set; }
         // TODO  field for invoice
 
         [Required]

@@ -85,6 +85,17 @@
                     emails.SendEmail(emailTo, string.Format(GlobalConstants.OrderMade, orderItemIds.ToString().TrimEnd(',', ' ')),
                         body, GlobalConstants.SMTPServer,
                         GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
+
+                    emails.SendEmail(GlobalConstants.EmailPrimaryProduction, string.Format(GlobalConstants.OrderMade, orderItemIds.ToString().TrimEnd(',', ' ')),
+                        body, GlobalConstants.SMTPServer,
+                        GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
+
+                    var orderFromRuse = items[0].OrderFromRuse;
+
+                    emails.SendEmail(orderFromRuse ? GlobalConstants.EmailRuse : GlobalConstants.EmailSofia,
+                        string.Format(GlobalConstants.OrderMade, orderItemIds.ToString().TrimEnd(',', ' ')),
+                        body, GlobalConstants.SMTPServer,
+                        GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
                 }
 
                 return result;
