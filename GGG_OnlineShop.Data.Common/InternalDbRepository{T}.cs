@@ -12,12 +12,7 @@
     {
         public InternalDbRepository(IInternalApiDbContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentException(GlobalConstants.DBContextRequiredErrorMessage, nameof(context));
-            }
-
-            this.Context = context;
+            this.Context = context ?? throw new ArgumentException(GlobalConstants.DBContextRequiredErrorMessage, nameof(context));
             this.DbSet = Context.Set<T>();
         }
 

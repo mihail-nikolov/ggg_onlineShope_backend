@@ -32,10 +32,10 @@
         private readonly string controllerName = MethodBase.GetCurrentMethod().DeclaringType.Name;
         private ApplicationUserManager _userManager;
         private readonly IUsersService users;
-        private readonly IOrderedItemsService orders;
+        private readonly IOrdersService orders;
         private readonly IEmailsService emails;
 
-        public AccountController(IUsersService users, IOrderedItemsService orders, IEmailsService emails, ILogsService dbLogger)
+        public AccountController(IUsersService users, IOrdersService orders, IEmailsService emails, ILogsService dbLogger)
             : base(dbLogger)
         {
             this.users = users;
@@ -43,7 +43,7 @@
             this.emails = emails;
         }
 
-        public AccountController(IUsersService users, IOrderedItemsService orders, IEmailsService emails,
+        public AccountController(IUsersService users, IOrdersService orders, IEmailsService emails,
             ApplicationUserManager userManager, ISecureDataFormat<AuthenticationTicket> accessTokenFormat, ILogsService dbLogger)
             : base(dbLogger)
         {
@@ -285,7 +285,7 @@
                 var username = this.User.Identity.Name;
                 var user = await UserManager.FindByNameAsync(username);
 
-                if (user.OrderedItems.Any())
+                if (user.Orders.Any())
                 {
                     this.users.CleanUserInfoFromOrders(user);
                 }

@@ -263,8 +263,8 @@
     <Compile Include="Areas\Administration\Controllers\AdministrationController.cs" />
     <Compile Include="Areas\Administration\Controllers\ManageOrderedItemsController.cs" />
     <Compile Include="Areas\Administration\Controllers\ManageUsersController.cs" />
-    <Compile Include="Areas\Administration\Models\OrderedItems\OrderedItemRequestUpdateStatusModel.cs" />
-    <Compile Include="Areas\Administration\Models\OrderedItems\OrderedItemResponseModelWIthUserInfo.cs" />
+    <Compile Include="Areas\Administration\Models\OrderedItems\OrderRequestUpdateStatusModel.cs" />
+    <Compile Include="Areas\Administration\Models\OrderedItems\OrderResponseModelWIthUserInfo.cs" />
     <Compile Include="Areas\Administration\Models\Users\UserResponseModel.cs" />
     <Compile Include="Areas\Administration\Models\Users\UserUpdateModel.cs" />
     <Compile Include="Controllers\AccountController.cs" />
@@ -287,6 +287,8 @@
     <Compile Include="Models\EnquiryRequestModel.cs" />
     <Compile Include="Models\OrderedItemRequestModel.cs" />
     <Compile Include="Models\OrderedItemResponseModel.cs" />
+    <Compile Include="Models\OrderRequestModel.cs" />
+    <Compile Include="Models\OrderResponseModel.cs" />
     <Compile Include="Models\VehicleBodyTypesRequestModel.cs" />
     <Compile Include="Models\VehicleBodyTypeResponseModel.cs" />
     <Compile Include="Models\VehicleGlassAccessoryResponseModel.cs" />
@@ -370,7 +372,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>60918</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

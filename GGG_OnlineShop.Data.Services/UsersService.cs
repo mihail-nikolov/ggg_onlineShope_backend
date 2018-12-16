@@ -17,7 +17,7 @@ namespace GGG_OnlineShop.Data.Services
 
         public void CleanUserInfoFromOrders(User user)
         {
-            var orders = user.OrderedItems;
+            var orders = user.Orders;
 
             foreach (var order in orders)
             {

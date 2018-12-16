@@ -1,4 +1,7 @@
-﻿namespace GGG_OnlineShop.Web.Api.Areas.Administration.Controllers
+﻿using GGG_OnlineShop.InternalApiDB.Models;
+using GGG_OnlineShop.InternalApiDB.Models.Enums;
+
+namespace GGG_OnlineShop.Web.Api.Areas.Administration.Controllers
 {
     using Api.Controllers;
     using Common;
@@ -14,12 +17,14 @@
     public class AdministrationController : BaseController
     {
         private readonly IGlassesInfoDbFiller dbInfoFiller;
+        private readonly IFlagService _flagService;
         private readonly string controllerName = MethodBase.GetCurrentMethod().DeclaringType.Name;
 
-        public AdministrationController(IGlassesInfoDbFiller dbInfoFiller, ILogsService dbLogger)
+        public AdministrationController(IGlassesInfoDbFiller dbInfoFiller, ILogsService dbLogger, IFlagService flagService)
             : base(dbLogger)
         {
             this.dbInfoFiller = dbInfoFiller;
+            _flagService = flagService;
         }
 
         [HttpPost]
@@ -44,8 +49,8 @@
             }
             catch (Exception e)
             {
-               HandlExceptionLogging(e, "", controllerName);
-               return InternalServerError();                            
+                HandlExceptionLogging(e, "", controllerName);
+                return InternalServerError();
             }
         }
 
@@ -61,8 +66,41 @@
             }
             catch (Exception e)
             {
-               HandlExceptionLogging(e, "", controllerName);
-               return InternalServerError();                               
+                HandlExceptionLogging(e, "", controllerName);
+                return InternalServerError();
+            }
+        }
+
+
+        [HttpPost]
+        [Route("SetHighCostProductVisibility")]
+        public IHttpActionResult SetHighCostProductVisibility(bool visible)
+        {
+            try
+            {
+                _flagService.Add(new Flag { FlagTypeEnum = FlagType.ShowOnlyHighCostGroups, Value = visible });
+                return this.Ok();
+            }
+            catch (Exception e)
+            {
+                HandlExceptionLogging(e, "", controllerName);
+                return InternalServerError();
+            }
+        }
+
+        [HttpGet]
+        [Route("GetHighCostProductVisibility")]
+        public IHttpActionResult GetHighCostProductVisibility()
+        {
+            try
+            {
+                bool value = _flagService.GetFlagValue(FlagType.ShowOnlyHighCostGroups);
+                return this.Ok(value);
+            }
+            catch (Exception e)
+            {
+                HandlExceptionLogging(e, "", controllerName);
+                return InternalServerError();
             }
         }
     }

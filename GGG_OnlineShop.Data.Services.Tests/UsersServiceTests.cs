@@ -109,10 +109,10 @@ namespace GGG_OnlineShop.Data.Services.Tests
                 Id = testId,
                 Email = testEmail,
                 PhoneNumber = testPhoneNumber,
-                OrderedItems = new List<OrderedItem>()
+                Orders = new List<Order>()
                 {
-                    new OrderedItem() { UserId = testId },
-                    new OrderedItem() { UserId = testId },
+                    new Order() { UserId = testId },
+                    new Order() { UserId = testId },
                 }
             };
 
@@ -123,12 +123,12 @@ namespace GGG_OnlineShop.Data.Services.Tests
 
             service.CleanUserInfoFromOrders(user);
 
-            Assert.AreEqual(user.OrderedItems.ToList()[0].UserId, null);
-            Assert.AreEqual(user.OrderedItems.ToList()[0].UserInfo, string.Format(GlobalConstants.DeletedUserInfo, user.PhoneNumber));
-            Assert.AreEqual(user.OrderedItems.ToList()[0].UserЕmail, user.Email);
-            Assert.AreEqual(user.OrderedItems.ToList()[1].UserId, null);
-            Assert.AreEqual(user.OrderedItems.ToList()[1].UserInfo, string.Format(GlobalConstants.DeletedUserInfo, user.PhoneNumber));
-            Assert.AreEqual(user.OrderedItems.ToList()[1].UserЕmail, user.Email);
+            Assert.AreEqual(user.Orders.ToList()[0].UserId, null);
+            Assert.AreEqual(user.Orders.ToList()[0].UserInfo, string.Format(GlobalConstants.DeletedUserInfo, user.PhoneNumber));
+            Assert.AreEqual(user.Orders.ToList()[0].UserЕmail, user.Email);
+            Assert.AreEqual(user.Orders.ToList()[1].UserId, null);
+            Assert.AreEqual(user.Orders.ToList()[1].UserInfo, string.Format(GlobalConstants.DeletedUserInfo, user.PhoneNumber));
+            Assert.AreEqual(user.Orders.ToList()[1].UserЕmail, user.Email);
             repositoryMock.VerifyAll();
             repositoryMock.Verify(x => x.Save(), Times.Exactly(1));
         }

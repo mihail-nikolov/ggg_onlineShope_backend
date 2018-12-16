@@ -40,7 +40,7 @@
         public void Update_ShouldReturnInternalServerErrorAndLogError_WhenOrdersServiceIsNull()
         {
             var usersMock = new Mock<IUsersService>();
-            OrderedItemRequestUpdateStatusModel request = new OrderedItemRequestUpdateStatusModel();
+            OrderRequestUpdateStatusModel request = new OrderRequestUpdateStatusModel();
             var controller = new ManageOrderedItemsController(null, null, mockedLogger.Object);
 
             var result = controller.Update(request);
@@ -54,37 +54,37 @@
         {
             mapper.Execute();
 
-            var orders = new List<OrderedItem>()
+            var orders = new List<Order>()
             {
-                new OrderedItem()
+                new Order()
                 {
-                    Status = DeliveryStatus.New,
+                    Status = DeliveryStatus.Unpaid,
                     Id = 2,
                     CreatedOn = DateTime.MinValue
                 },
-                new OrderedItem()
+                new Order()
                 {
-                    Status = DeliveryStatus.New,
+                    Status = DeliveryStatus.Unpaid,
                     Id = 3,
                     CreatedOn = DateTime.MinValue
                 },
-                new OrderedItem()
+                new Order()
                 {
-                    Status = DeliveryStatus.New,
+                    Status = DeliveryStatus.Unpaid,
                     Id = 1,
                     CreatedOn = DateTime.Now
                 }
             }.AsQueryable();
 
-            var ordersMock = new Mock<IOrderedItemsService>();
+            var ordersMock = new Mock<IOrdersService>();
             ordersMock.Setup(v => v.GetNewOrders()).Returns(orders);
 
             var controller = new ManageOrderedItemsController(ordersMock.Object, null, null);
 
-            var result = controller.Get(pending: true);
+            var result = controller.Get(true);
 
-            Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<List<OrderedItemResponseModelWIthUserInfo>>));
-            var responseContent = ((OkNegotiatedContentResult<List<OrderedItemResponseModelWIthUserInfo>>)result).Content;
+            Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<List<OrderResponseModelWIthUserInfo>>));
+            var responseContent = ((OkNegotiatedContentResult<List<OrderResponseModelWIthUserInfo>>)result).Content;
 
             Assert.AreEqual(responseContent[0].Id, 1);
             Assert.AreEqual(responseContent[1].Id, 2);
@@ -97,34 +97,34 @@
         {
             mapper.Execute();
 
-            var orders = new List<OrderedItem>()
+            var orders = new List<Order>()
             {
-                new OrderedItem()
+                new Order()
                 {
                     Status = DeliveryStatus.Ordered,
                     Id = 2
                 },
-                new OrderedItem()
+                new Order()
                 {
                     Status = DeliveryStatus.Ordered,
                     Id = 1
                 },
-                new OrderedItem()
+                new Order()
                 {
                     Status = DeliveryStatus.Ordered,
                     Id = 3
                 }
             }.AsQueryable();
 
-            var ordersMock = new Mock<IOrderedItemsService>();
+            var ordersMock = new Mock<IOrdersService>();
             ordersMock.Setup(v => v.GetOrderedProducts()).Returns(orders);
 
             var controller = new ManageOrderedItemsController(ordersMock.Object, null, null);
 
             var result = controller.Get(ordered: true);
 
-            Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<List<OrderedItemResponseModelWIthUserInfo>>));
-            var responseContent = ((OkNegotiatedContentResult<List<OrderedItemResponseModelWIthUserInfo>>)result).Content;
+            Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<List<OrderResponseModelWIthUserInfo>>));
+            var responseContent = ((OkNegotiatedContentResult<List<OrderResponseModelWIthUserInfo>>)result).Content;
 
             Assert.AreEqual(responseContent[0].Id, 1);
             Assert.AreEqual(responseContent[1].Id, 2);
@@ -137,34 +137,34 @@
         {
             mapper.Execute();
 
-            var orders = new List<OrderedItem>()
+            var orders = new List<Order>()
             {
-                new OrderedItem()
+                new Order()
                 {
                     Status = DeliveryStatus.Done,
                     Id = 2
                 },
-                new OrderedItem()
+                new Order()
                 {
                     Status = DeliveryStatus.Done,
                     Id = 1
                 },
-                new OrderedItem()
+                new Order()
                 {
                     Status = DeliveryStatus.Done,
                     Id = 3
                 }
             }.AsQueryable();
 
-            var ordersMock = new Mock<IOrderedItemsService>();
+            var ordersMock = new Mock<IOrdersService>();
             ordersMock.Setup(v => v.GetDoneOrders()).Returns(orders);
 
             var controller = new ManageOrderedItemsController(ordersMock.Object, null, null);
 
             var result = controller.Get(done: true);
 
-            Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<List<OrderedItemResponseModelWIthUserInfo>>));
-            var responseContent = ((OkNegotiatedContentResult<List<OrderedItemResponseModelWIthUserInfo>>)result).Content;
+            Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<List<OrderResponseModelWIthUserInfo>>));
+            var responseContent = ((OkNegotiatedContentResult<List<OrderResponseModelWIthUserInfo>>)result).Content;
 
             Assert.AreEqual(responseContent[0].Id, 1);
             Assert.AreEqual(responseContent[1].Id, 2);
@@ -177,34 +177,34 @@
         {
             mapper.Execute();
 
-            var orders = new List<OrderedItem>()
+            var orders = new List<Order>()
             {
-                new OrderedItem()
+                new Order()
                 {
-                    Status = DeliveryStatus.New,
+                    Status = DeliveryStatus.Unpaid,
                     Id = 2,
                     CreatedOn = DateTime.MinValue
                 },
-                new OrderedItem()
+                new Order()
                 {
-                    Status = DeliveryStatus.New,
+                    Status = DeliveryStatus.Unpaid,
                     Id = 1,
                     CreatedOn = DateTime.MinValue
                 },
-                new OrderedItem()
+                new Order()
                 {
                     Status = DeliveryStatus.Ordered,
                     Id = 4,
                     CreatedOn = DateTime.MinValue
                 },
-                new OrderedItem()
+                new Order()
                 {
                     Status = DeliveryStatus.Ordered,
                     Id = 3,
                     CreatedOn = DateTime.Now
                 }
                 ,
-                new OrderedItem()
+                new Order()
                 {
                     Status = DeliveryStatus.Done,
                     Id = 5,
@@ -212,15 +212,15 @@
                 }
             }.AsQueryable();
 
-            var ordersMock = new Mock<IOrderedItemsService>();
+            var ordersMock = new Mock<IOrdersService>();
             ordersMock.Setup(v => v.GetAll()).Returns(orders);
 
             var controller = new ManageOrderedItemsController(ordersMock.Object, null, null);
 
             var result = controller.Get();
 
-            Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<List<OrderedItemResponseModelWIthUserInfo>>));
-            var responseContent = ((OkNegotiatedContentResult<List<OrderedItemResponseModelWIthUserInfo>>)result).Content;
+            Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<List<OrderResponseModelWIthUserInfo>>));
+            var responseContent = ((OkNegotiatedContentResult<List<OrderResponseModelWIthUserInfo>>)result).Content;
 
             Assert.AreEqual(responseContent[0].Id, 1);
             Assert.AreEqual(responseContent[1].Id, 2);
@@ -235,40 +235,40 @@
         {
             mapper.Execute();
 
-            var orders = new List<OrderedItem>()
+            var orders = new List<Order>()
             {
-                new OrderedItem()
+                new Order()
                 {
-                    Status = DeliveryStatus.New,
+                    Status = DeliveryStatus.Unpaid,
                     Id = 1,
                     UserId = "1",
                     User = new User() {IsCompany = true, Bulstat = "Bulstat", Name = "CompanyName", Email = "testEmail", PhoneNumber = "0088"}
                 },
-                new OrderedItem()
+                new Order()
                 {
-                    Status = DeliveryStatus.New,
+                    Status = DeliveryStatus.Unpaid,
                     Id = 2,
                     UserId = "2",
                     User = new User() {IsCompany = false, Bulstat = "Bulstat", Name = "UserName", Email = "testEmail1", PhoneNumber = "0099"}
                 },
-                new OrderedItem()
+                new Order()
                 {
-                    Status = DeliveryStatus.New,
+                    Status = DeliveryStatus.Unpaid,
                     Id = 3,
                     UserInfo = "AnonymousUserInfo",
                     UserЕmail = "AnonymousUserЕmail"
                 },
             }.AsQueryable();
 
-            var ordersMock = new Mock<IOrderedItemsService>();
+            var ordersMock = new Mock<IOrdersService>();
             ordersMock.Setup(v => v.GetNewOrders()).Returns(orders);
 
             var controller = new ManageOrderedItemsController(ordersMock.Object, null, null);
 
-            var result = controller.Get(pending: true);
+            var result = controller.Get(true);
 
-            Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<List<OrderedItemResponseModelWIthUserInfo>>));
-            var responseContent = ((OkNegotiatedContentResult<List<OrderedItemResponseModelWIthUserInfo>>)result).Content;
+            Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<List<OrderResponseModelWIthUserInfo>>));
+            var responseContent = ((OkNegotiatedContentResult<List<OrderResponseModelWIthUserInfo>>)result).Content;
 
             Assert.AreEqual("Bulstat; CompanyName; testEmail; 0088", responseContent[0].UserInfo);
             Assert.IsNull(responseContent[0].UserInfo);
@@ -291,27 +291,27 @@
             mapper.Execute();
 
             int testId = 1;
-            var order = new OrderedItem()
+            var order = new Order()
             {
-                Status = DeliveryStatus.New,
+                Status = DeliveryStatus.Unpaid,
                 Id = testId,
                 UserЕmail = "testEmail"
             };
 
-            var ordersMock = new Mock<IOrderedItemsService>();
+            var ordersMock = new Mock<IOrdersService>();
             ordersMock.Setup(v => v.GetById(testId)).Returns(order);
             ordersMock.Setup(v => v.Save());
 
             var emailsMock = new Mock<IEmailsService>();
 
-            OrderedItemRequestUpdateStatusModel request = new OrderedItemRequestUpdateStatusModel() { Id = 1, Status = DeliveryStatus.Done };
+            OrderRequestUpdateStatusModel request = new OrderRequestUpdateStatusModel() { Id = 1, Status = DeliveryStatus.Done };
 
             var controller = new ManageOrderedItemsController(ordersMock.Object, emailsMock.Object, null);
 
             var result = controller.Update(request);
 
-            Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<OrderedItemResponseModelWIthUserInfo>));
-            var responseContent = ((OkNegotiatedContentResult<OrderedItemResponseModelWIthUserInfo>)result).Content;
+            Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<OrderResponseModelWIthUserInfo>));
+            var responseContent = ((OkNegotiatedContentResult<OrderResponseModelWIthUserInfo>)result).Content;
 
             Assert.AreEqual(responseContent.Id, testId);
             ordersMock.VerifyAll();
@@ -326,14 +326,14 @@
             DeliveryStatus status = DeliveryStatus.Done;
             string statusBG = EnglishBulgarianDictionary.Namings[status.ToString()];
 
-            var order = new OrderedItem()
+            var order = new Order()
             {
-                Status = DeliveryStatus.New,
+                Status = DeliveryStatus.Unpaid,
                 Id = testId,
                 UserЕmail = "testEmail"
             };
 
-            var ordersMock = new Mock<IOrderedItemsService>();
+            var ordersMock = new Mock<IOrdersService>();
             ordersMock.Setup(v => v.GetById(testId)).Returns(order);
 
             var emailsMock = new Mock<IEmailsService>();
@@ -343,14 +343,14 @@
                                               GlobalConstants.SMTPServer,
                                               GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword));
 
-            OrderedItemRequestUpdateStatusModel request = new OrderedItemRequestUpdateStatusModel() { Id = testId, Status = status };
+            OrderRequestUpdateStatusModel request = new OrderRequestUpdateStatusModel() { Id = testId, Status = status };
 
             var controller = new ManageOrderedItemsController(ordersMock.Object, emailsMock.Object, null);
 
             var result = controller.Update(request);
 
-            Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<OrderedItemResponseModelWIthUserInfo>));
-            var responseContent = ((OkNegotiatedContentResult<OrderedItemResponseModelWIthUserInfo>)result).Content;
+            Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<OrderResponseModelWIthUserInfo>));
+            var responseContent = ((OkNegotiatedContentResult<OrderResponseModelWIthUserInfo>)result).Content;
 
             Assert.AreEqual(responseContent.Id, testId);
             emailsMock.VerifyAll();
@@ -363,14 +363,14 @@
 
             int testId = 1;
             var testUser = new User { Email = "testEmail" };
-            var order = new OrderedItem()
+            var order = new Order()
             {
-                Status = DeliveryStatus.New,
+                Status = DeliveryStatus.Unpaid,
                 Id = testId,
                 User = testUser
             };
 
-            var ordersMock = new Mock<IOrderedItemsService>();
+            var ordersMock = new Mock<IOrdersService>();
             ordersMock.Setup(v => v.GetById(testId)).Returns(order);
 
             var emailsMock = new Mock<IEmailsService>();
@@ -380,14 +380,14 @@
                                               GlobalConstants.SMTPServer,
                                               GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword));
 
-            OrderedItemRequestUpdateStatusModel request = new OrderedItemRequestUpdateStatusModel() { Id = testId, Status = DeliveryStatus.Done };
+            OrderRequestUpdateStatusModel request = new OrderRequestUpdateStatusModel() { Id = testId, Status = DeliveryStatus.Done };
 
             var controller = new ManageOrderedItemsController(ordersMock.Object, emailsMock.Object, null);
 
             var result = controller.Update(request);
 
-            Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<OrderedItemResponseModelWIthUserInfo>));
-            var responseContent = ((OkNegotiatedContentResult<OrderedItemResponseModelWIthUserInfo>)result).Content;
+            Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<OrderResponseModelWIthUserInfo>));
+            var responseContent = ((OkNegotiatedContentResult<OrderResponseModelWIthUserInfo>)result).Content;
 
             Assert.AreEqual(responseContent.Id, testId);
             emailsMock.VerifyAll();

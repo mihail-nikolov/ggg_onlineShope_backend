@@ -14,18 +14,18 @@
         [TestMethod]
         public void GetDoneOrders_ShouldReturnNeededItem()
         {
-            var items = new List<OrderedItem>()
+            var order = new List<Order>()
             {
-                new OrderedItem() {Id = 1,  Status = DeliveryStatus.New},
-                new OrderedItem() {Id = 2,  Status = DeliveryStatus.Ordered},
-                new OrderedItem() {Id = 3,  Status = DeliveryStatus.Done},
-                new OrderedItem() {Id = 4,  Status = DeliveryStatus.Done},
+                new Order() {Id = 1,  Status = DeliveryStatus.Unpaid},
+                new Order() {Id = 2,  Status = DeliveryStatus.Ordered},
+                new Order() {Id = 3,  Status = DeliveryStatus.Done},
+                new Order() {Id = 4,  Status = DeliveryStatus.Done},
             }.AsQueryable();
 
-            var repositoryMock = new Mock<IInternalDbRepository<OrderedItem>>();
-            repositoryMock.Setup(x => x.All()).Returns(() => items);
+            var repositoryMock = new Mock<IInternalDbRepository<Order>>();
+            repositoryMock.Setup(x => x.All()).Returns(() => order);
 
-            var service = new OrderedItemsService(repositoryMock.Object, null);
+            var service = new OrdersService(repositoryMock.Object, null);
 
             var result = service.GetDoneOrders().ToList();
 
@@ -38,18 +38,18 @@
         [TestMethod]
         public void GetNewOrders_ShouldReturnNeededItem()
         {
-            var items = new List<OrderedItem>()
+            var order = new List<Order>()
             {
-                new OrderedItem() {Id = 1,  Status = DeliveryStatus.Done},
-                new OrderedItem() {Id = 2,  Status = DeliveryStatus.Ordered},
-                new OrderedItem() {Id = 3,  Status = DeliveryStatus.New},
-                new OrderedItem() {Id = 4,  Status = DeliveryStatus.New},
+                new Order() {Id = 1,  Status = DeliveryStatus.Unpaid},
+                new Order() {Id = 2,  Status = DeliveryStatus.Ordered},
+                new Order() {Id = 3,  Status = DeliveryStatus.Done},
+                new Order() {Id = 4,  Status = DeliveryStatus.Done},
             }.AsQueryable();
 
-            var repositoryMock = new Mock<IInternalDbRepository<OrderedItem>>();
-            repositoryMock.Setup(x => x.All()).Returns(() => items);
+            var repositoryMock = new Mock<IInternalDbRepository<Order>>();
+            repositoryMock.Setup(x => x.All()).Returns(() => order);
 
-            var service = new OrderedItemsService(repositoryMock.Object, null);
+            var service = new OrdersService(repositoryMock.Object, null);
 
             var result = service.GetNewOrders().ToList();
 
@@ -62,18 +62,18 @@
         [TestMethod]
         public void GetOrderedProducts_ShouldReturnNeededItem()
         {
-            var items = new List<OrderedItem>()
+            var order = new List<Order>()
             {
-                new OrderedItem() {Id = 1,  Status = DeliveryStatus.New},
-                new OrderedItem() {Id = 2,  Status = DeliveryStatus.Done},
-                new OrderedItem() {Id = 3,  Status = DeliveryStatus.Ordered},
-                new OrderedItem() {Id = 4,  Status = DeliveryStatus.Ordered},
+                new Order() {Id = 1,  Status = DeliveryStatus.Unpaid},
+                new Order() {Id = 2,  Status = DeliveryStatus.Ordered},
+                new Order() {Id = 3,  Status = DeliveryStatus.Done},
+                new Order() {Id = 4,  Status = DeliveryStatus.Done},
             }.AsQueryable();
 
-            var repositoryMock = new Mock<IInternalDbRepository<OrderedItem>>();
-            repositoryMock.Setup(x => x.All()).Returns(() => items);
+            var repositoryMock = new Mock<IInternalDbRepository<Order>>();
+            repositoryMock.Setup(x => x.All()).Returns(() => order);
 
-            var service = new OrderedItemsService(repositoryMock.Object, null);
+            var service = new OrdersService(repositoryMock.Object, null);
 
             var result = service.GetOrderedProducts().ToList();
 
@@ -86,19 +86,17 @@
         [TestMethod]
         public void IsValidOrder_SouldReturnTrue_WhenAbsolutelyAllNeededConditionsOk()
         {
-            var order = new OrderedItem()
+            var order = new Order()
             {
                 UserInfo = "test",
                 UserЕmail = "test",
                 UserId = "test",
-                EuroCode = "test",
-                OtherCodes = "test",
                 Price = 20,
                 PaidPrice = 20,
                 User = new User() { IsDeferredPaymentAllowed = true},
             };
 
-            var service = new OrderedItemsService(null, null);
+            var service = new OrdersService(null, null);
 
             var result = service.IsValidOrder(order);
 
@@ -108,16 +106,15 @@
         [TestMethod]
         public void IsValidOrder_SouldReturnTrue_WhenOnlyEuroCodeSendNoAnonymousInfoSend()
         {
-            var order = new OrderedItem()
+            var order = new Order()
             {
                 UserInfo = "test",
                 UserЕmail = "test",
-                EuroCode = "test",
                 Price = 20,
                 PaidPrice = 20,
             };
 
-            var service = new OrderedItemsService(null, null);
+            var service = new OrdersService(null, null);
 
             var result = service.IsValidOrder(order);
 
@@ -127,16 +124,15 @@
         [TestMethod]
         public void IsValidOrder_SouldReturnTrue_WhenOnlyOtherCodesSendNoAnonymousInfoSend()
         {
-            var order = new OrderedItem()
+            var order = new Order()
             {
                 UserInfo = "test",
                 UserЕmail = "test",
-                OtherCodes = "test",
                 Price = 20,
                 PaidPrice = 20,
             };
 
-            var service = new OrderedItemsService(null, null);
+            var service = new OrdersService(null, null);
 
             var result = service.IsValidOrder(order);
 
@@ -146,16 +142,15 @@
         [TestMethod]
         public void IsValidOrder_SouldReturnTrue_WhenPaidPriceNotEnoughButDeferredPaymentAllowed()
         {
-            var order = new OrderedItem()
+            var order = new Order()
             {
                 UserId = "test",
                 User = new User() { IsDeferredPaymentAllowed = true, Id = "test" },
-                OtherCodes = "test",
                 Price = 20,
                 PaidPrice = 0
             };
 
-            var service = new OrderedItemsService(null, null);
+            var service = new OrdersService(null, null);
 
             var result = service.IsValidOrder(order);
 

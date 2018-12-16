@@ -72,6 +72,7 @@
     <Compile Include="Contracts\IBaseDataService{T}.cs" />
     <Compile Include="Contracts\IBaseDataWithCreatorService{T}.cs" />
     <Compile Include="Base\BaseDataService{T}.cs" />
+    <Compile Include="Contracts\IFlagService.cs" />
     <Compile Include="Contracts\ILogsService.cs" />
     <Compile Include="Contracts\IEmailsService.cs" />
     <Compile Include="Contracts\IGlassesInfoDbFiller.cs" />
@@ -79,7 +80,7 @@
     <Compile Include="Contracts\IGoodsService.cs" />
     <Compile Include="Contracts\IInterchangeablePartsService.cs" />
     <Compile Include="Contracts\IObjectsService.cs" />
-    <Compile Include="Contracts\IOrderedItemsService.cs" />
+    <Compile Include="Contracts\IOrdersService.cs" />
     <Compile Include="Contracts\IProductQuantitiesService.cs" />
     <Compile Include="Contracts\ISolutionBaseConfig.cs" />
     <Compile Include="Contracts\IStoreService.cs" />
@@ -93,6 +94,7 @@
     <Compile Include="Contracts\IVehicleModelsService.cs" />
     <Compile Include="Contracts\IVehiclesService.cs" />
     <Compile Include="Contracts\IVehicleSuperceedsService.cs" />
+    <Compile Include="FlagService.cs" />
     <Compile Include="LogsService.cs" />
     <Compile Include="SolutionBaseConfig.cs" />
     <Compile Include="EmailsService.cs" />
@@ -113,7 +115,7 @@
     <Compile Include="JsonParseModels\ModelPartYearMonthJsonInfoModel.cs" />
     <Compile Include="JsonParseModels\ImageJsonInfoModel.cs" />
     <Compile Include="JsonParseModels\SuperceedJsonInfoModel.cs" />
-    <Compile Include="OrderedItemsService.cs" />
+    <Compile Include="OrdersService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UsersService.cs" />
     <Compile Include="VehicleBodyTypesService.cs" />

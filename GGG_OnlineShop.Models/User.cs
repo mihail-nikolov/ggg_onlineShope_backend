@@ -12,11 +12,11 @@
 
     public class User : IdentityUser, IAuditInfo, IDeletableEntity
     {
-        private ICollection<OrderedItem> orderedItems;
+        private ICollection<Order> orders;
 
         public User()
         {
-            this.orderedItems = new HashSet<OrderedItem>();
+            this.orders = new HashSet<Order>();
             this.CreatedOn = DateTime.Now;
         }
 
@@ -62,10 +62,10 @@
 
         public DateTime? DeletedOn { get; set; }
 
-        public virtual ICollection<OrderedItem> OrderedItems
+        public virtual ICollection<Order> Orders
         {
-            get => this.orderedItems;
-            set => this.orderedItems = value;
+            get => this.orders;
+            set => this.orders = value;
         }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<User> manager, string authenticationType)

@@ -2,7 +2,9 @@
 {
     public enum DeliveryStatus
     {
-        New,
+        Unpaid,
+        Paid,
+        Accepted,
         Ordered,
         Done
     }

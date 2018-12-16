@@ -9,19 +9,17 @@
     using System;
     using System.Reflection;
     using System.Web.Http;
-    using System.Collections.Generic;
-    using System.Text;
     using System.Web.Http.Results;
 
     [RoutePrefix("api/OrderedItems")]
     public class OrderedItemController : BaseController
     {
-        private readonly IOrderedItemsService orders;
+        private readonly IOrdersService orders;
         private readonly IUsersService users;
         private readonly IEmailsService emails;
         private readonly string controllerName = MethodBase.GetCurrentMethod().DeclaringType.Name;
 
-        public OrderedItemController(IOrderedItemsService orders, IUsersService users, IEmailsService emails, ILogsService dbLogger)
+        public OrderedItemController(IOrdersService orders, IUsersService users, IEmailsService emails, ILogsService dbLogger)
             : base(dbLogger)
         {
             this.orders = orders;
@@ -31,8 +29,13 @@
 
         [HttpPost]
         [Route("order")]
-        public IHttpActionResult Order(List<OrderedItemRequestModel> items)
+        public IHttpActionResult Order(OrderRequestModel orderRequest)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
                 IHttpActionResult result = Ok();
@@ -45,57 +48,48 @@
                     user = this.users.GetById(userId);
                 }
 
-                StringBuilder orderItemIds = new StringBuilder();
-                // info
-                // if registered user - default: in fullAddress will write down the user company deliveryAddress
-                // else if UseAlternativeAddress and registered -> use passed fullAddress
-                // if nonRegisteredUser -> fullAddress (required)
-                foreach (var item in items)
+                var order = this.Mapper.Map<Order>(orderRequest);
+                order.User = user;
+                order.Status = DeliveryStatus.Unpaid;
+
+                if (this.orders.IsValidOrder(order))
                 {
-                    OrderedItem order = new OrderedItem();
-
-                    item.Status = DeliveryStatus.New;
-                    if (!ModelState.IsValid)
-                    {
-                        result = BadRequest(ModelState);
-                        break;
-                    }
-
-                    order = this.Mapper.Map<OrderedItem>(item);
-                    order.User = user;
-                    order.UserId = userId;
-
-                    if (this.orders.IsValidOrder(order))
-                    {
-                        this.orders.Add(order);
-
-                        orderItemIds.Append($"{order.Id}, ");
-                    }
-                    else
-                    {
-                        result = this.BadRequest("Error while valditing order");
-                        break;
-                    }
+                    this.orders.Add(order);
+                }
+                else
+                {
+                    result = this.BadRequest("Грешка при валидацията на поръчката");
                 }
 
                 if (result is OkResult)
                 {
-                    string body = $"направена поръчка: {string.Join("\n\n", items)}";
-                    string emailTo = items[0].UserЕmail;
-                    emails.SendEmail(emailTo, string.Format(GlobalConstants.OrderMade, orderItemIds.ToString().TrimEnd(',', ' ')),
+                    string body = $"направена поръчка: \n\n, {orderRequest})";
+                    string emailTo = order.UserЕmail;
+                    emails.SendEmail(emailTo, string.Format(GlobalConstants.OrderMade, order.Id),
                         body, GlobalConstants.SMTPServer,
                         GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
 
-                    emails.SendEmail(GlobalConstants.EmailPrimaryProduction, string.Format(GlobalConstants.OrderMade, orderItemIds.ToString().TrimEnd(',', ' ')),
+                    emails.SendEmail(GlobalConstants.EmailPrimaryProduction, string.Format(GlobalConstants.OrderMade, order.Id),
                         body, GlobalConstants.SMTPServer,
                         GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
 
-                    var orderFromRuse = items[0].OrderFromRuse;
+                    var installationRuse = orderRequest.InstallationRuse;
+                    var installationSofia = orderRequest.InstallationSofia;
 
-                    emails.SendEmail(orderFromRuse ? GlobalConstants.EmailRuse : GlobalConstants.EmailSofia,
-                        string.Format(GlobalConstants.OrderMade, orderItemIds.ToString().TrimEnd(',', ' ')),
-                        body, GlobalConstants.SMTPServer,
-                        GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
+                    if (installationSofia)
+                    {
+                        emails.SendEmail(GlobalConstants.EmailSofia,
+                            string.Format(GlobalConstants.OrderMade, order.Id),
+                            body, GlobalConstants.SMTPServer,
+                            GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
+                    }
+                    else if (installationRuse)
+                    {
+                        emails.SendEmail(GlobalConstants.EmailRuse,
+                            string.Format(GlobalConstants.OrderMade, order.Id),
+                            body, GlobalConstants.SMTPServer,
+                            GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
+                    }
                 }
 
                 return result;

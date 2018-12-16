@@ -34,71 +34,15 @@ namespace GGG_OnlineShop.Web.Api.Tests
             var usersMock = new Mock<IUsersService>();
             var controller = new OrderedItemController(null, usersMock.Object, null, mockedLogger.Object);
 
-            var model = new OrderedItemRequestModel()
+            var model = new OrderRequestModel()
             {
-                Manufacturer = "nordglass"
+                Status = DeliveryStatus.Unpaid
             };
 
-            var result = controller.Order(new List<OrderedItemRequestModel> { model });
+            var result = controller.Order(model);
 
             Assert.IsInstanceOfType(result, typeof(InternalServerErrorResult));
             mockedLogger.Verify(x => x.LogError(It.IsAny<Exception>(), "", controllerName, "Order"));
-        }
-
-        [TestMethod]
-        public void Order_ShouldAddNewOrderWithAlternativeUserInfo_WhenNotAuthorized()
-        {
-            mapper.Execute();
-
-            var usersMock = new Mock<IUsersService>();
-
-            var ordersMock = new Mock<IOrderedItemsService>();
-            OrderedItem modelToAdd = new OrderedItem()
-            {
-                Manufacturer = "nordglass",
-                Status = DeliveryStatus.New,
-                FullAddress = null,
-                WithInstallation = false,
-                DeliveryNotes = "DeliveryNotes",
-                Description = "Description",
-                PaidPrice = 1,
-                Price = 1,
-                UserInfo = "AnonymousUserInfo",
-                UserЕmail = "AnonymousUserЕmail",
-                CreatedOn = DateTime.MinValue,
-                DeletedOn = null,
-                Id = 0,
-                IsDeleted = false,
-                IsInvoiceNeeded = false,
-                ModifiedOn = null,
-                OtherCodes = null,
-                User = null,
-                UserId = null
-            };
-
-            ordersMock.Setup(v => v.Add(It.IsAny<OrderedItem>()));
-            ordersMock.Setup(v => v.IsValidOrder(It.IsAny<OrderedItem>())).Returns(true);
-            var emailsMock = new Mock<IEmailsService>();
-
-            var controller = new OrderedItemController(ordersMock.Object, usersMock.Object, emailsMock.Object, null);
-
-            var model = new OrderedItemRequestModel()
-            {
-                Manufacturer = "nordglass",
-                Status = DeliveryStatus.New,
-                DeliveryNotes = "DeliveryNotes",
-                Description = "Description",
-                Price = 1,
-                PaidPrice = 1,
-                UserInfo = "AnonymousUserInfo",
-                UserЕmail = "AnonymousUserЕmail",
-            };
-
-            var result = controller.Order(new List<OrderedItemRequestModel> { model });
-
-            Assert.IsInstanceOfType(result, typeof(OkResult));
-            ordersMock.Verify(m => m.IsValidOrder(It.Is<OrderedItem>(x => AreObjectsEqual(x, modelToAdd))));
-            ordersMock.Verify(m => m.Add(It.Is<OrderedItem>(x => AreObjectsEqual(x, modelToAdd))));
         }
 
         [TestMethod]
@@ -111,17 +55,27 @@ namespace GGG_OnlineShop.Web.Api.Tests
             var usersMock = new Mock<IUsersService>();
             usersMock.Setup(v => v.GetById(testId)).Returns(() => testUser);
 
-            var ordersMock = new Mock<IOrderedItemsService>();
-            OrderedItem modelToAdd = new OrderedItem()
+            var ordersMock = new Mock<IOrdersService>();
+            OrderedItem orderedItem = new OrderedItem()
+            {
+                Manufacturer = "nordglass",
+                Price = 1,
+                CreatedOn = DateTime.MinValue,
+                DeletedOn = null,
+                Id = 0,
+                IsDeleted = false,
+                ModifiedOn = null,
+                OtherCodes = null,
+            };
+
+            var modelToAdd = new Order
             {
                 UserInfo = null,
                 UserЕmail = "testEmail",
-                Manufacturer = "nordglass",
-                Status = DeliveryStatus.New,
+                Status = DeliveryStatus.Unpaid,
                 FullAddress = "BG; SF; Liulin",
                 WithInstallation = false,
                 DeliveryNotes = "DeliveryNotes",
-                Description = "Description",
                 PaidPrice = 1,
                 Price = 1,
                 CreatedOn = DateTime.MinValue,
@@ -130,13 +84,16 @@ namespace GGG_OnlineShop.Web.Api.Tests
                 IsDeleted = false,
                 IsInvoiceNeeded = false,
                 ModifiedOn = null,
-                OtherCodes = null,
                 User = testUser,
                 UserId = testId,
+                OrderedItems = new List<OrderedItem>
+                {
+                    orderedItem
+                }
             };
 
-            ordersMock.Setup(v => v.Add(It.IsAny<OrderedItem>()));
-            ordersMock.Setup(v => v.IsValidOrder(It.IsAny<OrderedItem>())).Returns(true);
+            ordersMock.Setup(v => v.Add(It.IsAny<Order>()));
+            ordersMock.Setup(v => v.IsValidOrder(It.IsAny<Order>())).Returns(true);
             var emailsMock = new Mock<IEmailsService>();
 
             // moq the user
@@ -147,92 +104,37 @@ namespace GGG_OnlineShop.Web.Api.Tests
                 User = Mock.Of<IPrincipal>(ip => ip.Identity == mockIdentity)
             };
 
-            var model = new OrderedItemRequestModel()
+            var orderedItemRequest = new OrderedItemRequestModel()
             {
                 Manufacturer = "nordglass",
-                Status = DeliveryStatus.New,
-                DeliveryNotes = "DeliveryNotes",
                 Description = "Description",
+                Price = 1
+            };
+
+            var model = new OrderRequestModel
+            {
+                Status = DeliveryStatus.Unpaid,
+                DeliveryNotes = "DeliveryNotes",
                 Price = 1,
                 PaidPrice = 1,
                 UserЕmail = "testEmail",
                 UserId = testId,
                 FullAddress = "BG; SF; Liulin",
+                OrderedItems = new List<OrderedItemRequestModel>
+                {
+                    orderedItemRequest
+                }
             };
 
-            var result = controller.Order(new List<OrderedItemRequestModel> { model });
+            var result = controller.Order(model);
 
             Assert.IsInstanceOfType(result, typeof(OkResult));
-            ordersMock.Verify(m => m.IsValidOrder(It.Is<OrderedItem>(x => AreObjectsEqual(x, modelToAdd))));
-            ordersMock.Verify(m => m.Add(It.Is<OrderedItem>(x => AreObjectsEqual(x, modelToAdd))));
+            ordersMock.Verify(m => m.IsValidOrder(It.Is<Order>(x => AreObjectsEqual(x, modelToAdd))));
+            ordersMock.Verify(m => m.Add(It.Is<Order>(x => AreObjectsEqual(x, modelToAdd))));
         }
 
         [TestMethod]
-        public void Order_ShouldAddNewOrderWithUserInfoAndAlternativeAddress_WhenAuthorizedAndIsAlternativeAddressTrue()
-        {
-            mapper.Execute();
-
-            var testId = "testId";
-            var testUser = new User() { DeliveryCountry = "BG", DeliveryTown = "SF", DeliveryAddress = "Liulin" };
-            var usersMock = new Mock<IUsersService>();
-            usersMock.Setup(v => v.GetById(testId)).Returns(() => testUser);
-
-            var ordersMock = new Mock<IOrderedItemsService>();
-            OrderedItem modelToAdd = new OrderedItem()
-            {
-                UserInfo = null,
-                UserЕmail = null,
-                Manufacturer = "nordglass",
-                Status = DeliveryStatus.New,
-                FullAddress = "AlternativeAddress",
-                WithInstallation = false,
-                DeliveryNotes = "DeliveryNotes",
-                Description = "Description",
-                PaidPrice = 1,
-                Price = 1,
-                CreatedOn = DateTime.MinValue,
-                DeletedOn = null,
-                Id = 0,
-                IsDeleted = false,
-                IsInvoiceNeeded = false,
-                ModifiedOn = null,
-                OtherCodes = null,
-                User = testUser,
-                UserId = testId
-            };
-
-            ordersMock.Setup(v => v.Add(It.IsAny<OrderedItem>()));
-            ordersMock.Setup(v => v.IsValidOrder(It.IsAny<OrderedItem>())).Returns(true);
-            var emailsMock = new Mock<IEmailsService>();
-
-            // moq the user
-            var claim = new Claim("test", testId);
-            var mockIdentity = Mock.Of<ClaimsIdentity>(ci => ci.FindFirst(It.IsAny<string>()) == claim);
-            var controller = new OrderedItemController(ordersMock.Object, usersMock.Object, emailsMock.Object, null)
-            {
-                User = Mock.Of<IPrincipal>(ip => ip.Identity == mockIdentity)
-            };
-
-            var model = new OrderedItemRequestModel()
-            {
-                FullAddress = "AlternativeAddress",
-                Manufacturer = "nordglass",
-                Status = DeliveryStatus.New,
-                DeliveryNotes = "DeliveryNotes",
-                Description = "Description",
-                Price = 1,
-                PaidPrice = 1,
-            };
-
-            var result = controller.Order(new List<OrderedItemRequestModel> { model });
-
-            Assert.IsInstanceOfType(result, typeof(OkResult));
-            ordersMock.Verify(m => m.IsValidOrder(It.Is<OrderedItem>(x => AreObjectsEqual(x, modelToAdd))));
-            ordersMock.Verify(m => m.Add(It.Is<OrderedItem>(x => AreObjectsEqual(x, modelToAdd))));
-        }
-
-        [TestMethod]
-        public void Order_ShouldSendEmailToRegisteredUser_WhenValidOrder()
+        public void Order_ShouldSendEmailToUser_WhenValidOrder()
         {
             mapper.Execute();
 
@@ -241,10 +143,10 @@ namespace GGG_OnlineShop.Web.Api.Tests
             var usersMock = new Mock<IUsersService>();
             usersMock.Setup(v => v.GetById(testId)).Returns(() => testUser);
 
-            var ordersMock = new Mock<IOrderedItemsService>();
+            var ordersMock = new Mock<IOrdersService>();
 
-            ordersMock.Setup(v => v.Add(It.IsAny<OrderedItem>()));
-            ordersMock.Setup(v => v.IsValidOrder(It.IsAny<OrderedItem>())).Returns(true);
+            ordersMock.Setup(v => v.Add(It.IsAny<Order>()));
+            ordersMock.Setup(v => v.IsValidOrder(It.IsAny<Order>())).Returns(true);
 
             var emailsMock = new Mock<IEmailsService>();
             emailsMock.Setup(x => x.SendEmail(testUser.Email, string.Format(GlobalConstants.OrderMade, It.IsAny<string>()),
@@ -259,86 +161,29 @@ namespace GGG_OnlineShop.Web.Api.Tests
                 User = Mock.Of<IPrincipal>(ip => ip.Identity == mockIdentity)
             };
 
-            var model = new OrderedItemRequestModel()
+            var orderedItemRequest = new OrderedItemRequestModel()
             {
-                FullAddress = "AlternativeAddress",
                 Manufacturer = "nordglass",
-                Status = DeliveryStatus.New,
-                DeliveryNotes = "DeliveryNotes",
                 Description = "Description",
+                Price = 1
+            };
+
+            var model = new OrderRequestModel
+            {
+                Status = DeliveryStatus.Unpaid,
+                DeliveryNotes = "DeliveryNotes",
                 Price = 1,
                 PaidPrice = 1,
+                UserЕmail = "testEmail",
                 UserId = testId,
-                UserЕmail = "testEmail"
+                FullAddress = "BG; SF; Liulin",
+                OrderedItems = new List<OrderedItemRequestModel>
+                {
+                    orderedItemRequest
+                }
             };
 
-            var result = controller.Order(new List<OrderedItemRequestModel> { model });
-
-            Assert.IsInstanceOfType(result, typeof(OkResult));
-            emailsMock.VerifyAll();
-        }
-
-        [TestMethod]
-        public void Order_ShouldSendEmailToAnonymousUser_WhenValidOrder()
-        {
-            mapper.Execute();
-
-            var testId = "testId";
-            string eurocode = "2233A";
-            string othercodes = "3212; AS1312";
-            string anonymousEmail = "anonymousEmail";
-            string fullAddress = "Sofia BG";
-            string manufacturer = "nordglass";
-            bool isInvoiceNeeded = true;
-            bool isInstallationNeeded = false;
-            string deliveryNotes = "DeliveryNotes";
-            string description = "ALFA-ROMEO Windscreen";
-            double price = 102;
-            double paidPrice = 99;
-            DeliveryStatus status = DeliveryStatus.New;
-
-            string isInstallationNeededBG = EnglishBulgarianDictionary.Namings[isInstallationNeeded.ToString()];
-            string isInvoiceNeededBG = EnglishBulgarianDictionary.Namings[isInvoiceNeeded.ToString()];
-            string statusBG = EnglishBulgarianDictionary.Namings[status.ToString()];
-
-            var usersMock = new Mock<IUsersService>();
-            usersMock.Setup(v => v.GetById(testId)).Returns(() => null);
-
-            var ordersMock = new Mock<IOrderedItemsService>();
-
-            ordersMock.Setup(v => v.Add(It.IsAny<OrderedItem>()));
-            ordersMock.Setup(v => v.IsValidOrder(It.IsAny<OrderedItem>())).Returns(true);
-
-            var emailsMock = new Mock<IEmailsService>();
-            emailsMock.Setup(x => x.SendEmail(
-                                  anonymousEmail, string.Format(GlobalConstants.OrderMade, It.IsAny<string>()),
-                                  It.Is<string>(y => y.Contains(eurocode) && y.Contains(othercodes) && y.Contains(fullAddress) &&
-                                                     y.Contains(manufacturer) && y.Contains(isInvoiceNeededBG) &&
-                                                     y.Contains(deliveryNotes) && y.Contains(description) &&
-                                                     y.Contains(statusBG) && y.Contains(isInstallationNeededBG) &&
-                                                     y.Contains(price.ToString()) && y.Contains(paidPrice.ToString())), 
-                                  GlobalConstants.SMTPServer,
-                                  GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword));
-
-            var controller = new OrderedItemController(ordersMock.Object, usersMock.Object, emailsMock.Object, null);
-
-            var model = new OrderedItemRequestModel()
-            {
-                FullAddress = fullAddress,
-                Manufacturer = manufacturer,
-                EuroCode = eurocode,
-                OtherCodes = othercodes,
-                Status = status,
-                DeliveryNotes = deliveryNotes,
-                Description = description,
-                Price = price,
-                PaidPrice = paidPrice,
-                IsInvoiceNeeded = isInvoiceNeeded,
-                WithInstallation = isInstallationNeeded,
-                UserЕmail = anonymousEmail
-            };
-
-            var result = controller.Order(new List<OrderedItemRequestModel> { model });
+            var result = controller.Order(model);
 
             Assert.IsInstanceOfType(result, typeof(OkResult));
             emailsMock.VerifyAll();
@@ -351,56 +196,76 @@ namespace GGG_OnlineShop.Web.Api.Tests
 
             var usersMock = new Mock<IUsersService>();
 
-            var ordersMock = new Mock<IOrderedItemsService>();
-            OrderedItem modelToAdd = new OrderedItem()
+            var ordersMock = new Mock<IOrdersService>();
+            OrderedItem orderedItem = new OrderedItem()
             {
                 Manufacturer = "nordglass",
-                Status = DeliveryStatus.New,
-                FullAddress = null,
+                Price = 1,
+                CreatedOn = DateTime.MinValue,
+                DeletedOn = null,
+                Id = 0,
+                IsDeleted = false,
+                ModifiedOn = null,
+                OtherCodes = null,
+            };
+
+            var modelToAdd = new Order
+            {
+                UserInfo = null,
+                UserЕmail = "testEmail",
+                Status = DeliveryStatus.Unpaid,
+                FullAddress = "BG; SF; Liulin",
                 WithInstallation = false,
                 DeliveryNotes = "DeliveryNotes",
-                Description = "Description",
                 PaidPrice = 1,
                 Price = 1,
-                UserInfo = "AnonymousUserInfo",
-                UserЕmail = "AnonymousUserЕmail",
                 CreatedOn = DateTime.MinValue,
                 DeletedOn = null,
                 Id = 0,
                 IsDeleted = false,
                 IsInvoiceNeeded = false,
                 ModifiedOn = null,
-                OtherCodes = null,
-                User = null,
-                UserId = null
+                OrderedItems = new List<OrderedItem>
+                {
+                    orderedItem
+                }
             };
 
-            ordersMock.Setup(v => v.IsValidOrder(It.IsAny<OrderedItem>())).Returns(false);
+            ordersMock.Setup(v => v.IsValidOrder(It.IsAny<Order>())).Returns(false);
 
             var controller = new OrderedItemController(ordersMock.Object, usersMock.Object, null, null);
 
-            var model = new OrderedItemRequestModel()
+            var orderedItemRequest = new OrderedItemRequestModel()
             {
                 Manufacturer = "nordglass",
-                Status = DeliveryStatus.New,
-                DeliveryNotes = "DeliveryNotes",
                 Description = "Description",
-                Price = 1,
-                PaidPrice = 1,
-                UserInfo = "AnonymousUserInfo",
-                UserЕmail = "AnonymousUserЕmail",
+                Price = 1
             };
 
-            var result = controller.Order(new List<OrderedItemRequestModel> { model });
+            var model = new OrderRequestModel
+            {
+                Status = DeliveryStatus.Unpaid,
+                DeliveryNotes = "DeliveryNotes",
+                Price = 1,
+                PaidPrice = 1,
+                UserЕmail = "testEmail",
+                FullAddress = "BG; SF; Liulin",
+                OrderedItems = new List<OrderedItemRequestModel>
+                {
+                    orderedItemRequest
+                }
+            };
+
+            var result = controller.Order(model);
 
             Assert.IsInstanceOfType(result, typeof(BadRequestErrorMessageResult));
             string responseMessage = ((BadRequestErrorMessageResult)result).Message;
 
             Assert.IsTrue(responseMessage.Contains("Error while valditing order"));
-            ordersMock.Verify(m => m.IsValidOrder(It.Is<OrderedItem>(x => AreObjectsEqual(x, modelToAdd))));
+            ordersMock.Verify(m => m.IsValidOrder(It.Is<Order>(x => AreObjectsEqual(x, modelToAdd))));
         }
 
-        private bool AreObjectsEqual(OrderedItem first, OrderedItem second)
+        private bool AreObjectsEqual(Order first, Order second)
         {
             if (first == null && second == null)
             {

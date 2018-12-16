@@ -3,7 +3,6 @@
     using Common;
     using Infrastructure;
     using InternalApiDB.Models;
-    using InternalApiDB.Models.Enums;
     using System.ComponentModel.DataAnnotations;
 
     public class OrderedItemRequestModel : IMapTo<OrderedItem>
@@ -22,59 +21,18 @@
         [StringLength(GlobalConstants.DescriptionMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
         public string Description { get; set; }
 
-        [StringLength(GlobalConstants.FullAddressMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
-        public string FullAddress { get; set; }
-
-        [Required]
-        public DeliveryStatus Status { get; set; }
-
-        [StringLength(GlobalConstants.DeliveryNotesMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
-        public string DeliveryNotes { get; set; }
-
-        [Required]
-        public bool WithInstallation { get; set; }
-
-        public bool OrderFromRuse { get; set; }
-        // TODO  field for invoice
-
-        [Required]
-        public bool IsInvoiceNeeded { get; set; }
-
-        [Range(GlobalConstants.MinPrice, GlobalConstants.MaxPrice)]
-        public double PaidPrice { get; set; }
-
         [Required]
         [Range(GlobalConstants.MinPrice, GlobalConstants.MaxPrice)]
         public double Price { get; set; }
 
-        [Required]
-        [StringLength(GlobalConstants.UserЕmailMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
-        public string UserЕmail { get; set; }
-
-        [Required]
-        [StringLength(GlobalConstants.UserInfoMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
-        public string UserInfo { get; set; }
-
-        public string UserId { get; set; }
-
         public override string ToString()
         {
-            string invoice = EnglishBulgarianDictionary.Namings[IsInvoiceNeeded.ToString()];
-            string installation = EnglishBulgarianDictionary.Namings[IsInvoiceNeeded.ToString()];
-            string status = EnglishBulgarianDictionary.Namings[Status.ToString()];
-
             string info = $@"
 Производител:        {Manufacturer}
 EuroCode:            {EuroCode}
 Други кодове:        {OtherCodes}
 Описание:            {Description}
-Пълен адрес:         {FullAddress}
-Статус:              {status}
-Бележки за доставка: {DeliveryNotes}
-Необходим монтаж:    {installation}
-Необходима фактура:  {invoice}
-Цена:                {Price} лв (без включена отстъпка)
-Платено:             {PaidPrice} лв
+Цена:                {Price} лв
 ";
             return info;
         }

@@ -1,4 +1,6 @@
-﻿namespace GGG_OnlineShop.Web.Api.Tests.Administration
+﻿using GGG_OnlineShop.InternalApiDB.Models.Enums;
+
+namespace GGG_OnlineShop.Web.Api.Tests.Administration
 {
     using Areas.Administration.Controllers;
     using Common;
@@ -21,7 +23,11 @@
         public void DbInfoAdd_ShouldReturnInternalServerErrorAndLogError_WhenDbInfoFillerIsNull()
         {
             mockedLogger.Setup(x => x.LogError(It.IsAny<Exception>(), "", controllerName, "DbInfoAdd"));
-            var controller = new AdministrationController(null, mockedLogger.Object);
+
+            var flagService = new Mock<IFlagService>();
+            flagService.Setup(x => x.GetFlagValue(FlagType.ShowOnlyHighCostGroups)).Returns(() => true);
+
+            var controller = new AdministrationController(null, mockedLogger.Object, flagService.Object);
 
             var result = controller.DbInfoAdd(null);
 
@@ -34,8 +40,11 @@
         {
             var dbFillerMock = new Mock<IGlassesInfoDbFiller>();
             dbFillerMock.Setup(x => x.FillInfo(It.IsAny<GlassJsonInfoModel[]>(), ""));
-       
-            var controller = new AdministrationController(dbFillerMock.Object, null);
+
+            var flagService = new Mock<IFlagService>();
+            flagService.Setup(x => x.GetFlagValue(FlagType.ShowOnlyHighCostGroups)).Returns(() => true);
+
+            var controller = new AdministrationController(dbFillerMock.Object, null, flagService.Object);
 
             var result = controller.DbInfoAdd(null);
 
@@ -51,7 +60,11 @@
         {
             mockedLogger.Setup(x => x.LogError(It.IsAny<Exception>(), "", controllerName, "DbInfoAddFromFile"));
             HttpContext.Current = new HttpContext(new HttpRequest(null, "http://testUri.com", null), new HttpResponse(null));
-            var controller = new AdministrationController(null, mockedLogger.Object);
+
+            var flagService = new Mock<IFlagService>();
+            flagService.Setup(x => x.GetFlagValue(FlagType.ShowOnlyHighCostGroups)).Returns(() => true);
+
+            var controller = new AdministrationController(null, mockedLogger.Object, flagService.Object);
 
             var result = controller.DbInfoAddFromFile();
 
@@ -68,7 +81,10 @@
 
             HttpContext.Current = new HttpContext(new HttpRequest(testFile, "http://testUri.com", null), new HttpResponse(null));
 
-            var controller = new AdministrationController(dbFillerMock.Object, null);
+            var flagService = new Mock<IFlagService>();
+            flagService.Setup(x => x.GetFlagValue(FlagType.ShowOnlyHighCostGroups)).Returns(() => true);
+
+            var controller = new AdministrationController(dbFillerMock.Object, null, flagService.Object);
 
             var result = controller.DbInfoAddFromFile();
 

@@ -294,15 +294,15 @@
             var claim = new Claim("test", testUserId);
             var mockIdentity = Mock.Of<ClaimsIdentity>(ci => ci.FindFirst(It.IsAny<string>()) == claim);
 
-            var orders = new List<OrderedItem>()
+            var orders = new List<Order>()
             {
-                new OrderedItem() {Id = 3, Status = DeliveryStatus.Done, CreatedOn = DateTime.Now },
-                new OrderedItem() {Id = 4, Status = DeliveryStatus.Done, CreatedOn = DateTime.MinValue },
-                new OrderedItem() {Id = 5, Status = DeliveryStatus.Done, CreatedOn = DateTime.MinValue },
-                new OrderedItem() {Id = 2, Status = DeliveryStatus.Ordered, CreatedOn = DateTime.MinValue },
-                new OrderedItem() {Id = 1, Status = DeliveryStatus.New, CreatedOn = DateTime.MinValue },
+                new Order() {Id = 3, Status = DeliveryStatus.Done, CreatedOn = DateTime.Now },
+                new Order() {Id = 4, Status = DeliveryStatus.Done, CreatedOn = DateTime.MinValue },
+                new Order() {Id = 5, Status = DeliveryStatus.Done, CreatedOn = DateTime.MinValue },
+                new Order() {Id = 2, Status = DeliveryStatus.Ordered, CreatedOn = DateTime.MinValue },
+                new Order() {Id = 1, Status = DeliveryStatus.Unpaid, CreatedOn = DateTime.MinValue },
             }.AsQueryable();
-            var ordersMock = new Mock<IOrderedItemsService>();
+            var ordersMock = new Mock<IOrdersService>();
             ordersMock.Setup(x => x.GetAllByUser(testUserId)).Returns(orders);
 
             var controller = new AccountController(null, ordersMock.Object, null, null)
@@ -312,8 +312,8 @@
 
             var result = controller.GetMyOrders();
 
-            Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<List<OrderedItemResponseModel>>));
-            var responseContent = ((OkNegotiatedContentResult<List<OrderedItemResponseModel>>)result).Content;
+            Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<List<OrderResponseModel>>));
+            var responseContent = ((OkNegotiatedContentResult<List<OrderResponseModel>>)result).Content;
             Assert.AreEqual(responseContent[0].Id, 1);
             Assert.AreEqual(responseContent[1].Id, 2);
             Assert.AreEqual(responseContent[2].Id, 3);
@@ -642,7 +642,7 @@
                                             {
                                                 Email = testEmail,
                                                 Id = testUserId,
-                                                OrderedItems = new List<OrderedItem>() { new OrderedItem() { Id = 1 } }
+                                                Orders = new List<Order>() { new Order() { Id = 1 } }
                                             });
             userManagerMock.Setup(x => x.DeleteAsync(It.IsAny<User>()))
                                       .Returns(Task.FromResult(IdentityResult.Success));
@@ -686,7 +686,7 @@
                                             {
                                                 Email = testEmail,
                                                 Id = testUserId,
-                                                OrderedItems = new List<OrderedItem>() { new OrderedItem() { Id = 1 } }
+                                                Orders = new List<Order>() { new Order() { Id = 1 } }
                                             });
             userManagerMock.Setup(x => x.DeleteAsync(It.IsAny<User>()))
                                       .ReturnsAsync(() => new IdentityResult(errors));

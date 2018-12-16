@@ -60,8 +60,11 @@
     <Compile Include="Base\BaseModel{TKey}.cs" />
     <Compile Include="Base\IEntityWithCreator.cs" />
     <Compile Include="Enums\DeliveryStatus.cs" />
+    <Compile Include="Enums\FlagType.cs" />
     <Compile Include="Enums\LogType.cs" />
+    <Compile Include="Flag.cs" />
     <Compile Include="Log.cs" />
+    <Compile Include="Order.cs" />
     <Compile Include="VehicleBodyType.cs" />
     <Compile Include="VehicleGlass.cs" />
     <Compile Include="VehicleGlassAccessory.cs" />

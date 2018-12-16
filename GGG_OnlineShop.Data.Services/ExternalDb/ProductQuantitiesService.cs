@@ -1,4 +1,6 @@
-﻿namespace GGG_OnlineShop.Data.Services.ExternalDb
+﻿using GGG_OnlineShop.InternalApiDB.Models.Enums;
+
+namespace GGG_OnlineShop.Data.Services.ExternalDb
 {
     using Contracts;
     using GGG_OnlineShop.Common;
@@ -9,12 +11,17 @@
 
     public class ProductQuantitiesService : IProductQuantitiesService
     {
-        public ProductQuantitiesService(IGoodsService goods, IStoreService store, IGoodGroupsService goodGroups, IObjectsService objectsService)
+        private readonly IFlagService _flagService;
+        private readonly bool _publicHighCostVisible;
+
+        public ProductQuantitiesService(IGoodsService goods, IStoreService store, IGoodGroupsService goodGroups, IObjectsService objectsService, IFlagService flagService)
         {
+            _flagService = flagService;
             this.Goods = goods;
             this.ObjectsService = objectsService;
             this.GoodGroups = goodGroups;
             this.Store = store;
+            _publicHighCostVisible = flagService.GetFlagValue(FlagType.ShowOnlyHighCostGroups);
         }
 
         protected IGoodsService Goods { get; set; }
@@ -41,10 +48,10 @@
                 return productQuantities;
             }
 
-            bool onlyHighCostAllowed = false;
+            bool onlyHighCostAllowed = _publicHighCostVisible;
             if (user != null)
             {
-                onlyHighCostAllowed = user.OnlyHighCostVisible;
+                onlyHighCostAllowed = user.OnlyHighCostVisible; // user option will override the public one
             }
 
             var goodGroupIds = goods.Select(x => x.GroupID).ToList();

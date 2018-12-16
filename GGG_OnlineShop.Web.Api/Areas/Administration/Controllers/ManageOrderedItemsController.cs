@@ -15,11 +15,11 @@
     [RoutePrefix("api/Administration/ManageOrderedItems")]
     public class ManageOrderedItemsController : BaseController
     {
-        private readonly IOrderedItemsService orders;
+        private readonly IOrdersService orders;
         private readonly IEmailsService emails;
         private readonly string controllerName = MethodBase.GetCurrentMethod().DeclaringType.Name;
 
-        public ManageOrderedItemsController(IOrderedItemsService orders, IEmailsService emails, ILogsService dbLogger)
+        public ManageOrderedItemsController(IOrdersService orders, IEmailsService emails, ILogsService dbLogger)
             :base(dbLogger)
         {
             this.orders = orders;
@@ -32,30 +32,30 @@
         {
             try
             {
-                List<OrderedItemResponseModelWIthUserInfo> orders;
+                List<OrderResponseModelWIthUserInfo> orders;
 
                 if (pending)
                 {
                     orders = this.orders.GetNewOrders()
-                                        .To<OrderedItemResponseModelWIthUserInfo>()
+                                        .To<OrderResponseModelWIthUserInfo>()
                                         .ToList();
                 }
                 else if (ordered)
                 {
                     orders = this.orders.GetOrderedProducts()
-                                        .To<OrderedItemResponseModelWIthUserInfo>()
+                                        .To<OrderResponseModelWIthUserInfo>()
                                         .ToList();
                 }
                 else if (done)
                 {
                     orders = this.orders.GetDoneOrders()
-                                        .To<OrderedItemResponseModelWIthUserInfo>()
+                                        .To<OrderResponseModelWIthUserInfo>()
                                         .ToList();
                 }
                 else
                 {
                     orders = this.orders.GetAll()
-                                        .To<OrderedItemResponseModelWIthUserInfo>()
+                                        .To<OrderResponseModelWIthUserInfo>()
                                         .ToList();
                 }
 
@@ -75,7 +75,7 @@
 
         [HttpPost]
         [Route("update")]
-        public IHttpActionResult Update(OrderedItemRequestUpdateStatusModel model)
+        public IHttpActionResult Update(OrderRequestUpdateStatusModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -88,9 +88,9 @@
                 product.Status = model.Status;
                 this.orders.Save();
 
-                var updatedOrder = this.Mapper.Map<OrderedItemResponseModelWIthUserInfo>(product);
+                var updatedOrder = this.Mapper.Map<OrderResponseModelWIthUserInfo>(product);
                 emails.SendEmail(product.UserЕmail, string.Format(GlobalConstants.OrderUpdated, product.Id),
-                                 $"Нов статус на поръчка {model.ToString()}", GlobalConstants.SMTPServer,
+                                 $"Нов статус на поръчка {model}", GlobalConstants.SMTPServer,
                                  GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
 
                 return this.Ok(updatedOrder);

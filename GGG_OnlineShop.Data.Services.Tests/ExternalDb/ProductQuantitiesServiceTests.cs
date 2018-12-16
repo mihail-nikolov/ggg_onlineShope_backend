@@ -1,4 +1,6 @@
-﻿namespace GGG_OnlineShop.Data.Services.Tests.ExternalDb
+﻿using GGG_OnlineShop.InternalApiDB.Models.Enums;
+
+namespace GGG_OnlineShop.Data.Services.Tests.ExternalDb
 {
     using Contracts;
     using GGG_OnlineShop.Common;
@@ -21,7 +23,11 @@
             var goods = new List<Good>().AsQueryable();
             goodsServiceMock.Setup(x => x.GetAllByCode(testCode)).Returns(() => goods);
 
-            ProductQuantitiesService service = new ProductQuantitiesService(goodsServiceMock.Object, null, null, null);
+            var flagService = new Mock<IFlagService>();
+            flagService.Setup(x => x.GetFlagValue(FlagType.ShowOnlyHighCostGroups)).Returns(() => true);
+
+            ProductQuantitiesService service =
+                new ProductQuantitiesService(goodsServiceMock.Object, null, null, null, flagService.Object);
 
             var response = service.GetPriceAndQuantitiesByCode(testCode, null).ToList();
 
@@ -55,8 +61,11 @@
 
             var objectsServiceMock = new Mock<IObjectsService>();
 
+            var flagService = new Mock<IFlagService>();
+            flagService.Setup(x => x.GetFlagValue(FlagType.ShowOnlyHighCostGroups)).Returns(() => true);
+
             ProductQuantitiesService service = new ProductQuantitiesService(goodsServiceMock.Object, null,
-                                                                            goodGroupsServiceMock.Object, objectsServiceMock.Object);
+                                                                            goodGroupsServiceMock.Object, objectsServiceMock.Object, flagService.Object);
 
             var response = service.GetPriceAndQuantitiesByCode(testCode, null).ToList();
 
@@ -90,8 +99,11 @@
 
             var objectsServiceMock = new Mock<IObjectsService>();
 
+            var flagService = new Mock<IFlagService>();
+            flagService.Setup(x => x.GetFlagValue(FlagType.ShowOnlyHighCostGroups)).Returns(() => true);
+
             ProductQuantitiesService service = new ProductQuantitiesService(goodsServiceMock.Object, null,
-                                                                            goodGroupsServiceMock.Object, objectsServiceMock.Object);
+                                                                            goodGroupsServiceMock.Object, objectsServiceMock.Object, flagService.Object);
 
             var response = service.GetPriceAndQuantitiesByCode(testCode, null).ToList();
 
@@ -111,7 +123,10 @@
             var goodsServiceMock = new Mock<IGoodsService>();
             goodsServiceMock.Setup(x => x.GetAllByCode(cleanedTestCode)).Returns(goods);
 
-            ProductQuantitiesService service = new ProductQuantitiesService(goodsServiceMock.Object, null, null, null);
+            var flagService = new Mock<IFlagService>();
+            flagService.Setup(x => x.GetFlagValue(FlagType.ShowOnlyHighCostGroups)).Returns(() => true);
+
+            ProductQuantitiesService service = new ProductQuantitiesService(goodsServiceMock.Object, null, null, null, flagService.Object);
 
             service.GetPriceAndQuantitiesByCode(testCode, null);
 
@@ -160,8 +175,12 @@
 
             var storesServiceMock = new Mock<IStoreService>();
             storesServiceMock.Setup(x => x.GetAllByGoodId(1)).Returns(() => stores);
+
+            var flagService = new Mock<IFlagService>();
+            flagService.Setup(x => x.GetFlagValue(FlagType.ShowOnlyHighCostGroups)).Returns(() => true);
+
             ProductQuantitiesService service = new ProductQuantitiesService(goodsServiceMock.Object, storesServiceMock.Object,
-                                                                            goodGroupsServiceMock.Object, objectsServiceMock.Object);
+                                                                            goodGroupsServiceMock.Object, objectsServiceMock.Object, flagService.Object);
 
             var response = service.GetPriceAndQuantitiesByCode(testCode, null).ToList();
 
@@ -214,8 +233,11 @@
             var objects = new List<ObjectSkladPro>() { }.AsQueryable();
             objectsServiceMock.Setup(x => x.GetAll()).Returns(() => objects);
 
+            var flagService = new Mock<IFlagService>();
+            flagService.Setup(x => x.GetFlagValue(FlagType.ShowOnlyHighCostGroups)).Returns(() => true);
+
             ProductQuantitiesService service = new ProductQuantitiesService(goodsServiceMock.Object, null,
-                                                                            goodGroupsServiceMock.Object, objectsServiceMock.Object);
+                                                                            goodGroupsServiceMock.Object, objectsServiceMock.Object, flagService.Object);
 
             var response = service.GetPriceAndQuantitiesByCode(testCode, user).ToList();
 
@@ -323,8 +345,11 @@
             storesServiceMock.Setup(x => x.GetAllByGoodId(8)).Returns(() => stores8);
             storesServiceMock.Setup(x => x.GetAllByGoodId(9)).Returns(() => stores9);
 
+            var flagService = new Mock<IFlagService>();
+            flagService.Setup(x => x.GetFlagValue(FlagType.ShowOnlyHighCostGroups)).Returns(() => true);
+
             ProductQuantitiesService service = new ProductQuantitiesService(goodsServiceMock.Object, storesServiceMock.Object,
-                                                                            goodGroupsServiceMock.Object, objectsServiceMock.Object);
+                                                                            goodGroupsServiceMock.Object, objectsServiceMock.Object, flagService.Object);
 
             var response = service.GetPriceAndQuantitiesByCode(testCode, user).ToList();
 
@@ -500,8 +525,11 @@
             storesServiceMock.Setup(x => x.GetAllByGoodId(8)).Returns(() => stores8);
             storesServiceMock.Setup(x => x.GetAllByGoodId(9)).Returns(() => stores9);
 
+            var flagService = new Mock<IFlagService>();
+            flagService.Setup(x => x.GetFlagValue(FlagType.ShowOnlyHighCostGroups)).Returns(() => true);
+
             ProductQuantitiesService service = new ProductQuantitiesService(goodsServiceMock.Object, storesServiceMock.Object,
-                                                                            goodGroupsServiceMock.Object, objectsServiceMock.Object);
+                                                                            goodGroupsServiceMock.Object, objectsServiceMock.Object, flagService.Object);
 
             var response = service.GetPriceAndQuantitiesByCode(testCode, null).ToList();
 

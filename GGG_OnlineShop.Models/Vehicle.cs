@@ -32,14 +32,8 @@
 
         public virtual ICollection<VehicleGlass> VehicleGlasses
         {
-            get
-            {
-                return this.glasses;
-            }
-            set
-            {
-                this.glasses = value;
-            }
+            get => this.glasses;
+            set => this.glasses = value;
         }
     }
 }

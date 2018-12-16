@@ -10,7 +10,7 @@
     public class InternalApiDbContext : IdentityDbContext<User>, IInternalApiDbContext
     {
         public InternalApiDbContext()
-            : base("GGG_OnlineShopInternalDb", throwIfV1Schema: false)
+            : base("GGG_OnlineShopInternalDb", false)
         {
             // all except this:
             // Configuration.UseDatabaseNullSemantics
@@ -22,7 +22,11 @@
             return new InternalApiDbContext();
         }
 
+        public IDbSet<Flag> Flags { get; set; }
+
         public IDbSet<Log> Logs { get; set; }
+
+        public IDbSet<Order> Orders { get; set; }
 
         public IDbSet<OrderedItem> OrderedItems { get; set; }
 
