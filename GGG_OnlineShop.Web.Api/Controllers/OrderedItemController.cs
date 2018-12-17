@@ -37,7 +37,7 @@
             }
 
             try
-            {
+                {
                 IHttpActionResult result = Ok();
 
                 var userId = User.Identity.GetUserId();
@@ -60,6 +60,7 @@
                 {
                     result = this.BadRequest("Грешка при валидацията на поръчката");
                 }
+
 
                 if (result is OkResult)
                 {
@@ -91,6 +92,9 @@
                             GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
                     }
                 }
+
+                var orderResponse = Mapper.Map<OrderResponseModel>(order);
+                result = Ok(orderResponse);
 
                 return result;
             }

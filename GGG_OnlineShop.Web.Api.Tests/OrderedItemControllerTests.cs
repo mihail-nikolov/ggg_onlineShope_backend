@@ -36,7 +36,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
 
             var model = new OrderRequestModel()
             {
-                Status = DeliveryStatus.Unpaid
+                IsInvoiceNeeded = true
             };
 
             var result = controller.Order(model);
@@ -113,7 +113,6 @@ namespace GGG_OnlineShop.Web.Api.Tests
 
             var model = new OrderRequestModel
             {
-                Status = DeliveryStatus.Unpaid,
                 DeliveryNotes = "DeliveryNotes",
                 Price = 1,
                 PaidPrice = 1,
@@ -170,7 +169,6 @@ namespace GGG_OnlineShop.Web.Api.Tests
 
             var model = new OrderRequestModel
             {
-                Status = DeliveryStatus.Unpaid,
                 DeliveryNotes = "DeliveryNotes",
                 Price = 1,
                 PaidPrice = 1,
@@ -244,7 +242,6 @@ namespace GGG_OnlineShop.Web.Api.Tests
 
             var model = new OrderRequestModel
             {
-                Status = DeliveryStatus.Unpaid,
                 DeliveryNotes = "DeliveryNotes",
                 Price = 1,
                 PaidPrice = 1,

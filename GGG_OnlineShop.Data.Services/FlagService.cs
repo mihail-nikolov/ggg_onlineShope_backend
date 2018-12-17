@@ -22,7 +22,7 @@
 
         public override void Add(Flag flag)
         {
-            var existingFlag = this.Data.All().FirstOrDefault(x => x.FlagTypeEnum == flag.FlagTypeEnum);
+            var existingFlag = Data.All().FirstOrDefault(x => x.Name == flag.FlagTypeEnum.ToString());
             if (existingFlag != null)
             {
                 existingFlag.Value = flag.Value;

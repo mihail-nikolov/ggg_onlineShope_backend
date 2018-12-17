@@ -12,7 +12,6 @@ namespace GGG_OnlineShop.Web.Api.Models
         [StringLength(GlobalConstants.FullAddressMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
         public string FullAddress { get; set; }
 
-        [Required]
         public DeliveryStatus Status { get; set; }
 
         [StringLength(GlobalConstants.DeliveryNotesMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]

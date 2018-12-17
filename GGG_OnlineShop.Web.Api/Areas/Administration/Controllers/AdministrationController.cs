@@ -73,12 +73,13 @@ namespace GGG_OnlineShop.Web.Api.Areas.Administration.Controllers
 
 
         [HttpPost]
-        [Route("SetHighCostProductVisibility")]
-        public IHttpActionResult SetHighCostProductVisibility(bool visible)
+        [Route("ShowOnlyHighCostProducts/{value}")]
+        public IHttpActionResult ShowOnlyHighCostProducts(bool value)
         {
             try
             {
-                _flagService.Add(new Flag { FlagTypeEnum = FlagType.ShowOnlyHighCostGroups, Value = visible });
+                var flag = new Flag {FlagTypeEnum = FlagType.ShowOnlyHighCostGroups, Value = value};
+                _flagService.Add(flag);
                 return this.Ok();
             }
             catch (Exception e)
@@ -89,8 +90,8 @@ namespace GGG_OnlineShop.Web.Api.Areas.Administration.Controllers
         }
 
         [HttpGet]
-        [Route("GetHighCostProductVisibility")]
-        public IHttpActionResult GetHighCostProductVisibility()
+        [Route("ShowOnlyHighCostProducts")]
+        public IHttpActionResult ShowOnlyHighCostProducts()
         {
             try
             {

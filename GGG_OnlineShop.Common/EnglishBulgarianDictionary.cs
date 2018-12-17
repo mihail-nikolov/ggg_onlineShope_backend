@@ -6,7 +6,7 @@
     {
         public static Dictionary<string, string> Namings = new Dictionary<string, string>()
         {
-            { "Done", "Завършена" },  { "New", "Нова" }, { "Ordered", "На път" },
+            { "Done", "Завършена" },  { "New", "Нова" }, { "Unpaid", "Неплатена" }, { "Paid", "Платена" }, { "Ordered", "На път" },
             { "True", "Да" },  { "False", "Не" }
         };
     }
