@@ -12,14 +12,14 @@
     using System.Reflection;
 
     [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
-    [RoutePrefix("api/Administration/ManageOrderedItems")]
-    public class ManageOrderedItemsController : BaseController
+    [RoutePrefix("api/Administration/ManageOrders")]
+    public class ManageOrdersController : BaseController
     {
         private readonly IOrdersService orders;
         private readonly IEmailsService emails;
         private readonly string controllerName = MethodBase.GetCurrentMethod().DeclaringType.Name;
 
-        public ManageOrderedItemsController(IOrdersService orders, IEmailsService emails, ILogsService dbLogger)
+        public ManageOrdersController(IOrdersService orders, IEmailsService emails, ILogsService dbLogger)
             :base(dbLogger)
         {
             this.orders = orders;

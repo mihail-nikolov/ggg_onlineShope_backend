@@ -11,15 +11,15 @@
     using System.Web.Http;
     using System.Web.Http.Results;
 
-    [RoutePrefix("api/OrderedItems")]
-    public class OrderedItemController : BaseController
+    [RoutePrefix("api/Orders")]
+    public class OrdersController : BaseController
     {
         private readonly IOrdersService orders;
         private readonly IUsersService users;
         private readonly IEmailsService emails;
         private readonly string controllerName = MethodBase.GetCurrentMethod().DeclaringType.Name;
 
-        public OrderedItemController(IOrdersService orders, IUsersService users, IEmailsService emails, ILogsService dbLogger)
+        public OrdersController(IOrdersService orders, IUsersService users, IEmailsService emails, ILogsService dbLogger)
             : base(dbLogger)
         {
             this.orders = orders;
@@ -28,7 +28,6 @@
         }
 
         [HttpPost]
-        [Route("order")]
         public IHttpActionResult Order(OrderRequestModel orderRequest)
         {
             if (!ModelState.IsValid)
@@ -61,10 +60,9 @@
                     result = this.BadRequest("Грешка при валидацията на поръчката");
                 }
 
-
                 if (result is OkResult)
                 {
-                    string body = $"направена поръчка: \n\n, {orderRequest})";
+                    string body = $"Направена поръчка: \n\n{orderRequest}";
                     string emailTo = order.UserЕmail;
                     emails.SendEmail(emailTo, string.Format(GlobalConstants.OrderMade, order.Id),
                         body, GlobalConstants.SMTPServer,

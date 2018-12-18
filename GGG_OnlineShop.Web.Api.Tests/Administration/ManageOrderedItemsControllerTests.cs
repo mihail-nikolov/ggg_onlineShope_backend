@@ -28,7 +28,7 @@
         [TestMethod]
         public void Get_ShouldReturnInternalServerErrorAndLogError_WhenOrdersServiceIsNull()
         {
-            var controller = new ManageOrderedItemsController(null, null, mockedLogger.Object);
+            var controller = new ManageOrdersController(null, null, mockedLogger.Object);
 
             var result = controller.Get();
 
@@ -41,7 +41,7 @@
         {
             var usersMock = new Mock<IUsersService>();
             OrderRequestUpdateStatusModel request = new OrderRequestUpdateStatusModel();
-            var controller = new ManageOrderedItemsController(null, null, mockedLogger.Object);
+            var controller = new ManageOrdersController(null, null, mockedLogger.Object);
 
             var result = controller.Update(request);
 
@@ -79,7 +79,7 @@
             var ordersMock = new Mock<IOrdersService>();
             ordersMock.Setup(v => v.GetNewOrders()).Returns(orders);
 
-            var controller = new ManageOrderedItemsController(ordersMock.Object, null, null);
+            var controller = new ManageOrdersController(ordersMock.Object, null, null);
 
             var result = controller.Get(true);
 
@@ -119,7 +119,7 @@
             var ordersMock = new Mock<IOrdersService>();
             ordersMock.Setup(v => v.GetOrderedProducts()).Returns(orders);
 
-            var controller = new ManageOrderedItemsController(ordersMock.Object, null, null);
+            var controller = new ManageOrdersController(ordersMock.Object, null, null);
 
             var result = controller.Get(ordered: true);
 
@@ -159,7 +159,7 @@
             var ordersMock = new Mock<IOrdersService>();
             ordersMock.Setup(v => v.GetDoneOrders()).Returns(orders);
 
-            var controller = new ManageOrderedItemsController(ordersMock.Object, null, null);
+            var controller = new ManageOrdersController(ordersMock.Object, null, null);
 
             var result = controller.Get(done: true);
 
@@ -215,7 +215,7 @@
             var ordersMock = new Mock<IOrdersService>();
             ordersMock.Setup(v => v.GetAll()).Returns(orders);
 
-            var controller = new ManageOrderedItemsController(ordersMock.Object, null, null);
+            var controller = new ManageOrdersController(ordersMock.Object, null, null);
 
             var result = controller.Get();
 
@@ -263,7 +263,7 @@
             var ordersMock = new Mock<IOrdersService>();
             ordersMock.Setup(v => v.GetNewOrders()).Returns(orders);
 
-            var controller = new ManageOrderedItemsController(ordersMock.Object, null, null);
+            var controller = new ManageOrdersController(ordersMock.Object, null, null);
 
             var result = controller.Get(true);
 
@@ -306,7 +306,7 @@
 
             OrderRequestUpdateStatusModel request = new OrderRequestUpdateStatusModel() { Id = 1, Status = DeliveryStatus.Done };
 
-            var controller = new ManageOrderedItemsController(ordersMock.Object, emailsMock.Object, null);
+            var controller = new ManageOrdersController(ordersMock.Object, emailsMock.Object, null);
 
             var result = controller.Update(request);
 
@@ -345,7 +345,7 @@
 
             OrderRequestUpdateStatusModel request = new OrderRequestUpdateStatusModel() { Id = testId, Status = status };
 
-            var controller = new ManageOrderedItemsController(ordersMock.Object, emailsMock.Object, null);
+            var controller = new ManageOrdersController(ordersMock.Object, emailsMock.Object, null);
 
             var result = controller.Update(request);
 
@@ -382,7 +382,7 @@
 
             OrderRequestUpdateStatusModel request = new OrderRequestUpdateStatusModel() { Id = testId, Status = DeliveryStatus.Done };
 
-            var controller = new ManageOrderedItemsController(ordersMock.Object, emailsMock.Object, null);
+            var controller = new ManageOrdersController(ordersMock.Object, emailsMock.Object, null);
 
             var result = controller.Update(request);
 

@@ -261,7 +261,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Administration\AdministrationAreaRegistration.cs" />
     <Compile Include="Areas\Administration\Controllers\AdministrationController.cs" />
-    <Compile Include="Areas\Administration\Controllers\ManageOrderedItemsController.cs" />
+    <Compile Include="Areas\Administration\Controllers\ManageOrdersController.cs" />
     <Compile Include="Areas\Administration\Controllers\ManageUsersController.cs" />
     <Compile Include="Areas\Administration\Models\OrderedItems\OrderRequestUpdateStatusModel.cs" />
     <Compile Include="Areas\Administration\Models\OrderedItems\OrderResponseModelWIthUserInfo.cs" />
@@ -273,7 +273,7 @@
     <Compile Include="Controllers\ProductsController.cs" />
     <Compile Include="Controllers\MakesController.cs" />
     <Compile Include="Controllers\ModelsController.cs" />
-    <Compile Include="Controllers\OrderedItemController.cs" />
+    <Compile Include="Controllers\OrdersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
