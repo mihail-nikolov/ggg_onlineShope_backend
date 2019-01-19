@@ -173,24 +173,25 @@
             return Ok();
         }
 
+
         [HttpGet]
         [Route("GetMyOrders")]
         public IHttpActionResult GetMyOrders()
         {
             try
             {
-                var orders = this.orders.GetAllByUser(User.Identity.GetUserId())
-                                        .OrderBy(x => x.Status)
-                                        .ThenByDescending(x => x.CreatedOn)
-                                        .ThenByDescending(x => x.Id)
-                                        .To<OrderedItemResponseModel>()
-                                        .ToList();
-                return this.Ok(orders);
+                var myOrders = this.orders.GetAllByUser(User.Identity.GetUserId())
+                    .OrderBy(x => x.Status)
+                    .ThenByDescending(x => x.CreatedOn)
+                    .ThenByDescending(x => x.Id)
+                    .To<OrderResponseModel>()
+                    .ToList();
+                return this.Ok(myOrders);
             }
             catch (Exception e)
             {
-               HandlExceptionLogging(e, "", controllerName);
-               return InternalServerError(); 
+                HandlExceptionLogging(e, "", controllerName);
+                return InternalServerError();
             }
         }
 
@@ -214,8 +215,7 @@
                                             string.Format(GlobalConstants.ResetPasswordBody, code), GlobalConstants.SMTPServer,
                                             GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
 
-                    // TODO will return only OK (without code)
-                    return Ok(code);
+                    return Ok();
                 }
 
                 return BadRequest(ModelState);

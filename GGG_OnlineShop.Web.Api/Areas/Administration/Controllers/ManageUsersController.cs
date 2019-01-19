@@ -109,7 +109,6 @@
             {
                 User user = this.users.GetByEmail(model.Email);
                 string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                //string callbackUrl = this.Url.Route("GGG_OnlineShop_WithAction", new { Controller = "Account", Action = "ConfirmEmail", userId = user.Id, code = code });
 
                 string fullCallbackUrl = $"{GlobalConstants.AppDomainPath}/confirmemail?userid={user.Id}&code={code}";
 
@@ -117,8 +116,7 @@
                                       string.Format(GlobalConstants.ConfirmEmailBody, fullCallbackUrl), GlobalConstants.SMTPServer,
                                       GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
 
-                return Ok(fullCallbackUrl);
-                // TODO fullCallbackUrl will not be shown
+                return Ok();
             }
             catch (Exception e)
             {

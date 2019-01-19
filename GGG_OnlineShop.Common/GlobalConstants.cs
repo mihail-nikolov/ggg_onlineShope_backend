@@ -9,7 +9,7 @@ namespace GGG_OnlineShop.Common
         public const string ExternalDBRestrictionMessage = "Do not have rights on external DB";
         public const string DBContextRequiredErrorMessage = "An instance of DbContext is required to use this repository.";
         public const string DbFilledInFinishedMessage = "Db filled/updated finished. Check log files for info/errors.";
-        public const string AppDomainPath = "http://shop.glassgoldgroup.eu"; 
+        public const string AppDomainPath = "http://localhost:3000/"; // TODO enable "http://shop.glassgoldgroup.eu"; 
         // TODO build on release!!!
 
         public const char InterchangeablePartStringSeparator = ';';
@@ -66,7 +66,7 @@ namespace GGG_OnlineShop.Common
         public const string EmailPrimaryProduction = "glassgoldgroup@gmail.com";
 
         public const string ResetPasswordSubject = "Забравена парола";
-        public const string ResetPasswordBody = "Моля, обновете паролата си, използвайки следния код: {0}";
+        public const string ResetPasswordBody = "Моля, обновете паролата си, използвайки следния код: {0}. Изплозвайте следния линк: {1}";
         public const string ConfirmEmailSubject = "Потвърждаване на акаунт";
         public const string ConfirmEmailBody = "Моля, потвърдете акаунта си, кликвайки на следния линк: {0}";
         public const string OrderMade = "направена поръчка, ID-та на отделните поръчани елементи: {0}";
