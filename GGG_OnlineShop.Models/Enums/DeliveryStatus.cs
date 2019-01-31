@@ -6,6 +6,7 @@
         Paid,
         Accepted,
         Ordered,
+        Denied,
         Done
     }
 }

@@ -32,6 +32,9 @@ namespace GGG_OnlineShop.InternalApiDB.Models
         [Required]
         public bool IsInvoiceNeeded { get; set; }
 
+        //[Required]
+        public int InvoiceNumber { get; set; }
+
         [Required]
         [Range(GlobalConstants.MinPrice, GlobalConstants.MaxPrice)]
         public double PaidPrice { get; set; }

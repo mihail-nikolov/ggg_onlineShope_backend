@@ -288,6 +288,7 @@
     <Compile Include="Models\OrderedItemResponseModel.cs" />
     <Compile Include="Models\OrderRequestModel.cs" />
     <Compile Include="Models\OrderResponseModel.cs" />
+    <Compile Include="Models\OrderUpdateStatus.cs" />
     <Compile Include="Models\VehicleBodyTypesRequestModel.cs" />
     <Compile Include="Models\VehicleBodyTypeResponseModel.cs" />
     <Compile Include="Models\VehicleGlassAccessoryResponseModel.cs" />
