@@ -18,12 +18,12 @@
 
         public string ProductType { get; set; }
 
-        public bool EnquireToRuse { get; set; }
-
-        public bool EnquireToSofia { get; set; }
-
         public string VIN { get; set; }
 
         public string Description { get; set; }
+
+        public bool EnquireToRuse { get; set; }
+
+        public bool EnquireToSofia { get; set; }
     }
 }

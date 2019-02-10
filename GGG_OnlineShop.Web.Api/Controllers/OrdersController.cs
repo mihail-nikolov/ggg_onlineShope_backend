@@ -104,6 +104,7 @@
         }
 
         [HttpPost]
+        [Route("update")]
         public IHttpActionResult UpdateOrder(OrderUpdateStatus updateOrder)
         {
             if (!ModelState.IsValid)
