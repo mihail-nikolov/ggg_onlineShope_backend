@@ -1,4 +1,6 @@
-﻿namespace GGG_OnlineShop.Web.Api.Controllers
+﻿using Newtonsoft.Json;
+
+namespace GGG_OnlineShop.Web.Api.Controllers
 {
     using Common;
     using Data.Services.Contracts;
@@ -107,63 +109,66 @@
         [Route("update")]
         public IHttpActionResult UpdateOrder(OrderUpdateStatus updateOrder)
         {
+            EpayResponse response = new EpayResponse {Status = ShopResponse.Ok};
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                response.Status = ShopResponse.Error;
+                response.Error = JsonConvert.SerializeObject(ModelState, Formatting.Indented);
+                response.ErrorMessage = "Грешен модел";
+
+                return Ok(response);
             }
 
+            response.Invoice = updateOrder.Invoice;
             try
             {
+                IHttpActionResult result = Ok(response);
                 // for now for invoice we use the ID
-                IHttpActionResult result = Ok();
-                var order = orders.GetById(updateOrder.INVOICE);
-                switch (updateOrder.STATUS)
+                var order = orders.GetById(updateOrder.Invoice);
+                if (order == null)
                 {
-                    case EpayStatus.PAID:
-                        order.Status = DeliveryStatus.Paid;
-                        break;
-                    case EpayStatus.DENIED:
-                        order.Status = DeliveryStatus.Denied;
-                        break;
+                    response.Status = ShopResponse.NotFound;
+                    result = Ok(response);
                 }
-
-                string body = $"Обновена поръчка с No: {updateOrder.INVOICE}";
-                switch (order.Status)
+                else
                 {
-                    case DeliveryStatus.Paid:
-                        body += "статус: платена";
-                        break;
-                    case DeliveryStatus.Denied:
-                        body += "статус: отказана";
-                        break;
-                }
-
-                try
-                {
-                    if (updateOrder.STATUS != EpayStatus.EXPIRED)
+                    switch (updateOrder.Status)
                     {
-                        emails.SendEmail(GlobalConstants.EmailPrimary,
-                            string.Format(GlobalConstants.OrderMade, order.Id),
-                            body, GlobalConstants.SMTPServer,
-                            GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
-
-                        emails.SendEmail(order.UserЕmail,
-                            string.Format(GlobalConstants.OrderUpdated, order.Id),
-                            body, GlobalConstants.SMTPServer,
-                            GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
+                        case EpayStatus.Paid: order.Status = DeliveryStatus.Paid; break;
+                        case EpayStatus.Denied: order.Status = DeliveryStatus.Denied; break;
                     }
-                }
-                catch(Exception e)
-                {
-                    HandlExceptionLogging(e, "error while sending update emails", controllerName);
-                    return InternalServerError();
+
+                    string body = $"Обновена поръчка с No: {updateOrder.Invoice}\n";
+                    switch (order.Status)
+                    {
+                        case DeliveryStatus.Paid: body += "статус: платена"; break;
+                        case DeliveryStatus.Denied: body += "статус: отказана"; break;
+                    }
+
+                    try
+                    {
+                        if (updateOrder.Status != EpayStatus.Expired)
+                        {
+                            emails.SendEmail(GlobalConstants.EmailPrimary,
+                                string.Format(GlobalConstants.OrderMade, order.Id),
+                                body, GlobalConstants.SMTPServer,
+                                GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
+
+                            emails.SendEmail(order.UserЕmail,
+                                string.Format(GlobalConstants.OrderUpdated, order.Id),
+                                body, GlobalConstants.SMTPServer,
+                                GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        HandlExceptionLogging(e, "error while sending update emails", controllerName);
+                    }
+                    // TODO ???
+                    // INVOICE=123456:STATUS=OK
+                    // INVOICE=123457:STATUS=ERR
                 }
 
-
-                // response
-                // TODO ???
-                // INVOICE=123456:STATUS=OK
-                // INVOICE=123457:STATUS=ERR
                 return result;
             }
             catch (Exception e)
