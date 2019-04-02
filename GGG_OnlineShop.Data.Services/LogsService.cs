@@ -37,6 +37,19 @@
             Add(newLog);
         }
 
+        public void LogInfo(string info, string comment, string className, [CallerMemberName]string method = "")
+        {
+            Log newLog = new Log
+            {
+                Type = LogType.Info,
+                Place = $"{className}.{method}",
+                Info = info,
+                Comment = comment,
+            };
+
+            Add(newLog);
+        }
+
         private string GetAllExceptionMessages(Exception exc, StringBuilder sb)
         {
             // bottom

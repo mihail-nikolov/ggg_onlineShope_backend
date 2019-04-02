@@ -36,6 +36,11 @@ namespace GGG_OnlineShop.Web.Api.Models
 
         [JsonProperty("BIN")]
         public string Bin { get; set; }
+
+        public string ToJson()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
     }
 
     public enum EpayStatus

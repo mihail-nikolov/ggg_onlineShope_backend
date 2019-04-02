@@ -110,6 +110,8 @@ namespace GGG_OnlineShop.Web.Api.Controllers
         public IHttpActionResult UpdateOrder(OrderUpdateStatus updateOrder)
         {
             EpayResponse response = new EpayResponse {Status = ShopResponse.Ok};
+            Logger.LogInfo(updateOrder.ToJson(), "incoming message", controllerName, "Order");
+
             if (!ModelState.IsValid)
             {
                 response.Status = ShopResponse.Error;

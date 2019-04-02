@@ -5,8 +5,10 @@
     using System;
     using System.Runtime.CompilerServices;
 
-    public interface ILogsService: ILogger, IBaseDataService<Log>
+    public interface ILogsService : ILogger, IBaseDataService<Log>
     {
         void LogError(Exception exc, string comment, string className, [CallerMemberName]string method = "");
+
+        void LogInfo(string info, string comment, string className, [CallerMemberName] string method = "");
     }
 }
