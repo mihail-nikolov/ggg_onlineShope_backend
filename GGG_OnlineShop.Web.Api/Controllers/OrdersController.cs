@@ -176,8 +176,8 @@ namespace GGG_OnlineShop.Web.Api.Controllers
             }
             catch (Exception e)
             {
-                HandlExceptionLogging(e, "", controllerName);
-                return InternalServerError();
+                HandlExceptionLogging(e, content, controllerName);
+                return Ok("INVOICE=0:STATUS=ERR=InternalServerError");
             }
         }
 
