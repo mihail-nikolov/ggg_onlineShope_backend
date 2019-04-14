@@ -64,6 +64,7 @@ namespace GGG_OnlineShop.Common
         public const string EmailPrimary = "testggg9@gmail.com";
         public const string EmailPrimaryPassword = "ggg12345";
         public const string EmailPrimaryProduction = "glassgoldgroup@gmail.com";
+        public const string EpayUserKey = "S86UKGH9RA9W1N3F9JIEZ76CU2PXMA1R98IVVTMIX8S5LHCKEFPT7A1XKEXXMRQN";
 
         public const string ResetPasswordSubject = "Забравена парола";
         public const string ResetPasswordBody = "Моля, обновете паролата си, използвайки следния код: {0}. Изплозвайте следния линк: {1}";

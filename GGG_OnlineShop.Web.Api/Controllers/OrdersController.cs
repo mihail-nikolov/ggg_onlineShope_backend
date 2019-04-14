@@ -1,4 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.IdentityModel.Tokens;
 
 namespace GGG_OnlineShop.Web.Api.Controllers
 {
@@ -105,31 +109,28 @@ namespace GGG_OnlineShop.Web.Api.Controllers
             }
         }
 
+        // TODO add route for update order manually
         [HttpPost]
         [Route("update")]
-        public IHttpActionResult UpdateOrder(OrderUpdateStatus updateOrder)
+        public async Task<IHttpActionResult> UpdateOrder()
         {
-            EpayResponse response = new EpayResponse {Status = ShopResponse.Ok};
-            Logger.LogInfo(updateOrder.ToJson(), "incoming message", controllerName, "Order");
-
-            if (!ModelState.IsValid)
-            {
-                response.Status = ShopResponse.Error;
-                response.Error = JsonConvert.SerializeObject(ModelState, Formatting.Indented);
-                response.ErrorMessage = "Грешен модел";
-
-                return Ok(response);
-            }
-
-            response.Invoice = updateOrder.Invoice;
+            string method = nameof(UpdateOrder);
+            var content = await Request.Content.ReadAsStringAsync();
+            Logger.LogInfo(content, "incoming message", controllerName, method);
             try
             {
-                IHttpActionResult result = Ok(response);
+                var updateOrder = DecodeUpdateInput(content);
+
+                string response = "INVOICE=" + updateOrder.Invoice + ":STATUS={0}";
+                IHttpActionResult result;
                 // for now for invoice we use the ID
                 var order = orders.GetById(updateOrder.Invoice);
                 if (order == null)
                 {
-                    response.Status = ShopResponse.NotFound;
+                    response = string.Format(response, ShopResponse.ERR);
+                    response += $"=не е намерен продукт с ID:{updateOrder.Invoice}";
+                    Logger.LogInfo(response, "не е намерен продукт", controllerName, method);
+
                     result = Ok(response);
                 }
                 else
@@ -166,9 +167,9 @@ namespace GGG_OnlineShop.Web.Api.Controllers
                     {
                         HandlExceptionLogging(e, "error while sending update emails", controllerName);
                     }
-                    // TODO ???
-                    // INVOICE=123456:STATUS=OK
-                    // INVOICE=123457:STATUS=ERR
+
+                    response = string.Format(response, ShopResponse.OK);
+                    result = Ok(response);
                 }
 
                 return result;
@@ -178,6 +179,58 @@ namespace GGG_OnlineShop.Web.Api.Controllers
                 HandlExceptionLogging(e, "", controllerName);
                 return InternalServerError();
             }
+        }
+
+        private OrderUpdateStatus DecodeUpdateInput(string input)
+        {
+            // TODO probably can send more than 1 invoice
+            var splitted = input.Split('&');
+            int startIndexData = splitted[0].IndexOf("=", StringComparison.Ordinal) + 1;
+            string dataPart = splitted[0].Substring(startIndexData);
+
+            // TODO enable later
+            //int startIndexCheckSum = splitted[1].IndexOf("=", StringComparison.Ordinal) + 1;
+            //string checkSumPart = splitted[1].Substring(startIndexCheckSum);
+
+            //string controlCheckSum = HashString(dataPart);
+            //if (controlCheckSum != checkSumPart)
+            //{
+            //    return null;
+            //}
+
+            dataPart = dataPart.Replace("%3D", "="); ;
+
+            string data = Base64UrlEncoder.Decode(dataPart).Replace("\n", "");
+            Logger.LogInfo(data, "split data Input", controllerName, nameof(DecodeUpdateInput));
+            var dataDictionary = new Dictionary<string, string>();
+            var dataSplit = data.Split(':');
+            foreach (var dataArgument in dataSplit)
+            {
+                var splittedArgument = dataArgument.Split('=');
+                dataDictionary.Add(splittedArgument[0], splittedArgument[1]);
+            }
+
+            var model = new OrderUpdateStatus
+            {
+                Invoice = int.Parse(dataDictionary["INVOICE"]),
+                Status = (EpayStatus)Enum.Parse(typeof(EpayStatus), dataDictionary["STATUS"], true)
+            };
+
+            return model;
+        }
+
+        public static string HashString(string stringToHash)
+        {
+            UTF8Encoding myEncoder = new UTF8Encoding();
+            byte[] Key = myEncoder.GetBytes(GlobalConstants.EpayUserKey);
+            byte[] Text = myEncoder.GetBytes(stringToHash);
+
+            HMACSHA1 myHMACSHA1 = new HMACSHA1(Key);
+
+            byte[] HashCode = myHMACSHA1.ComputeHash(Text);
+            string hash = BitConverter.ToString(HashCode).Replace("-", "");
+
+            return hash.ToLower();
         }
     }
 }
