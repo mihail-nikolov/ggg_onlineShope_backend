@@ -68,7 +68,7 @@
             catch (Exception e)
             {
                 HandlExceptionLogging(e, "", controllerName);
-                return InternalServerError();                    
+                return InternalServerError();
             }
         }
 
@@ -97,7 +97,7 @@
             catch (Exception e)
             {
                 HandlExceptionLogging(e, "", controllerName);
-                return InternalServerError(); 
+                return InternalServerError();
             }
         }
 
@@ -112,16 +112,16 @@
 
                 string fullCallbackUrl = $"{GlobalConstants.AppDomainPath}/confirmemail?userid={user.Id}&code={code}";
 
-                this.emails.SendEmail(user.Email, GlobalConstants.ConfirmEmailSubject,
-                                      string.Format(GlobalConstants.ConfirmEmailBody, fullCallbackUrl), GlobalConstants.SMTPServer,
-                                      GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
+                await this.emails.SendEmail(user.Email, GlobalConstants.ConfirmEmailSubject,
+                                       string.Format(GlobalConstants.ConfirmEmailBody, fullCallbackUrl), GlobalConstants.SMTPServer,
+                                       GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
 
                 return Ok();
             }
             catch (Exception e)
             {
                 HandlExceptionLogging(e, "", controllerName);
-                return InternalServerError();                                
+                return InternalServerError();
             }
         }
 

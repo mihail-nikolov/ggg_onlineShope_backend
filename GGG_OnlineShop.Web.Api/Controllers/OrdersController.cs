@@ -146,15 +146,15 @@ namespace GGG_OnlineShop.Web.Api.Controllers
 
                         try
                         {
-                            emails.SendEmail(GlobalConstants.EmailPrimary,
-                                string.Format(GlobalConstants.OrderMade, order.Id),
-                                body, GlobalConstants.SMTPServer,
-                                GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
+                            await emails.SendEmail(GlobalConstants.EmailPrimary,
+                                 string.Format(GlobalConstants.OrderMade, order.Id),
+                                 body, GlobalConstants.SMTPServer,
+                                 GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
 
-                            emails.SendEmail(order.UserЕmail,
-                                string.Format(GlobalConstants.OrderUpdated, order.Id),
-                                body, GlobalConstants.SMTPServer,
-                                GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
+                            await emails.SendEmail(order.UserЕmail,
+                                 string.Format(GlobalConstants.OrderUpdated, order.Id),
+                                 body, GlobalConstants.SMTPServer,
+                                 GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
                         }
                         catch (Exception e)
                         {
@@ -168,7 +168,10 @@ namespace GGG_OnlineShop.Web.Api.Controllers
                     response.AppendLine(responseOrder);
                 }
 
-                return Ok(response.ToString().TrimEnd());
+                var responseString = response.ToString().TrimEnd();
+                Logger.LogInfo(responseString, "response to epay", controllerName, method);
+
+                return Ok(responseString);
             }
             catch (Exception e)
             {
