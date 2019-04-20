@@ -109,7 +109,6 @@ namespace GGG_OnlineShop.Web.Api.Controllers
             }
         }
 
-        // TODO add route for update order manually
         [HttpPost]
         [Route("update")]
         public async Task<IHttpActionResult> UpdateOrder()
@@ -119,38 +118,33 @@ namespace GGG_OnlineShop.Web.Api.Controllers
             Logger.LogInfo(content, "incoming message", controllerName, method);
             try
             {
-                var updateOrder = DecodeUpdateInput(content);
+                var updateOrders = DecodeUpdateInput(content);
 
-                string response = "INVOICE=" + updateOrder.Invoice + ":STATUS={0}";
-                IHttpActionResult result;
-                // for now for invoice we use the ID
-                var order = orders.GetById(updateOrder.Invoice);
-                if (order == null)
+                StringBuilder response = new StringBuilder();
+                foreach (var updateOrder in updateOrders)
                 {
-                    response = string.Format(response, ShopResponse.ERR);
-                    response += $"=не е намерен продукт с ID:{updateOrder.Invoice}";
-                    Logger.LogInfo(response, "не е намерен продукт", controllerName, method);
-
-                    result = Ok(response);
-                }
-                else
-                {
-                    switch (updateOrder.Status)
+                    string responseOrder = "INVOICE=" + updateOrder.Invoice + ":STATUS={0}";
+                    // for now for invoice we use the ID
+                    var order = orders.GetById(updateOrder.Invoice);
+                    if (order == null)
                     {
-                        case EpayStatus.Paid: order.Status = DeliveryStatus.Paid; break;
-                        case EpayStatus.Denied: order.Status = DeliveryStatus.Denied; break;
+                        responseOrder = string.Format(responseOrder, ShopResponse.ERR);
+                        responseOrder += $"=не е намерен продукт с ID:{updateOrder.Invoice}";
+                        Logger.LogInfo(responseOrder, "product not found", controllerName, method);
                     }
-
-                    string body = $"Обновена поръчка с No: {updateOrder.Invoice}\n";
-                    switch (order.Status)
+                    else
                     {
-                        case DeliveryStatus.Paid: body += "статус: платена"; break;
-                        case DeliveryStatus.Denied: body += "статус: отказана"; break;
-                    }
+                        string body = $"Обновена поръчка с No: {updateOrder.Invoice}\n";
 
-                    try
-                    {
-                        if (updateOrder.Status != EpayStatus.Expired)
+                        switch (updateOrder.Status)
+                        {
+                            case EpayStatus.Paid: order.Status = DeliveryStatus.Paid; body += "статус: платена"; break;
+                            case EpayStatus.Denied: order.Status = DeliveryStatus.Denied; body += "статус: отказана"; break;
+                            case EpayStatus.Expired: order.Status = DeliveryStatus.Expired; body += "статус: изтекла"; break;
+                        }
+                        orders.Save();
+
+                        try
                         {
                             emails.SendEmail(GlobalConstants.EmailPrimary,
                                 string.Format(GlobalConstants.OrderMade, order.Id),
@@ -162,17 +156,19 @@ namespace GGG_OnlineShop.Web.Api.Controllers
                                 body, GlobalConstants.SMTPServer,
                                 GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
                         }
-                    }
-                    catch (Exception e)
-                    {
-                        HandlExceptionLogging(e, "error while sending update emails", controllerName);
+                        catch (Exception e)
+                        {
+                            HandlExceptionLogging(e, "error while sending update emails", controllerName);
+                        }
+
+                        responseOrder = string.Format(responseOrder, ShopResponse.OK);
+                        Logger.LogInfo(responseOrder, "product found", controllerName, method);
                     }
 
-                    response = string.Format(response, ShopResponse.OK);
-                    result = Ok(response);
+                    response.AppendLine(responseOrder);
                 }
 
-                return result;
+                return Ok(response.ToString().TrimEnd());
             }
             catch (Exception e)
             {
@@ -181,7 +177,7 @@ namespace GGG_OnlineShop.Web.Api.Controllers
             }
         }
 
-        private OrderUpdateStatus DecodeUpdateInput(string input)
+        private List<OrderUpdateStatus> DecodeUpdateInput(string input)
         {
             // TODO probably can send more than 1 invoice
             var splitted = input.Split('&');
@@ -198,25 +194,32 @@ namespace GGG_OnlineShop.Web.Api.Controllers
             //    return null;
             //}
 
-            dataPart = dataPart.Replace("%3D", "="); ;
+            dataPart = dataPart.Replace("%3D", "=");
 
-            string data = Base64UrlEncoder.Decode(dataPart).Replace("\n", "");
-            Logger.LogInfo(data, "split data Input", controllerName, nameof(DecodeUpdateInput));
-            var dataDictionary = new Dictionary<string, string>();
-            var dataSplit = data.Split(':');
-            foreach (var dataArgument in dataSplit)
+            List<OrderUpdateStatus> orderUpdates = new List<OrderUpdateStatus>();
+            var dataArray = Base64UrlEncoder.Decode(dataPart).Split(Environment.NewLine.ToCharArray());
+            foreach (var data in dataArray)
             {
-                var splittedArgument = dataArgument.Split('=');
-                dataDictionary.Add(splittedArgument[0], splittedArgument[1]);
+                if (!string.IsNullOrWhiteSpace(data) && data.Contains("=") && data.Contains(":"))
+                {
+                    Logger.LogInfo(data, "split data Input", controllerName, nameof(DecodeUpdateInput));
+                    var dataDictionary = new Dictionary<string, string>();
+                    var dataSplit = data.Split(':');
+                    foreach (var dataArgument in dataSplit)
+                    {
+                        var splittedArgument = dataArgument.Split('=');
+                        dataDictionary.Add(splittedArgument[0], splittedArgument[1]);
+                    }
+
+                    orderUpdates.Add(new OrderUpdateStatus
+                    {
+                        Invoice = int.Parse(dataDictionary["INVOICE"]),
+                        Status = (EpayStatus)Enum.Parse(typeof(EpayStatus), dataDictionary["STATUS"], true)
+                    });
+                }
             }
 
-            var model = new OrderUpdateStatus
-            {
-                Invoice = int.Parse(dataDictionary["INVOICE"]),
-                Status = (EpayStatus)Enum.Parse(typeof(EpayStatus), dataDictionary["STATUS"], true)
-            };
-
-            return model;
+            return orderUpdates;
         }
 
         public static string HashString(string stringToHash)

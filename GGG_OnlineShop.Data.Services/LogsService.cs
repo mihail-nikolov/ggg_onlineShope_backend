@@ -6,7 +6,6 @@
     using InternalApiDB.Models;
     using InternalApiDB.Models.Enums;
     using System;
-    using System.Data.Entity.Validation;
     using System.Runtime.CompilerServices;
     using System.Text;
 
@@ -24,7 +23,7 @@
         {
             StringBuilder sb = new StringBuilder();
             string allExceptionMessage = GetAllExceptionMessages(exc, sb);
-           
+
 
             Log newLog = new Log
             {

@@ -7,6 +7,7 @@
         Accepted,
         Ordered,
         Denied,
+        Expired,
         Done
     }
 }
