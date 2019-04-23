@@ -1,4 +1,6 @@
-﻿namespace GGG_OnlineShop.Web.Api.Tests.Administration
+﻿using System.Threading.Tasks;
+
+namespace GGG_OnlineShop.Web.Api.Tests.Administration
 {
     using Areas.Administration.Controllers;
     using Areas.Administration.Models.OrderedItems;
@@ -286,7 +288,7 @@
         }
 
         [TestMethod]
-        public void Update_ShouldUpdateOrderCorrectly()
+        public async Task Update_ShouldUpdateOrderCorrectly()
         {
             mapper.Execute();
 
@@ -308,7 +310,7 @@
 
             var controller = new ManageOrdersController(ordersMock.Object, emailsMock.Object, null);
 
-            var result = controller.Update(request);
+            var result = await controller.Update(request);
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<OrderResponseModelWIthUserInfo>));
             var responseContent = ((OkNegotiatedContentResult<OrderResponseModelWIthUserInfo>)result).Content;
@@ -318,7 +320,7 @@
         }
 
         [TestMethod]
-        public void Update_ShouldSendEmaiToTheAnonymousUserWithTheCorrectContent()
+        public async Task Update_ShouldSendEmaiToTheAnonymousUserWithTheCorrectContent()
         {
             mapper.Execute();
 
@@ -347,7 +349,7 @@
 
             var controller = new ManageOrdersController(ordersMock.Object, emailsMock.Object, null);
 
-            var result = controller.Update(request);
+            var result = await controller.Update(request);
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<OrderResponseModelWIthUserInfo>));
             var responseContent = ((OkNegotiatedContentResult<OrderResponseModelWIthUserInfo>)result).Content;
@@ -357,7 +359,7 @@
         }
 
         [TestMethod]
-        public void Update_ShouldSendEmailToTheRegisteredUser()
+        public async Task Update_ShouldSendEmailToTheRegisteredUser()
         {
             mapper.Execute();
 
@@ -384,7 +386,7 @@
 
             var controller = new ManageOrdersController(ordersMock.Object, emailsMock.Object, null);
 
-            var result = controller.Update(request);
+            var result = await controller.Update(request);
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<OrderResponseModelWIthUserInfo>));
             var responseContent = ((OkNegotiatedContentResult<OrderResponseModelWIthUserInfo>)result).Content;

@@ -1,4 +1,6 @@
-﻿namespace GGG_OnlineShop.Web.Api.Controllers
+﻿using System.Threading.Tasks;
+
+namespace GGG_OnlineShop.Web.Api.Controllers
 {
     using Common;
     using Data.Services.Contracts;
@@ -255,7 +257,7 @@
         }
 
         [HttpPost]
-        public IHttpActionResult CheckAvailability(EnquiryRequestModel enquiry)
+        public async Task<IHttpActionResult> CheckAvailability(EnquiryRequestModel enquiry)
         {
             try
             {
@@ -276,17 +278,17 @@ Email:                   {enquiry.Email}
 
                 if (enquiry.EnquireToRuse)
                 {
-                    _emails.SendEmail(GlobalConstants.EmailRuse, "Запитване за продукт", enquiryText, GlobalConstants.SMTPServer,
-                        GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
+                    await _emails.SendEmail(GlobalConstants.EmailRuse, "Запитване за продукт", enquiryText, GlobalConstants.SMTPServer,
+                         GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
                 }
 
                 if (enquiry.EnquireToSofia)
                 {
-                    _emails.SendEmail(GlobalConstants.EmailSofia, "Запитване за продукт", enquiryText, GlobalConstants.SMTPServer,
+                    await _emails.SendEmail(GlobalConstants.EmailSofia, "Запитване за продукт", enquiryText, GlobalConstants.SMTPServer,
                         GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
                 }
 
-                _emails.SendEmail(enquiry.Email, "Запитване за продукт", enquiryText, GlobalConstants.SMTPServer,
+                await _emails.SendEmail(enquiry.Email, "Запитване за продукт", enquiryText, GlobalConstants.SMTPServer,
                     GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
 
                 return result;

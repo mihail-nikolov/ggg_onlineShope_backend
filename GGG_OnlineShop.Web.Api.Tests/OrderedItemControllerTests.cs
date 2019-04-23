@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace GGG_OnlineShop.Web.Api.Tests
 {
@@ -188,7 +189,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
         }
 
         [TestMethod]
-        public void Order_ShouldReturnBadRequest_WhenOrderNotValid()
+        public async Task Order_ShouldReturnBadRequest_WhenOrderNotValid()
         {
             mapper.Execute();
 
@@ -253,7 +254,7 @@ namespace GGG_OnlineShop.Web.Api.Tests
                 }
             };
 
-            var result = controller.Order(model);
+            var result = await controller.Order(model);
 
             Assert.IsInstanceOfType(result, typeof(BadRequestErrorMessageResult));
             string responseMessage = ((BadRequestErrorMessageResult)result).Message;

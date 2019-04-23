@@ -1,4 +1,6 @@
-﻿namespace GGG_OnlineShop.Web.Api.Areas.Administration.Controllers
+﻿using System.Threading.Tasks;
+
+namespace GGG_OnlineShop.Web.Api.Areas.Administration.Controllers
 {
     using Common;
     using Api.Controllers;
@@ -20,7 +22,7 @@
         private readonly string controllerName = MethodBase.GetCurrentMethod().DeclaringType.Name;
 
         public ManageOrdersController(IOrdersService orders, IEmailsService emails, ILogsService dbLogger)
-            :base(dbLogger)
+            : base(dbLogger)
         {
             this.orders = orders;
             this.emails = emails;
@@ -68,14 +70,14 @@
             }
             catch (Exception e)
             {
-               HandlExceptionLogging(e, "", controllerName);
-               return InternalServerError();                     
+                HandlExceptionLogging(e, "", controllerName);
+                return InternalServerError();
             }
         }
 
         [HttpPost]
         [Route("update")]
-        public IHttpActionResult Update(OrderRequestUpdateStatusModel model)
+        public  async Task<IHttpActionResult> Update(OrderRequestUpdateStatusModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -89,16 +91,16 @@
                 this.orders.Save();
 
                 var updatedOrder = this.Mapper.Map<OrderResponseModelWIthUserInfo>(product);
-                emails.SendEmail(product.UserЕmail, string.Format(GlobalConstants.OrderUpdated, product.Id),
-                                 $"Нов статус на поръчка {model}", GlobalConstants.SMTPServer,
-                                 GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
+                await emails.SendEmail(product.UserЕmail, string.Format(GlobalConstants.OrderUpdated, product.Id),
+                                  $"Нов статус на поръчка {model}", GlobalConstants.SMTPServer,
+                                  GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
 
                 return this.Ok(updatedOrder);
             }
             catch (Exception e)
             {
-               HandlExceptionLogging(e, "", controllerName);
-               return InternalServerError();                             
+                HandlExceptionLogging(e, "", controllerName);
+                return InternalServerError();
             }
         }
     }

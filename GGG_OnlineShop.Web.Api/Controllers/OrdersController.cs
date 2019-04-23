@@ -34,7 +34,7 @@ namespace GGG_OnlineShop.Web.Api.Controllers
         }
 
         [HttpPost]
-        public IHttpActionResult Order(OrderRequestModel orderRequest)
+        public async Task<IHttpActionResult> Order(OrderRequestModel orderRequest)
         {
             if (!ModelState.IsValid)
             {
@@ -70,11 +70,11 @@ namespace GGG_OnlineShop.Web.Api.Controllers
                 {
                     string body = $"Направена поръчка: \n\n{orderRequest}";
                     string emailTo = order.UserЕmail;
-                    emails.SendEmail(emailTo, string.Format(GlobalConstants.OrderMade, order.Id),
+                    await emails.SendEmail(emailTo, string.Format(GlobalConstants.OrderMade, order.Id),
                         body, GlobalConstants.SMTPServer,
                         GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
 
-                    emails.SendEmail(GlobalConstants.EmailPrimaryProduction, string.Format(GlobalConstants.OrderMade, order.Id),
+                    await emails.SendEmail(GlobalConstants.EmailPrimaryProduction, string.Format(GlobalConstants.OrderMade, order.Id),
                         body, GlobalConstants.SMTPServer,
                         GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
 
@@ -83,14 +83,14 @@ namespace GGG_OnlineShop.Web.Api.Controllers
 
                     if (installationSofia)
                     {
-                        emails.SendEmail(GlobalConstants.EmailSofia,
-                            string.Format(GlobalConstants.OrderMade, order.Id),
-                            body, GlobalConstants.SMTPServer,
-                            GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
+                        await emails.SendEmail(GlobalConstants.EmailSofia,
+                             string.Format(GlobalConstants.OrderMade, order.Id),
+                             body, GlobalConstants.SMTPServer,
+                             GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
                     }
                     else if (installationRuse)
                     {
-                        emails.SendEmail(GlobalConstants.EmailRuse,
+                        await emails.SendEmail(GlobalConstants.EmailRuse,
                             string.Format(GlobalConstants.OrderMade, order.Id),
                             body, GlobalConstants.SMTPServer,
                             GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
