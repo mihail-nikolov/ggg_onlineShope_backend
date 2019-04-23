@@ -20,6 +20,7 @@ build/
 
 # Visual Studio 2015 cache/options directory
 .vs/
+PublishProfiles/
 
 # NuGet Packages Directory
 ## TODO: If you have NuGet Package Restore enabled, uncomment the next line
