@@ -23,6 +23,9 @@ namespace GGG_OnlineShop.InternalApiDB.Models
         [Required]
         public DeliveryStatus Status { get; set; }
 
+        [Required]
+        public PaymentMethod PaymentMethod { get; set; }
+
         [StringLength(GlobalConstants.DeliveryNotesMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
         public string DeliveryNotes { get; set; }
 

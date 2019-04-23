@@ -4,6 +4,8 @@ using GGG_OnlineShop.Common;
 using GGG_OnlineShop.Infrastructure;
 using GGG_OnlineShop.InternalApiDB.Models;
 using GGG_OnlineShop.InternalApiDB.Models.Enums;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace GGG_OnlineShop.Web.Api.Models
 {
@@ -13,6 +15,11 @@ namespace GGG_OnlineShop.Web.Api.Models
         public string FullAddress { get; set; }
 
         public DeliveryStatus Status { get; set; }
+
+        [Required]
+        [JsonProperty("WayToPay")]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public PaymentMethod PaymentMethod { get; set; }
 
         [StringLength(GlobalConstants.DeliveryNotesMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
         public string DeliveryNotes { get; set; }
