@@ -103,8 +103,8 @@
             }
             catch (Exception e)
             {
-               HandlExceptionLogging(e, "", controllerName);
-               return InternalServerError(); 
+                HandlExceptionLogging(e, "", controllerName);
+                return InternalServerError();
             }
         }
 
@@ -122,8 +122,8 @@
             }
             catch (Exception e)
             {
-               HandlExceptionLogging(e, "", controllerName);
-               return InternalServerError(); 
+                HandlExceptionLogging(e, "", controllerName);
+                return InternalServerError();
             }
         }
 
@@ -149,8 +149,8 @@
             }
             catch (Exception e)
             {
-               HandlExceptionLogging(e, "", controllerName);
-               return InternalServerError(); 
+                HandlExceptionLogging(e, "", controllerName);
+                return InternalServerError();
             }
         }
 
@@ -211,9 +211,9 @@
                     }
 
                     string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                    this.emails.SendEmail(user.Email, GlobalConstants.ResetPasswordSubject,
-                                            string.Format(GlobalConstants.ResetPasswordBody, code), GlobalConstants.SMTPServer,
-                                            GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
+                    await this.emails.SendEmail(user.Email, GlobalConstants.ResetPasswordSubject,
+                                             string.Format(GlobalConstants.ResetPasswordBody, code), GlobalConstants.SMTPServer,
+                                             GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
 
                     return Ok();
                 }
@@ -222,8 +222,8 @@
             }
             catch (Exception e)
             {
-               HandlExceptionLogging(e, "", controllerName);
-               return InternalServerError(); 
+                HandlExceptionLogging(e, "", controllerName);
+                return InternalServerError();
             }
         }
 
@@ -306,8 +306,8 @@
 
             catch (Exception e)
             {
-               HandlExceptionLogging(e, "", controllerName);
-               return InternalServerError(); 
+                HandlExceptionLogging(e, "", controllerName);
+                return InternalServerError();
             }
         }
 

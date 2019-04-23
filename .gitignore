@@ -8,12 +8,7 @@
 *.ppt
 *.pptx
 *.txt
-
-db.lock
-storage.ide
-storage.ide-shm
-storage.ide-wal
-
+*.pubxml
 # Build results
 
 [Dd]ebug/

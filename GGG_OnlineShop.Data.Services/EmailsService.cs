@@ -1,4 +1,6 @@
-﻿namespace GGG_OnlineShop.Data.Services
+﻿using System.Threading.Tasks;
+
+namespace GGG_OnlineShop.Data.Services
 {
     using Contracts;
     using System.Net;
@@ -6,7 +8,7 @@
 
     public class EmailsService : IEmailsService
     {
-        public void SendEmail(string emailTo, string subject, string body, string smptClient, string fromMail, string password)
+        public async Task SendEmail(string emailTo, string subject, string body, string smptClient, string fromMail, string password)
         {
             MailMessage mail = new MailMessage();
             SmtpClient SmtpServer = new SmtpClient(smptClient);
@@ -17,7 +19,7 @@
             SmtpServer.Port = 25;
             SmtpServer.Credentials = new NetworkCredential(fromMail, password);
             SmtpServer.EnableSsl = true;
-            SmtpServer.Send(mail);
+            await SmtpServer.SendMailAsync(mail);
         }
     }
 }
