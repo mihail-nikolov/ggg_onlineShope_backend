@@ -197,12 +197,10 @@ namespace GGG_OnlineShop.Web.Api.Controllers
 
         private List<OrderUpdateStatus> DecodeUpdateInput(string input)
         {
-            // TODO probably can send more than 1 invoice
             var splitted = input.Split('&');
             int startIndexData = splitted[0].IndexOf("=", StringComparison.Ordinal) + 1;
             string dataPart = splitted[0].Substring(startIndexData);
 
-            // TODO enable later
             int startIndexCheckSum = splitted[1].IndexOf("=", StringComparison.Ordinal) + 1;
             string checkSumPart = splitted[1].Substring(startIndexCheckSum);
 
