@@ -120,7 +120,7 @@ namespace GGG_OnlineShop.Web.Api.Controllers
             {
                 var updateOrders = DecodeUpdateInput(content);
 
-                StringBuilder response = new StringBuilder();
+                StringBuilder responseString = new StringBuilder();
                 foreach (var updateOrder in updateOrders)
                 {
                     string responseOrder = "INVOICE=" + updateOrder.Invoice + ":STATUS={0}";
@@ -129,7 +129,7 @@ namespace GGG_OnlineShop.Web.Api.Controllers
                     if (order == null)
                     {
                         responseOrder = string.Format(responseOrder, ShopResponse.ERR);
-                        responseOrder += $"=не е намерен продукт с ID:{updateOrder.Invoice}";
+                        responseOrder += $"не е намерен продукт с ID:{updateOrder.Invoice}";
                         Logger.LogInfo(responseOrder, "product not found", controllerName, method);
                     }
                     else
@@ -165,19 +165,34 @@ namespace GGG_OnlineShop.Web.Api.Controllers
                         Logger.LogInfo(responseOrder, "product found", controllerName, method);
                     }
 
-                    response.AppendLine(responseOrder);
+                    responseString.AppendLine(responseOrder);
                 }
 
-                var responseString = response.ToString().TrimEnd();
-                Logger.LogInfo(responseString, "response to epay", controllerName, method);
+                var encodedResponse = GenerateEncodedResponse(responseString.ToString().TrimEnd());
+                Logger.LogInfo(encodedResponse, "response to epay", controllerName, method);
 
-                return Ok(responseString);
+                return Ok(encodedResponse);
             }
             catch (Exception e)
             {
                 HandlExceptionLogging(e, content, controllerName);
-                return Ok("INVOICE=0:STATUS=ERR=InternalServerError");
+                string response = GenerateEncodedResponse("INVOICE=0:STATUS=ERR=InternalServerError");
+
+                return Ok(response);
             }
+        }
+
+        private string GenerateEncodedResponse(string data)
+        {
+            string base64DecodedData = Base64UrlEncoder.Encode(data);
+            string checksum = "";
+
+            if (!string.IsNullOrWhiteSpace(base64DecodedData))
+            {
+                checksum = GenerateCheckSum(base64DecodedData);
+            }
+
+            return $"encoded={base64DecodedData}&checksum={checksum}";
         }
 
         private List<OrderUpdateStatus> DecodeUpdateInput(string input)
@@ -188,16 +203,15 @@ namespace GGG_OnlineShop.Web.Api.Controllers
             string dataPart = splitted[0].Substring(startIndexData);
 
             // TODO enable later
-            //int startIndexCheckSum = splitted[1].IndexOf("=", StringComparison.Ordinal) + 1;
-            //string checkSumPart = splitted[1].Substring(startIndexCheckSum);
-
-            //string controlCheckSum = HashString(dataPart);
-            //if (controlCheckSum != checkSumPart)
-            //{
-            //    return null;
-            //}
+            int startIndexCheckSum = splitted[1].IndexOf("=", StringComparison.Ordinal) + 1;
+            string checkSumPart = splitted[1].Substring(startIndexCheckSum);
 
             dataPart = dataPart.Replace("%3D", "=");
+            string controlCheckSum = GenerateCheckSum(dataPart);
+            if (controlCheckSum != checkSumPart)
+            {
+                return new List<OrderUpdateStatus>();
+            }
 
             List<OrderUpdateStatus> orderUpdates = new List<OrderUpdateStatus>();
             var dataArray = Base64UrlEncoder.Decode(dataPart).Split(Environment.NewLine.ToCharArray());
@@ -225,15 +239,15 @@ namespace GGG_OnlineShop.Web.Api.Controllers
             return orderUpdates;
         }
 
-        public static string HashString(string stringToHash)
+        public static string GenerateCheckSum(string stringToHash)
         {
             UTF8Encoding myEncoder = new UTF8Encoding();
-            byte[] Key = myEncoder.GetBytes(GlobalConstants.EpayUserKey);
-            byte[] Text = myEncoder.GetBytes(stringToHash);
+            byte[] key = myEncoder.GetBytes(GlobalConstants.EpayUserKey);
+            byte[] text = myEncoder.GetBytes(stringToHash);
 
-            HMACSHA1 myHMACSHA1 = new HMACSHA1(Key);
+            HMACSHA1 myHMACSHA1 = new HMACSHA1(key);
 
-            byte[] HashCode = myHMACSHA1.ComputeHash(Text);
+            byte[] HashCode = myHMACSHA1.ComputeHash(text);
             string hash = BitConverter.ToString(HashCode).Replace("-", "");
 
             return hash.ToLower();
