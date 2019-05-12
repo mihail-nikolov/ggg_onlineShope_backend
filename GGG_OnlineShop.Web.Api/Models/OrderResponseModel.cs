@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using GGG_OnlineShop.Infrastructure;
 using GGG_OnlineShop.InternalApiDB.Models;
 using GGG_OnlineShop.InternalApiDB.Models.Enums;
@@ -31,6 +32,11 @@ namespace GGG_OnlineShop.Web.Api.Models
         public double PaidPrice { get; set; }
 
         public double DiscountPercentage { get; set; }
+
+        [Required]
+        [JsonProperty("WayToPay")]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public PaymentMethod PaymentMethod { get; set; }
 
         public List<OrderedItemResponseModel> OrderedItems { get; set; }
     }
