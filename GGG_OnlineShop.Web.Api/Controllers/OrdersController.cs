@@ -165,10 +165,10 @@ namespace GGG_OnlineShop.Web.Api.Controllers
                         Logger.LogInfo(responseOrder, "product found", controllerName, method);
                     }
 
-                    responseString.AppendLine(responseOrder);
+                    responseString.AppendFormat("{0}\n", responseOrder);
                 }
 
-                var encodedResponse = GenerateEncodedResponse(responseString.ToString().TrimEnd());
+                var encodedResponse = GenerateEncodedResponse(responseString.ToString());
                 Logger.LogInfo(encodedResponse, "response to epay", controllerName, method);
 
                 return Ok(encodedResponse);
@@ -184,7 +184,9 @@ namespace GGG_OnlineShop.Web.Api.Controllers
 
         private string GenerateEncodedResponse(string data)
         {
+            data = data.Replace("OK", "DENIED");
             string base64DecodedData = Base64UrlEncoder.Encode(data);
+            base64DecodedData = base64DecodedData.PadRight(base64DecodedData.Length + (4 - base64DecodedData.Length % 4) % 4, '=');
             string checksum = "";
 
             if (!string.IsNullOrWhiteSpace(base64DecodedData))
