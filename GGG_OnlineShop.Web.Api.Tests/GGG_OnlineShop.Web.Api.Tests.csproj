@@ -138,6 +138,10 @@
       <Project>{B8D0E014-1843-4AC3-A5C4-5E64875B2CBE}</Project>
       <Name>GGG_OnlineShop.InternalApiDB.Models</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GGG_OnlineShop.Web.Api\GGG_OnlineShop.Web.Api.csproj">
+      <Project>{1B1A382D-4C2B-4063-BED5-7774022234B3}</Project>
+      <Name>GGG_OnlineShop.Web.Api</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />

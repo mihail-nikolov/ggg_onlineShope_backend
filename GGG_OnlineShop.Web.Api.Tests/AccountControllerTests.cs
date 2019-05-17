@@ -1,13 +1,14 @@
-﻿namespace GGG_OnlineShop.Web.Api.Tests
+﻿using GGG_OnlineShop.Web.Api.Controllers;
+using GGG_OnlineShop.Web.Api.Models;
+
+namespace GGG_OnlineShop.Web.Api.Tests
 {
     using Common;
-    using Controllers;
     using Data.Services.Contracts;
     using InternalApiDB.Models;
     using InternalApiDB.Models.Enums;
     using Microsoft.AspNet.Identity;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using Models;
     using Moq;
     using System;
     using System.Collections.Generic;
@@ -15,8 +16,6 @@
     using System.Security.Claims;
     using System.Security.Principal;
     using System.Threading.Tasks;
-    using System.Web;
-    using System.Web.Http.Controllers;
     using System.Web.Http.Results;
 
     [TestClass]

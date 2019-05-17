@@ -124,11 +124,10 @@ namespace GGG_OnlineShop.Web.Api.Controllers
                 foreach (var updateOrder in updateOrders)
                 {
                     string responseOrder = "INVOICE=" + updateOrder.Invoice + ":STATUS={0}";
-                    // for now for invoice we use the ID
                     var order = orders.GetById(updateOrder.Invoice);
                     if (order == null)
                     {
-                        responseOrder = string.Format(responseOrder, ShopResponse.ERR);
+                        responseOrder = string.Format(responseOrder, ShopResponse.NO);
                         responseOrder += $"не е намерен продукт с ID:{updateOrder.Invoice}";
                         Logger.LogInfo(responseOrder, "product not found", controllerName, method);
                     }
@@ -184,7 +183,6 @@ namespace GGG_OnlineShop.Web.Api.Controllers
 
         private string GenerateEncodedResponse(string data)
         {
-            data = data.Replace("OK", "DENIED");
             string base64DecodedData = Base64UrlEncoder.Encode(data);
             base64DecodedData = base64DecodedData.PadRight(base64DecodedData.Length + (4 - base64DecodedData.Length % 4) % 4, '=');
             string checksum = "";
@@ -194,7 +192,7 @@ namespace GGG_OnlineShop.Web.Api.Controllers
                 checksum = GenerateCheckSum(base64DecodedData);
             }
 
-            return $"encoded={base64DecodedData}&checksum={checksum}";
+            return $"ENCODED={base64DecodedData}&CHECKSUM={checksum}";
         }
 
         private List<OrderUpdateStatus> DecodeUpdateInput(string input)

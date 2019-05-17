@@ -176,16 +176,41 @@
 
         [HttpGet]
         [Route("GetMyOrders")]
-        public IHttpActionResult GetMyOrders()
+        public IHttpActionResult GetMyOrders(bool pending = false, bool ordered = false, bool done = false)
         {
             try
             {
-                var myOrders = this.orders.GetAllByUser(User.Identity.GetUserId())
-                    .OrderBy(x => x.Status)
+                List<OrderResponseModel> myOrders;
+                if (pending)
+                {
+                    myOrders = this.orders.GetNewOrders()
+                        .To<OrderResponseModel>()
+                        .ToList();
+                }
+                else if (ordered)
+                {
+                    myOrders = this.orders.GetOrderedProducts()
+                        .To<OrderResponseModel>()
+                        .ToList();
+                }
+                else if (done)
+                {
+                    myOrders = this.orders.GetDoneOrders()
+                        .To<OrderResponseModel>()
+                        .ToList();
+                }
+                else
+                {
+                    myOrders = this.orders.GetAll()
+                        .To<OrderResponseModel>()
+                        .ToList();
+                }
+
+                myOrders = myOrders.OrderBy(x => x.Status)
                     .ThenByDescending(x => x.CreatedOn)
-                    .ThenByDescending(x => x.Id)
-                    .To<OrderResponseModel>()
+                    .ThenBy(x => x.Id)
                     .ToList();
+
                 return this.Ok(myOrders);
             }
             catch (Exception e)
@@ -212,8 +237,8 @@
 
                     string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
                     await this.emails.SendEmail(user.Email, GlobalConstants.ResetPasswordSubject,
-                                             string.Format(GlobalConstants.ResetPasswordBody, code), GlobalConstants.SMTPServer,
-                                             GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
+                         string.Format(GlobalConstants.ResetPasswordBody, code, $"{GlobalConstants.AppDomainPath}/{GlobalConstants.ResetPasswordPath}"),
+                         GlobalConstants.SMTPServer, GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
 
                     return Ok();
                 }

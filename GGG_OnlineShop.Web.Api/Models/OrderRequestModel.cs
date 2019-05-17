@@ -74,7 +74,7 @@ namespace GGG_OnlineShop.Web.Api.Models
 Необходим монтаж:    {installation}
 Необходима фактура:  {invoice}
 Цена:                {Price} лв
-Цена с отстъпка:     {Price - DiscountPercentage*Price} лв
+Цена с отстъпка:     {Price - DiscountPercentage/100*Price} лв
 Платено:             {PaidPrice} лв
 ";
             return info;

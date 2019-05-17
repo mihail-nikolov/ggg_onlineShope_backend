@@ -17,6 +17,7 @@
     public enum ShopResponse
     {
         OK,
-        ERR
+        ERR,
+        NO
     }
 }
