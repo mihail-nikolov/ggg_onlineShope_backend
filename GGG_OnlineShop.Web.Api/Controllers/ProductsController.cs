@@ -1,4 +1,6 @@
 ﻿using System.Threading.Tasks;
+using System.Web.Http.Results;
+using GGG_OnlineShop.Data.Services.ExternalDb.Models;
 
 namespace GGG_OnlineShop.Web.Api.Controllers
 {
@@ -109,7 +111,8 @@ namespace GGG_OnlineShop.Web.Api.Controllers
                     return BadRequest(GlobalConstants.NeededCodesErrorMessage);
                 }
 
-                IHttpActionResult result;
+                IHttpActionResult result = Ok();
+                List<VehicleGlassShortResponseModel> glassesList = new List<VehicleGlassShortResponseModel>();
 
                 if (!string.IsNullOrEmpty(eurocode))
                 {
@@ -119,8 +122,7 @@ namespace GGG_OnlineShop.Web.Api.Controllers
                     }
                     else
                     {
-                        List<VehicleGlassShortResponseModel> glassesList = this._glasses.GetGlassesByEuroCode(eurocode).To<VehicleGlassShortResponseModel>().ToList();
-                        result = this.Ok(glassesList);
+                        glassesList = this._glasses.GetGlassesByEuroCode(eurocode).To<VehicleGlassShortResponseModel>().ToList();
                     }
                 }
                 else if (!string.IsNullOrEmpty(oescode))
@@ -131,8 +133,7 @@ namespace GGG_OnlineShop.Web.Api.Controllers
                     }
                     else
                     {
-                        List<VehicleGlassShortResponseModel> glassesList = this._glasses.GetByOesCode(oescode).To<VehicleGlassShortResponseModel>().ToList();
-                        result = this.Ok(glassesList);
+                         glassesList = this._glasses.GetByOesCode(oescode).To<VehicleGlassShortResponseModel>().ToList();
                     }
                 }
                 else
@@ -143,10 +144,26 @@ namespace GGG_OnlineShop.Web.Api.Controllers
                     }
                     else
                     {
-                        List<VehicleGlassShortResponseModel> glassesList = this._glasses.GetByRandomCode(code).To<VehicleGlassShortResponseModel>()
-                                                                               .ToList();
-                        result = this.Ok(glassesList);
+                        glassesList = this._glasses.GetByRandomCode(code).To<VehicleGlassShortResponseModel>().ToList();
                     }
+                }
+
+                // get quantities for each
+                if (result.GetType() == typeof(OkResult))
+                {
+                    var isUserLogged = this.User.Identity.IsAuthenticated;
+                    User user = null;
+                    if (isUserLogged)
+                    {
+                        user = this._users.GetByEmail(this.User.Identity.Name);
+                    }
+
+                    foreach (var glass in glassesList)
+                    {
+                        glass.ProductInfos = GetProductInfos(glass.Id, user);
+                    }
+
+                    result = Ok(glassesList);
                 }
 
                 return result;
@@ -164,9 +181,6 @@ namespace GGG_OnlineShop.Web.Api.Controllers
         {
             try
             {
-                var product = this._glasses.GetById(productId);
-                var code = this._glasses.GetCode(product);
-
                 var isUserLogged = this.User.Identity.IsAuthenticated;
                 User user = null;
                 if (isUserLogged)
@@ -174,7 +188,7 @@ namespace GGG_OnlineShop.Web.Api.Controllers
                     user = this._users.GetByEmail(this.User.Identity.Name);
                 }
 
-                var quantities = this._productQuantities.GetPriceAndQuantitiesByCode(code, user);
+                var quantities = GetProductInfos(productId, user);
                 return this.Ok(quantities);
             }
             catch (Exception e)
@@ -182,6 +196,15 @@ namespace GGG_OnlineShop.Web.Api.Controllers
                 HandlExceptionLogging(e, "", _controllerName);
                 return InternalServerError();
             }
+        }
+
+        private IEnumerable<ProductInfoResponseModel> GetProductInfos(int productId, User user)
+        {
+            var product = this._glasses.GetById(productId);
+            var code = this._glasses.GetCode(product);
+
+            var quantities = this._productQuantities.GetPriceAndQuantitiesByCode(code, user);
+            return quantities;
         }
 
         [HttpPost]

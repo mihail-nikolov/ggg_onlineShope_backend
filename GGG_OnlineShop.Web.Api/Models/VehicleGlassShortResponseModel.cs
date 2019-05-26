@@ -1,4 +1,6 @@
-﻿namespace GGG_OnlineShop.Web.Api.Models
+﻿using GGG_OnlineShop.Data.Services.ExternalDb.Models;
+
+namespace GGG_OnlineShop.Web.Api.Models
 {
     using AutoMapper;
     using Infrastructure;
@@ -32,6 +34,8 @@
 
         public List<int> Images { get; set; }
 
+        public IEnumerable<ProductInfoResponseModel> ProductInfos { get; set; }
+        
         public virtual void CreateMappings(IConfiguration configuration)
         {
             configuration.CreateMap<VehicleGlass, VehicleGlassShortResponseModel>("VehicleGlassShortResponseModel")
