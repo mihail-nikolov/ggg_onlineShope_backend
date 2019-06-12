@@ -19,6 +19,11 @@
             return this.Data.All().FirstOrDefault(x => x.InvoiceNumber == invoiceNumber);
         }
 
+        public IQueryable<Order> GetOrderByStatus(DeliveryStatus status)
+        {
+            return this.Data.All().Where(x => x.Status == status);
+        }
+
         public IQueryable<Order> GetDoneOrders()
         {
             return this.Data.All().Where(x => x.Status == DeliveryStatus.Done);

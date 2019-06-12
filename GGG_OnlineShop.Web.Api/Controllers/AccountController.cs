@@ -1,4 +1,6 @@
-﻿namespace GGG_OnlineShop.Web.Api.Controllers
+﻿using GGG_OnlineShop.InternalApiDB.Models.Enums;
+
+namespace GGG_OnlineShop.Web.Api.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -176,42 +178,32 @@
 
         [HttpGet]
         [Route("GetMyOrders")]
-        public IHttpActionResult GetMyOrders(bool pending = false, bool ordered = false, bool done = false)
+        public IHttpActionResult GetMyOrders(string status = null)
         {
             try
             {
-                List<OrderResponseModel> myOrders;
-                if (pending)
+                var myOrders = orders.GetAllByUser(User.Identity.GetUserId());
+                List<OrderResponseModel> ordersToReturn;
+
+                if (!string.IsNullOrWhiteSpace(status))
                 {
-                    myOrders = this.orders.GetNewOrders()
-                        .To<OrderResponseModel>()
-                        .ToList();
-                }
-                else if (ordered)
-                {
-                    myOrders = this.orders.GetOrderedProducts()
-                        .To<OrderResponseModel>()
-                        .ToList();
-                }
-                else if (done)
-                {
-                    myOrders = this.orders.GetDoneOrders()
+                    DeliveryStatus statusEnum = (DeliveryStatus)Enum.Parse(typeof(DeliveryStatus), status, true);
+                    ordersToReturn = myOrders.Where(x => x.Status == statusEnum)
+                        .OrderByDescending(x => x.CreatedOn)
+                        .ThenBy(x => x.Id)
                         .To<OrderResponseModel>()
                         .ToList();
                 }
                 else
                 {
-                    myOrders = this.orders.GetAll()
+                    ordersToReturn = myOrders.OrderBy(x => x.Status)
+                        .ThenByDescending(x => x.CreatedOn)
+                        .ThenBy(x => x.Id)
                         .To<OrderResponseModel>()
                         .ToList();
                 }
 
-                myOrders = myOrders.OrderBy(x => x.Status)
-                    .ThenByDescending(x => x.CreatedOn)
-                    .ThenBy(x => x.Id)
-                    .ToList();
-
-                return this.Ok(myOrders);
+                return this.Ok(ordersToReturn);
             }
             catch (Exception e)
             {

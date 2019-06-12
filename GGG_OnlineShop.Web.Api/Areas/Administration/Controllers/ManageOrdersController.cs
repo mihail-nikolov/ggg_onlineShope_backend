@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using GGG_OnlineShop.InternalApiDB.Models.Enums;
 
 namespace GGG_OnlineShop.Web.Api.Areas.Administration.Controllers
 {
@@ -30,43 +31,31 @@ namespace GGG_OnlineShop.Web.Api.Areas.Administration.Controllers
 
         [HttpGet]
         [Route("")]
-        public IHttpActionResult Get(bool pending = false, bool ordered = false, bool done = false)
+        public IHttpActionResult Get(string status = null)
         {
             try
             {
-                List<OrderResponseModelWIthUserInfo> orders;
-
-                if (pending)
+                var allOrders = this.orders.GetAll();
+                List<OrderResponseModelWIthUserInfo> ordersToReturn;
+                if (!string.IsNullOrWhiteSpace(status))
                 {
-                    orders = this.orders.GetNewOrders()
-                                        .To<OrderResponseModelWIthUserInfo>()
-                                        .ToList();
-                }
-                else if (ordered)
-                {
-                    orders = this.orders.GetOrderedProducts()
-                                        .To<OrderResponseModelWIthUserInfo>()
-                                        .ToList();
-                }
-                else if (done)
-                {
-                    orders = this.orders.GetDoneOrders()
-                                        .To<OrderResponseModelWIthUserInfo>()
-                                        .ToList();
+                    DeliveryStatus statusEnum = (DeliveryStatus)Enum.Parse(typeof(DeliveryStatus), status, true);
+                    ordersToReturn = allOrders.Where(x => x.Status == statusEnum)
+                        .OrderByDescending(x => x.CreatedOn)
+                        .ThenBy(x => x.Id)
+                        .To<OrderResponseModelWIthUserInfo>()
+                        .ToList();
                 }
                 else
                 {
-                    orders = this.orders.GetAll()
-                                        .To<OrderResponseModelWIthUserInfo>()
-                                        .ToList();
+                    ordersToReturn = allOrders.OrderBy(x => x.Status)
+                        .ThenByDescending(x => x.CreatedOn)
+                        .ThenBy(x => x.Id)
+                        .To<OrderResponseModelWIthUserInfo>()
+                        .ToList();
                 }
 
-                orders = orders.OrderBy(x => x.Status)
-                               .ThenByDescending(x => x.CreatedOn)
-                               .ThenBy(x => x.Id)
-                               .ToList();
-
-                return this.Ok(orders);
+                return this.Ok(ordersToReturn);
             }
             catch (Exception e)
             {
@@ -77,7 +66,7 @@ namespace GGG_OnlineShop.Web.Api.Areas.Administration.Controllers
 
         [HttpPost]
         [Route("update")]
-        public  async Task<IHttpActionResult> Update(OrderRequestUpdateStatusModel model)
+        public async Task<IHttpActionResult> Update(OrderRequestUpdateStatusModel model)
         {
             if (!ModelState.IsValid)
             {

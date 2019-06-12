@@ -1,4 +1,6 @@
-﻿namespace GGG_OnlineShop.Data.Services.Contracts
+﻿using GGG_OnlineShop.InternalApiDB.Models.Enums;
+
+namespace GGG_OnlineShop.Data.Services.Contracts
 {
     using InternalApiDB.Models;
     using System.Linq;
@@ -12,5 +14,7 @@
         IQueryable<Order> GetDoneOrders();
 
         bool IsValidOrder(Order product);
+
+        IQueryable<Order> GetOrderByStatus(DeliveryStatus status);
     }
 }
