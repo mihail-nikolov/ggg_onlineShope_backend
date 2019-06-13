@@ -228,8 +228,9 @@ namespace GGG_OnlineShop.Web.Api.Controllers
                     }
 
                     string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+                    string encodedCode = HttpUtility.UrlEncode(code);
                     await this.emails.SendEmail(user.Email, GlobalConstants.ResetPasswordSubject,
-                         string.Format(GlobalConstants.ResetPasswordBody, code, $"{GlobalConstants.AppDomainPath}/{GlobalConstants.ResetPasswordPath}"),
+                         string.Format(GlobalConstants.ResetPasswordBody, encodedCode, $"{GlobalConstants.AppDomainPath}/{GlobalConstants.ResetPasswordPath}"),
                          GlobalConstants.SMTPServer, GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
 
                     return Ok();
@@ -260,7 +261,8 @@ namespace GGG_OnlineShop.Web.Api.Controllers
                 return BadRequest(GlobalConstants.NoSuchAUserErroMessage);
             }
 
-            var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
+            string decodedCode = HttpUtility.UrlDecode(model.Code);
+            var result = await UserManager.ResetPasswordAsync(user.Id, decodedCode, model.Password);
             if (result.Succeeded)
             {
                 return Ok();
@@ -279,7 +281,10 @@ namespace GGG_OnlineShop.Web.Api.Controllers
                 return this.BadRequest(string.Format(GlobalConstants.WrongCodeErrorMessage, userId));
             }
 
-            var result = await UserManager.ConfirmEmailAsync(userId, code);
+            string userIdEncoded = HttpUtility.UrlDecode(userId);
+            //string codeEncoded = HttpUtility.UrlDecode(code); // do not decode token
+
+            var result = await UserManager.ConfirmEmailAsync(userIdEncoded, code);
             if (!result.Succeeded)
             {
                 return this.BadRequest(GlobalConstants.EmailConfirmationFailedErrorMessage);

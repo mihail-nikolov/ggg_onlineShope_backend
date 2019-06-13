@@ -63,17 +63,18 @@ namespace GGG_OnlineShop.Common
 
         public const string EmailRuse = "glassgoldgroup_ruse@abv.bg";
         public const string EmailSofia = "glassgoldgroup_slatina@abv.bg";
+        // TODO change these on PRD
         public const string EmailPrimary = "testggg9@gmail.com";
         public const string EmailPrimaryPassword = "ggg12345";
         public const string EmailPrimaryProduction = "glassgoldgroup@gmail.com";
         public const string EpayUserKey = "S86UKGH9RA9W1N3F9JIEZ76CU2PXMA1R98IVVTMIX8S5LHCKEFPT7A1XKEXXMRQN";
 
         public const string ResetPasswordSubject = "Забравена парола";
-        public const string ResetPasswordBody = "Моля, обновете паролата си, използвайки следния код: {0}. Изплозвайте следния линк: {1}";
+        public const string ResetPasswordBody = "Моля, обновете паролата си, използвайки следния код: <b>{0}</b>. Изплозвайте <a href ='{1}'>този линк</a>";
         public const string ConfirmEmailSubject = "Потвърждаване на акаунт";
-        public const string ConfirmEmailBody = "Моля, потвърдете акаунта си, кликвайки на следния линк: {0}";
-        public const string OrderMade = "направена поръчка, ID: {0}";
-        public const string OrderUpdated = "нов статус на поръчка, ID: {0}";
+        public const string ConfirmEmailBody = "Моля, потвърдете акаунта си, кликвайки на <a href ='{0}'>този линк</a>";
+        public const string OrderMade = "направена поръчка, ID: <b>{0}</b>";
+        public const string OrderUpdated = "нов статус на поръчка, ID: <b>{0}</b>";
         public const string WrongCodeErrorMessage = "wrong code for {0}";
         public const string EmailConfirmationFailedErrorMessage = "email confirmation failed";
         public const string CannotRemoveAdminErrorMessage = "Cannot remove Admin";

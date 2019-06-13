@@ -83,7 +83,7 @@ namespace GGG_OnlineShop.Web.Api.Tests.Administration
 
             var controller = new ManageOrdersController(ordersMock.Object, null, null);
 
-            var result = controller.Get(true);
+            var result = controller.Get(DeliveryStatus.Unpaid.ToString());
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<List<OrderResponseModelWIthUserInfo>>));
             var responseContent = ((OkNegotiatedContentResult<List<OrderResponseModelWIthUserInfo>>)result).Content;
@@ -123,7 +123,7 @@ namespace GGG_OnlineShop.Web.Api.Tests.Administration
 
             var controller = new ManageOrdersController(ordersMock.Object, null, null);
 
-            var result = controller.Get(ordered: true);
+            var result = controller.Get(DeliveryStatus.Ordered.ToString());
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<List<OrderResponseModelWIthUserInfo>>));
             var responseContent = ((OkNegotiatedContentResult<List<OrderResponseModelWIthUserInfo>>)result).Content;
@@ -163,7 +163,7 @@ namespace GGG_OnlineShop.Web.Api.Tests.Administration
 
             var controller = new ManageOrdersController(ordersMock.Object, null, null);
 
-            var result = controller.Get(done: true);
+            var result = controller.Get(DeliveryStatus.Done.ToString());
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<List<OrderResponseModelWIthUserInfo>>));
             var responseContent = ((OkNegotiatedContentResult<List<OrderResponseModelWIthUserInfo>>)result).Content;
@@ -267,7 +267,7 @@ namespace GGG_OnlineShop.Web.Api.Tests.Administration
 
             var controller = new ManageOrdersController(ordersMock.Object, null, null);
 
-            var result = controller.Get(true);
+            var result = controller.Get();
 
             Assert.IsInstanceOfType(result, typeof(OkNegotiatedContentResult<List<OrderResponseModelWIthUserInfo>>));
             var responseContent = ((OkNegotiatedContentResult<List<OrderResponseModelWIthUserInfo>>)result).Content;

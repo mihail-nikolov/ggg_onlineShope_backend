@@ -1,4 +1,6 @@
-﻿namespace GGG_OnlineShop.Web.Api.Areas.Administration.Controllers
+﻿using System.Web;
+
+namespace GGG_OnlineShop.Web.Api.Areas.Administration.Controllers
 {
     using System.Linq;
     using Common;
@@ -109,8 +111,9 @@
             {
                 User user = this.users.GetByEmail(model.Email);
                 string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-
-                string fullCallbackUrl = $"{GlobalConstants.AppDomainPath}/confirmemail?userid={user.Id}&code={code}";
+                string encodedCode = HttpUtility.UrlEncode(code);
+                string encodedUserId = HttpUtility.UrlEncode(user.Id);
+                string fullCallbackUrl = $"{GlobalConstants.AppDomainPath}/confirmemail?userid={encodedUserId}&code={encodedCode}";
 
                 await this.emails.SendEmail(user.Email, GlobalConstants.ConfirmEmailSubject,
                                        string.Format(GlobalConstants.ConfirmEmailBody, fullCallbackUrl), GlobalConstants.SMTPServer,

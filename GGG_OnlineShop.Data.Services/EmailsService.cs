@@ -16,6 +16,7 @@ namespace GGG_OnlineShop.Data.Services
             mail.To.Add(emailTo);
             mail.Subject = subject;
             mail.Body = body;
+            mail.IsBodyHtml = true;
             SmtpServer.Port = 25;
             SmtpServer.Credentials = new NetworkCredential(fromMail, password);
             SmtpServer.EnableSsl = true;
