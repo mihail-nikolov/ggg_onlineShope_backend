@@ -62,7 +62,9 @@ namespace GGG_OnlineShop.Common
         public const string FindingUserError = "Error while finding user";
 
         public const string EmailRuse = "glassgoldgroup_ruse@abv.bg";
+        public const string OfficeRuse = "Ruse";
         public const string EmailSofia = "glassgoldgroup_slatina@abv.bg";
+        public const string OfficeSofia = "Sofia";
         // TODO change these on PRD
         public const string EmailPrimary = "testggg9@gmail.com";
         public const string EmailPrimaryPassword = "ggg12345";

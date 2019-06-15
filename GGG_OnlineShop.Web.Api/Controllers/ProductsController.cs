@@ -6,7 +6,6 @@ namespace GGG_OnlineShop.Web.Api.Controllers
 {
     using Common;
     using Data.Services.Contracts;
-    using Infrastructure;
     using InternalApiDB.Models;
     using Models;
     using System;
@@ -48,34 +47,42 @@ namespace GGG_OnlineShop.Web.Api.Controllers
                     return BadRequest("No code passed");
                 }
 
-                VehicleGlassResponseModel glass = null;
+                VehicleGlass glass = null;
                 if (id != null)
                 {
-                    glass = this.Mapper.Map<VehicleGlassResponseModel>(this._glasses.GetById(id));
+                    glass = _glasses.GetById(id);
                 }
 
                 if (!string.IsNullOrEmpty(eurocode))
                 {
-                    glass = this.Mapper.Map<VehicleGlassResponseModel>(this._glasses.GetByEuroCode(eurocode));
+                    glass = _glasses.GetByEuroCode(eurocode);
                 }
 
                 if (glass == null && !string.IsNullOrEmpty(materialNumber))
                 {
-                    glass = this.Mapper.Map<VehicleGlassResponseModel>(
-                        this._glasses.GetByMaterialNumber(materialNumber));
+                    glass = this._glasses.GetByMaterialNumber(materialNumber);
                 }
 
                 if (glass == null && !string.IsNullOrEmpty(industryCode))
                 {
-                    glass = this.Mapper.Map<VehicleGlassResponseModel>(this._glasses.GetByIndustryCode(industryCode));
+                    glass = this._glasses.GetByIndustryCode(industryCode);
                 }
 
                 if (glass == null && !string.IsNullOrEmpty(localCode))
                 {
-                    glass = this.Mapper.Map<VehicleGlassResponseModel>(this._glasses.GetByLocalCode(localCode));
+                    glass = _glasses.GetByLocalCode(localCode);
                 }
 
-                return Ok(glass);
+                var glassResponse = this.Mapper.Map<VehicleGlassResponseModel>(glass);
+                User user = null;
+                if (User.Identity.IsAuthenticated)
+                {
+                    user = _users.GetByEmail(User.Identity.Name);
+                }
+
+                glassResponse.ProductInfos = GetProductInfos(glass, user);
+
+                return Ok(glassResponse);
             }
             catch (Exception e)
             {
@@ -112,7 +119,7 @@ namespace GGG_OnlineShop.Web.Api.Controllers
                 }
 
                 IHttpActionResult result = Ok();
-                List<VehicleGlassShortResponseModel> glassesList = new List<VehicleGlassShortResponseModel>();
+                IQueryable<VehicleGlass> glassesQuery = new List<VehicleGlass>().AsQueryable();
 
                 if (!string.IsNullOrEmpty(eurocode))
                 {
@@ -122,7 +129,7 @@ namespace GGG_OnlineShop.Web.Api.Controllers
                     }
                     else
                     {
-                        glassesList = this._glasses.GetGlassesByEuroCode(eurocode).To<VehicleGlassShortResponseModel>().ToList();
+                        glassesQuery = this._glasses.GetGlassesByEuroCode(eurocode);
                     }
                 }
                 else if (!string.IsNullOrEmpty(oescode))
@@ -133,7 +140,7 @@ namespace GGG_OnlineShop.Web.Api.Controllers
                     }
                     else
                     {
-                         glassesList = this._glasses.GetByOesCode(oescode).To<VehicleGlassShortResponseModel>().ToList();
+                        glassesQuery = this._glasses.GetByOesCode(oescode);
                     }
                 }
                 else
@@ -144,26 +151,30 @@ namespace GGG_OnlineShop.Web.Api.Controllers
                     }
                     else
                     {
-                        glassesList = this._glasses.GetByRandomCode(code).To<VehicleGlassShortResponseModel>().ToList();
+                        glassesQuery = _glasses.GetByRandomCode(code);
                     }
                 }
+
+                List<VehicleGlassShortResponseModel> glassesResult = new List<VehicleGlassShortResponseModel>();
 
                 // get quantities for each
                 if (result.GetType() == typeof(OkResult))
                 {
-                    var isUserLogged = this.User.Identity.IsAuthenticated;
                     User user = null;
-                    if (isUserLogged)
+                    if (User.Identity.IsAuthenticated)
                     {
-                        user = this._users.GetByEmail(this.User.Identity.Name);
+                        user = _users.GetByEmail(User.Identity.Name);
                     }
 
-                    foreach (var glass in glassesList)
+                    foreach (var glass in glassesQuery)
                     {
-                        glass.ProductInfos = GetProductInfos(glass.Id, user);
+                        var glassToAdd = Mapper.Map<VehicleGlassShortResponseModel>(glass);
+                        glassToAdd.ProductInfos = GetProductInfos(glass, user);
+
+                        glassesResult.Add(glassToAdd);
                     }
 
-                    result = Ok(glassesList);
+                    result = Ok(glassesResult);
                 }
 
                 return result;
@@ -181,14 +192,14 @@ namespace GGG_OnlineShop.Web.Api.Controllers
         {
             try
             {
-                var isUserLogged = this.User.Identity.IsAuthenticated;
                 User user = null;
-                if (isUserLogged)
+                if (User.Identity.IsAuthenticated)
                 {
                     user = this._users.GetByEmail(this.User.Identity.Name);
                 }
 
-                var quantities = GetProductInfos(productId, user);
+                var product = _glasses.GetById(productId);
+                var quantities = GetProductInfos(product, user);
                 return this.Ok(quantities);
             }
             catch (Exception e)
@@ -198,10 +209,9 @@ namespace GGG_OnlineShop.Web.Api.Controllers
             }
         }
 
-        private IEnumerable<ProductInfoResponseModel> GetProductInfos(int productId, User user)
+        private IEnumerable<ProductInfoResponseModel> GetProductInfos(VehicleGlass glass, User user)
         {
-            var product = this._glasses.GetById(productId);
-            var code = this._glasses.GetCode(product);
+            var code = this._glasses.GetCode(glass);
 
             var quantities = this._productQuantities.GetPriceAndQuantitiesByCode(code, user);
             return quantities;
@@ -218,8 +228,8 @@ namespace GGG_OnlineShop.Web.Api.Controllers
 
             try
             {
-                var positions = this.FindProductsByVehicleInfo(model).Select(x => x.Position).Distinct().ToList();
-                return this.Ok(positions);
+                var positions = FindProductsByVehicleInfo(model).Select(x => x.Position).Distinct();
+                return Ok(positions);
             }
             catch (Exception e)
             {
@@ -239,9 +249,9 @@ namespace GGG_OnlineShop.Web.Api.Controllers
 
             try
             {
-                var glasses = this.FindProductsByVehicleInfo(requestModel);
+                var glasses = FindProductsByVehicleInfo(requestModel);
 
-                return this.Ok(glasses.ToList());
+                return Ok(glasses.ToList());
             }
             catch (Exception e)
             {
@@ -250,33 +260,33 @@ namespace GGG_OnlineShop.Web.Api.Controllers
             }
         }
 
-        private IQueryable<VehicleGlassShortResponseModel> FindProductsByVehicleInfo(VehicleGlassRequestModel requestModel)
+        private List<VehicleGlassShortResponseModel> FindProductsByVehicleInfo(VehicleGlassRequestModel requestModel)
         {
-            var vehicle = this._vehicles.GetVehicleByMakeModelAndBodyTypeIds(requestModel.MakeId, requestModel.ModelId, requestModel.BodyTypeId);
-            IQueryable<VehicleGlassShortResponseModel> glasses = new List<VehicleGlassShortResponseModel>().AsQueryable();
+            var vehicle = _vehicles.GetVehicleByMakeModelAndBodyTypeIds(requestModel.MakeId, requestModel.ModelId, requestModel.BodyTypeId);
+            var glassesResult = new List<VehicleGlassShortResponseModel>();
 
-            if (!string.IsNullOrEmpty(requestModel.ProductType))
+            var applicableGlasses = !string.IsNullOrEmpty(requestModel.ProductType) 
+                ? _vehicles.GetApplicableGLassesByProductType(vehicle, requestModel.ProductType) 
+                : _vehicles.GetApplicableGLasses(vehicle);
+
+            if (applicableGlasses != null)
             {
-                var applicableGlasses =
-                    this._vehicles.GetApplicableGLassesByProductType(vehicle, requestModel.ProductType);
-
-                if (applicableGlasses != null)
+                User user = null;
+                if (User.Identity.IsAuthenticated)
                 {
-                    glasses = applicableGlasses?.To<VehicleGlassShortResponseModel>().OrderBy(x => x.Description);
+                    user = _users.GetByEmail(User.Identity.Name);
+                }
+
+                foreach (var glass in applicableGlasses)
+                {
+                    var glassToAdd = Mapper.Map<VehicleGlassShortResponseModel>(glass);
+                    glassToAdd.ProductInfos = GetProductInfos(glass, user);
+
+                    glassesResult.Add(glassToAdd);
                 }
             }
-            else
-            {
-                var applicableGlasses =
-                    this._vehicles.GetApplicableGLasses(vehicle);
 
-                if (applicableGlasses != null)
-                {
-                    glasses = applicableGlasses?.To<VehicleGlassShortResponseModel>().OrderBy(x => x.Description);
-                }
-            }
-
-            return glasses;
+            return glassesResult;
         }
 
         [HttpPost]

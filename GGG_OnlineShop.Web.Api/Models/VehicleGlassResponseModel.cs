@@ -1,12 +1,11 @@
 ﻿namespace GGG_OnlineShop.Web.Api.Models
 {
     using AutoMapper;
-    using Infrastructure;
     using InternalApiDB.Models;
     using System.Collections.Generic;
     using System.Linq;
 
-    public class VehicleGlassResponseModel : VehicleGlassShortResponseModel, IMapFrom<VehicleGlass>, IHaveCustomMappings
+    public class VehicleGlassResponseModel : VehicleGlassShortResponseModel
     {
         public string ModelDate { get; set; }
 

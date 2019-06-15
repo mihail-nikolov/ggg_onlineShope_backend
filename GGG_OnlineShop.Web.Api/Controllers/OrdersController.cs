@@ -47,15 +47,25 @@ namespace GGG_OnlineShop.Web.Api.Controllers
 
                 var userId = User.Identity.GetUserId();
                 User user = null;
-
                 if (!string.IsNullOrEmpty(userId))
                 {
-                    user = this.users.GetById(userId);
+                    user = users.GetById(userId);
                 }
 
                 var order = this.Mapper.Map<Order>(orderRequest);
                 order.User = user;
                 order.Status = DeliveryStatus.Unpaid;
+
+                var installationRuse = orderRequest.InstallationRuse;
+                var installationSofia = orderRequest.InstallationSofia;
+                if (installationSofia)
+                {
+                    order.BoughtFrom = GlobalConstants.OfficeSofia;
+                }
+                else if (installationRuse)
+                {
+                    order.BoughtFrom = GlobalConstants.OfficeRuse;
+                }
 
                 if (this.orders.IsValidOrder(order))
                 {
@@ -63,7 +73,7 @@ namespace GGG_OnlineShop.Web.Api.Controllers
                 }
                 else
                 {
-                    result = this.BadRequest("Грешка при валидацията на поръчката");
+                    result = BadRequest("Грешка при валидацията на поръчката");
                 }
 
                 if (result is OkResult)
@@ -77,9 +87,6 @@ namespace GGG_OnlineShop.Web.Api.Controllers
                     await emails.SendEmail(GlobalConstants.EmailPrimaryProduction, string.Format(GlobalConstants.OrderMade, order.Id),
                         body, GlobalConstants.SMTPServer,
                         GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
-
-                    var installationRuse = orderRequest.InstallationRuse;
-                    var installationSofia = orderRequest.InstallationSofia;
 
                     if (installationSofia)
                     {
@@ -145,10 +152,29 @@ namespace GGG_OnlineShop.Web.Api.Controllers
 
                         try
                         {
-                            await emails.SendEmail(GlobalConstants.EmailPrimary,
-                                 string.Format(GlobalConstants.OrderMade, order.Id),
-                                 body, GlobalConstants.SMTPServer,
-                                 GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
+                            var boughtFrom = order.BoughtFrom;
+                            if (boughtFrom == GlobalConstants.OfficeSofia)
+                            {
+                                await emails.SendEmail(GlobalConstants.EmailSofia,
+                                    string.Format(GlobalConstants.OrderMade, order.Id),
+                                    body, GlobalConstants.SMTPServer,
+                                    GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
+                            }
+                            if (boughtFrom == GlobalConstants.OfficeRuse)
+                            {
+                                await emails.SendEmail(GlobalConstants.EmailRuse,
+                                    string.Format(GlobalConstants.OrderMade, order.Id),
+                                    body, GlobalConstants.SMTPServer,
+                                    GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
+                            }
+                            else
+                            {
+                                await emails.SendEmail(GlobalConstants.EmailPrimary,
+                                    string.Format(GlobalConstants.OrderMade, order.Id),
+                                    body, GlobalConstants.SMTPServer,
+                                    GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
+                            }
+
 
                             await emails.SendEmail(order.UserЕmail,
                                  string.Format(GlobalConstants.OrderUpdated, order.Id),

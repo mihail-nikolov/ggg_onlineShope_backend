@@ -16,6 +16,8 @@ namespace GGG_OnlineShop.InternalApiDB.Models
             this.orderedItems = new HashSet<OrderedItem>();
         }
 
+        public string BoughtFrom { get; set; }
+
         [Required]
         [StringLength(GlobalConstants.FullAddressMaxLength, ErrorMessage = GlobalConstants.MaxLengthErrorMessage)]
         public string FullAddress { get; set; }
