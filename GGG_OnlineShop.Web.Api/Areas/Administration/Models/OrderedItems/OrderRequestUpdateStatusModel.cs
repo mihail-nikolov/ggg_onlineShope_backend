@@ -17,7 +17,7 @@
             string status = EnglishBulgarianDictionary.Namings[Status.ToString()];
 
             string info = $@"
-ID:     {Id}
+ID: {Id}<br>
 Статус: {status}
 ";
             return info;

@@ -75,8 +75,8 @@ namespace GGG_OnlineShop.Common
         public const string ResetPasswordBody = "Моля, обновете паролата си, използвайки следния код: <b>{0}</b>. Изплозвайте <a href ='{1}'>този линк</a>";
         public const string ConfirmEmailSubject = "Потвърждаване на акаунт";
         public const string ConfirmEmailBody = "Моля, потвърдете акаунта си, кликвайки на <a href ='{0}'>този линк</a>";
-        public const string OrderMade = "направена поръчка, ID: <b>{0}</b>";
-        public const string OrderUpdated = "нов статус на поръчка, ID: <b>{0}</b>";
+        public const string OrderMade = "направена поръчка, ID: {0}";
+        public const string OrderUpdated = "нов статус на поръчка, ID: {0}";
         public const string WrongCodeErrorMessage = "wrong code for {0}";
         public const string EmailConfirmationFailedErrorMessage = "email confirmation failed";
         public const string CannotRemoveAdminErrorMessage = "Cannot remove Admin";

@@ -64,18 +64,18 @@ namespace GGG_OnlineShop.Web.Api.Models
             string info = "";
             foreach (var orderedItem in OrderedItems)
             {
-                info += $"{orderedItem}\n=======================\n";
+                info += $"{orderedItem}<br>=======================<br>";
             }
 
             info += $@"
-Пълен адрес:         {FullAddress}
-Статус:              {status}
-Бележки за доставка: {DeliveryNotes}
-Необходим монтаж:    {installation}
-Необходима фактура:  {invoice}
-Цена:                {Price} лв
-Цена с отстъпка:     {Price - DiscountPercentage/100*Price} лв
-Платено:             {PaidPrice} лв
+Пълен адрес: {FullAddress}<br>
+Статус: {status}<br>
+Бележки за доставка: {DeliveryNotes}<br>
+Необходим монтаж: {installation}<br>
+Необходима фактура: {invoice}<br><br>
+Цена:{Price} лв<br>
+Цена с отстъпка:{Price - DiscountPercentage/100*Price} лв<br>
+Платено: {PaidPrice} лв<br>
 ";
             return info;
         }
