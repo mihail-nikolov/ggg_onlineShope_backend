@@ -27,12 +27,12 @@
 
         public override string ToString()
         {
-            string info = $@"
-Производител:        {Manufacturer}
-EuroCode:            {EuroCode}
-Други кодове:        {OtherCodes}
-Описание:            {Description}
-Цена:                {Price} лв
+            string info = $@"<br>
+Производител:        {Manufacturer}<br>
+EuroCode:            {EuroCode}<br>
+Други кодове:        {OtherCodes}<br>
+Описание:            {Description}<br>
+Цена:                {Price} лв<br>
 ";
             return info;
         }
