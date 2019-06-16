@@ -78,13 +78,14 @@ namespace GGG_OnlineShop.Web.Api.Controllers
 
                 if (result is OkResult)
                 {
-                    string body = $"Направена поръчка: \n\n{orderRequest}";
+                    string body = orderRequest.ToString();
                     string emailTo = order.UserЕmail;
                     await emails.SendEmail(emailTo, string.Format(GlobalConstants.OrderMade, order.Id),
                         body, GlobalConstants.SMTPServer,
                         GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
 
-                    await emails.SendEmail(GlobalConstants.EmailPrimaryProduction, string.Format(GlobalConstants.OrderMade, order.Id),
+                    await emails.SendEmail(GlobalConstants.EmailPrimaryProduction, 
+                        string.Format(GlobalConstants.OrderMade, order.Id),
                         body, GlobalConstants.SMTPServer,
                         GlobalConstants.EmailPrimary, GlobalConstants.EmailPrimaryPassword);
 

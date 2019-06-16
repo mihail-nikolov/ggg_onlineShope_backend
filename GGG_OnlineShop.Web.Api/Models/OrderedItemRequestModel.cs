@@ -27,7 +27,7 @@
 
         public override string ToString()
         {
-            string info = $@"<br>
+            string info = $@"
 Производител:        {Manufacturer}<br>
 EuroCode:            {EuroCode}<br>
 Други кодове:        {OtherCodes}<br>
